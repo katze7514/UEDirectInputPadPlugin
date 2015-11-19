@@ -1,0 +1,22 @@
+{
+	"FileVersion" : 3,
+	
+	"FriendlyName" : "DirectInpt Plugin",
+	"Version" : 0.1,
+	"VersionName" : "0.1",
+	"CreatedBy" : "katze7514",
+	"CreatedByURL" : "http://epicgames.com",
+	"EngineVersion" : "4.10.0",
+	"Description" : "DirectInput plugin.",
+	"Category" : "Input",
+	
+	"Modules" :
+	[
+		{
+			"Name" : "DirectInputPlugin",
+			"Type" : "Runtime",
+			"LoadingPhase" : "PreDefault"
+			"WhitelistPlatforms" : ["Win64", "Win32" ]
+		}
+	]
+}
