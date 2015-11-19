@@ -250,13 +250,13 @@ private:
  *  FDirectInputJoystick_enum/FDirectInputJoystick‚ğ‚Ü‚Æ‚ß‚éB
  *  Joystick‚ğæ“¾‚·‚é‚Í‚±‚ê‚ğg‚¤‚Æ—Ç‚¢
  */
-class FDirectInputJoystick_factory
+class FDirectInputJoystickFactory
 {
 public:
 	typedef TMap<uint32, TSharedPtr<FDirectInputJoystick>> joy_map;
 
-	FDirectInputJoystick_factory(){}
-	~FDirectInputJoystick_factory(){ Fin(); }
+	FDirectInputJoystickFactory(){}
+	~FDirectInputJoystickFactory(){ Fin(); }
 
 	bool Init(HWND hWnd, const TSharedPtr<FDirectInputDriver>& pDriver, bool bBackGround=false);
 	void Fin();

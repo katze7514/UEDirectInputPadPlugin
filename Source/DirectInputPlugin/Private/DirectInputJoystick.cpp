@@ -536,7 +536,7 @@ bool FDirectInputJoystick::IsRelease(uint32_t nBtn)const
 //////////////////////////////////////
 // joystick_factory
 /////////////////////////////////////
-bool FDirectInputJoystick_factory::Init(HWND hWnd, const TSharedPtr<FDirectInputDriver>& pDriver, bool bBackGround)
+bool FDirectInputJoystickFactory::Init(HWND hWnd, const TSharedPtr<FDirectInputDriver>& pDriver, bool bBackGround)
 {
 	hWnd_		= hWnd;
 	pAdapter_	= pDriver;
@@ -547,15 +547,15 @@ bool FDirectInputJoystick_factory::Init(HWND hWnd, const TSharedPtr<FDirectInput
 	return r;
 }
 
-void FDirectInputJoystick_factory::Fin()
+void FDirectInputJoystickFactory::Fin()
 {
 	mapJoy_.Reset();
 }
 
-TSharedPtr<FDirectInputJoystick> FDirectInputJoystick_factory::GetJoystick(uint32 nNo)
+TSharedPtr<FDirectInputJoystick> FDirectInputJoystickFactory::GetJoystick(uint32 nNo)
 {
 	auto joy = mapJoy_.Find(nNo);
-	if(!joy) return nullptr;
+	if(joy) return *joy;
 
 	const DIDEVICEINSTANCE* info = joyEnum_.GetJoystickInfo(nNo);
 	if(!info) return nullptr;
