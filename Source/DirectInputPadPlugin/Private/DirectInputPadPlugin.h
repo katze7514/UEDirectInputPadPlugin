@@ -2,6 +2,8 @@
 
 #include "../Public/IDirectInputPadPlugin.h"
 
+class FDirectInputPadDevice;
+
 class FDirectInputPadPlugin : public IDirectInputPadPlugin
 {
 public:
@@ -11,4 +13,7 @@ public:
 
 	/** IInputDeviceModule immplementaion **/
 	virtual TSharedPtr< class IInputDevice > CreateInputDevice(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler);
+
+private:
+	TSharedPtr<FDirectInputPadDevice> device_;
 };

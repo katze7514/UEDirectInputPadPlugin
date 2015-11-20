@@ -3,6 +3,8 @@
 #include "DirectInputPadPluginPrivatePCH.h"
 #include "DirectInputPadPlugin.h"
 
+#include "DirectInputPadDevice.h"
+
 IMPLEMENT_MODULE( FDirectInputPadPlugin, DirectInputPadPlugin )
 
 DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
@@ -22,7 +24,8 @@ void FDirectInputPadPlugin::ShutdownModule()
 
 TSharedPtr< class IInputDevice > FDirectInputPadPlugin::CreateInputDevice(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler)
 {
-	return nullptr;
+	device_->SetMessageHandler(InMessageHandler);
+	return device_;
 }
 
 

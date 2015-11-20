@@ -17,11 +17,11 @@ bool FDirectInputDriver::Init()
 
 	if(r != DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("DirectInputDriver initialize fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("DirectInputDriver initialization failed."));
 		return false;
 	}
 
-	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputDriver Initialied."));
+	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputDriver initialied."));
 	return true;
 }
 
@@ -42,7 +42,7 @@ bool FDirectInputJoystickEnum::Init(FDirectInputDriver& adapter)
 	HRESULT r = pDriver->EnumDevices(DI8DEVCLASS_GAMECTRL, &FDirectInputJoystickEnum::OnEnumDevice, this, DIEDFL_ATTACHEDONLY);
 	if(FAILED(r))
 	{
-		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Search Joysticks Error."));
+		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Search DirectInputPad Error."));
 		return false;
 	}
 
@@ -54,7 +54,7 @@ const DIDEVICEINSTANCE* FDirectInputJoystickEnum::GetJoystickInfo(uint32 nJoyNo)
 {
 	if(!vecJoyStickInfo_.IsValidIndex(nJoyNo))
 	{
-		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Unsuable Joystick ÅF No. %n"), nJoyNo);
+		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Unsuable DirectInputPadÅFNo. %n"), nJoyNo);
 		return nullptr;
 	}
 
