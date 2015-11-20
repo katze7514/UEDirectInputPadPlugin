@@ -12,7 +12,7 @@
  * The public interface to this module.  In most cases, this interface is only public to sibling modules 
  * within this plugin.
  */
-class IDirectInputPlugin : public IInputDeviceModule
+class IDirectInputPadPlugin : public IInputDeviceModule
 {
 
 public:
@@ -23,9 +23,9 @@ public:
 	 *
 	 * @return Returns singleton instance, loading the module on demand if needed
 	 */
-	static inline IDirectInputPlugin& Get()
+	static inline IDirectInputPadPlugin& Get()
 	{
-		return FModuleManager::LoadModuleChecked< IDirectInputPlugin >( "DirectInputPlugin" );
+		return FModuleManager::LoadModuleChecked< IDirectInputPadPlugin >( "DirectInputPadPlugin" );
 	}
 
 	/**
@@ -35,7 +35,7 @@ public:
 	 */
 	static inline bool IsAvailable()
 	{
-		return FModuleManager::Get().IsModuleLoaded( "DirectInputPlugin" );
+		return FModuleManager::Get().IsModuleLoaded( "DirectInputPadPlugin" );
 	}
 };
 

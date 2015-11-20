@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Public/IDirectInputPlugin.h"
+#include "../Public/IDirectInputPadPlugin.h"
 
-class FDirectInputPlugin : public IDirectInputPlugin
+class FDirectInputPadPlugin : public IDirectInputPadPlugin
 {
 public:
 	/** IModuleInterface implementation */

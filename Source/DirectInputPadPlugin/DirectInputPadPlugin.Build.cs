@@ -2,20 +2,20 @@
 
 namespace UnrealBuildTool.Rules
 {
-	public class DirectInputPlugin : ModuleRules
+	public class DirectInputPadPlugin : ModuleRules
 	{
-		public DirectInputPlugin(TargetInfo Target)
+		public DirectInputPadPlugin(TargetInfo Target)
 		{
 			PublicIncludePaths.AddRange(
 				new string[] {
-					"DirectInputPlugin/Public",
+					"DirectInputPadPlugin/Public",
 					// ... add public include paths required here ...
 				}
 				);
 
 			PrivateIncludePaths.AddRange(
 				new string[] {
-					"DirectInputPlugin/Private",
+					"DirectInputPadPlugin/Private",
 					// ... add other private include paths required here ...
 				}
 				);

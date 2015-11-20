@@ -1,9 +1,9 @@
-#include "DirectInputPluginPrivatePCH.h"
+#include "DirectInputPadPluginPrivatePCH.h"
 #include "DirectInputJoystick.h"
 
 #include <tuple>
 
-DEFINE_LOG_CATEGORY_STATIC(DirectInputPlugin, Log, All)
+DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
 
 //////////////////////////////////////
 // FDirectInputDrive

@@ -1,19 +1,19 @@
 {
 	"FileVersion" : 3,
 	
-	"FriendlyName" : "DirectInpt Plugin",
+	"FriendlyName" : "DirectInptPad Plugin",
 	"Version" : 0.1,
 	"VersionName" : "0.1",
 	"CreatedBy" : "katze7514",
-	"CreatedByURL" : "http://epicgames.com",
+	"CreatedByURL" : "https://github.com/katze7514/UEDirectInputPadPlugin",
 	"EngineVersion" : "4.10.0",
-	"Description" : "DirectInput plugin.",
+	"Description" : "DirectInputPad plugin.",
 	"Category" : "Input",
 	
 	"Modules" :
 	[
 		{
-			"Name" : "DirectInputPlugin",
+			"Name" : "DirectInputPadPlugin",
 			"Type" : "Runtime",
 			"LoadingPhase" : "PreDefault"
 			"WhitelistPlatforms" : ["Win64", "Win32" ]
