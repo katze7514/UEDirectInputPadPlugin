@@ -17,11 +17,11 @@ bool FDirectInputDriver::Init()
 
 	if(r != DI_OK)
 	{
-		UE_LOG(DirectInputPlugin, Error, TEXT("DirectInputDriver initialize fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("DirectInputDriver initialize fail."));
 		return false;
 	}
 
-	UE_LOG(DirectInputPlugin, Log, TEXT("DirectInputDriver Initialied."));
+	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputDriver Initialied."));
 	return true;
 }
 
@@ -42,7 +42,7 @@ bool FDirectInputJoystickEnum::Init(FDirectInputDriver& adapter)
 	HRESULT r = pDriver->EnumDevices(DI8DEVCLASS_GAMECTRL, &FDirectInputJoystickEnum::OnEnumDevice, this, DIEDFL_ATTACHEDONLY);
 	if(FAILED(r))
 	{
-		UE_LOG(DirectInputPlugin, Warning, TEXT("Search Joysticks Error."));
+		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Search Joysticks Error."));
 		return false;
 	}
 
@@ -54,7 +54,7 @@ const DIDEVICEINSTANCE* FDirectInputJoystickEnum::GetJoystickInfo(uint32 nJoyNo)
 {
 	if(!vecJoyStickInfo_.IsValidIndex(nJoyNo))
 	{
-		UE_LOG(DirectInputPlugin, Warning, TEXT("Unsuable Joystick F No. %n"), nJoyNo);
+		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Unsuable Joystick F No. %n"), nJoyNo);
 		return nullptr;
 	}
 
@@ -87,14 +87,14 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	HRESULT r = driver->CreateDevice(joyins.guidInstance, &pDevice_, NULL);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPlugin, Error, TEXT("Joystick CreateDevice fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick CreateDevice fail."));
 		return false;
 	}
 
 	r = pDevice_->SetDataFormat(&c_dfDIJoystick);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPlugin, Error, TEXT("Joystick SetDataformat fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetDataformat fail."));
 		Fin();
 		return false;
 	}
@@ -110,7 +110,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	r = pDevice_->SetCooperativeLevel(hWnd, flags);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPlugin, Error, TEXT("Joystick SetCooperativeLevel fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetCooperativeLevel fail."));
 		Fin();
 		return false;
 	}
@@ -128,7 +128,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	r = pDevice_->SetProperty(DIPROP_AXISMODE, &diprop.diph);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPlugin, Error, TEXT("Joystick AxisMode Setup fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick AxisMode Setup fail."));
 		Fin();
 		return false;
 	}
@@ -144,7 +144,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	}
 
 //	const string sFlag = (flags&DISCL_BACKGROUND)>0 ? "BACKGROUND" : "FOREGROUND";
-	UE_LOG(DirectInputPlugin, Log, TEXT("Joystick Device Create Success."));
+	UE_LOG(DirectInputPadPlugin, Log, TEXT("Joystick Device Create Success."));
 
 	return true;
 }

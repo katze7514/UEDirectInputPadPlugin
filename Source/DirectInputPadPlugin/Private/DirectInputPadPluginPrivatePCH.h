@@ -5,4 +5,4 @@
 #include "Core.h"
 #include "CoreUObject.h"
 
-#include "DirectInputPlugin.h"
+#include "DirectInputPadPlugin.h"
