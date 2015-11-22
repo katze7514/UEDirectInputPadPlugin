@@ -4,5 +4,9 @@
 // add includes for headers that are used in most of your module's source files though.
 #include "Core.h"
 #include "CoreUObject.h"
-
-#include "DirectInputPadPlugin.h"
+#include "Engine.h"
+#include "SlateBasics.h"
+#include "SlateCore.h"
+#include "InputCore.h"
+#include "InputDevice.h"
+#include "MainFrame.h"

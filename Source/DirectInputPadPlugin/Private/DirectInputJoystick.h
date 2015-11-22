@@ -98,7 +98,7 @@ public:
 	static const int32 MAX_AXIS_VALUE;
 
 public:
-	FDirectInputJoystick():pDevice_(nullptr),nCurIndex_(0),bAcquire_(false),
+	FDirectInputJoystick():pDevice_(nullptr),nPlayerID_(-1),nCurIndex_(0),bAcquire_(false),
 				  bADConv_(true),
 				  nX_Threshold_(300),nY_Threshold_(300),nZ_Threshold_(300),
 				  nXrot_Threshold_(300),nYrot_Threshold_(300),nZrot_Threshold_(300),
@@ -129,6 +129,11 @@ public:
 	//! アナログ回転のあそびの閾値設定。この値以下の入力は無効扱い
 	void SetRotThreshold(uint32 nX, uint32 nY, uint32 nZ){ nXrot_Threshold_=nX; nYrot_Threshold_=nY; nZrot_Threshold_=nZ; }
 
+public:
+	int32 GetPlayerID()const{ return nPlayerID_; }
+	void  SetPlayerID(int32 nPlayerID){ nPlayerID_ = nPlayerID; }
+
+public:
 	//! x軸の値
 	float	X()const;
 	//! y軸の値
@@ -216,6 +221,9 @@ private:
 	//! デバイス
 	LPDIRECTINPUTDEVICE8	pDevice_;
 
+	// 対応するPlayerID
+	int32		nPlayerID_;
+
 	//! ジョイスティック入力バッファ
 	DIJOYSTATE	joyBuf_[2];
 	//! ジョイスティックバッファ位置
@@ -241,7 +249,7 @@ private:
 	//! @brief 入力ガードフラグ
 	/*! trueになすると入力バッファがクリアされ、inputを呼んでも更新されない
 	 *  つまり、入力されてない扱いになる */
-	bool bGuard_;
+	bool		bGuard_;
 };
 
 
@@ -255,7 +263,8 @@ class FDirectInputJoystickFactory
 public:
 	typedef TMap<uint32, TSharedPtr<FDirectInputJoystick>> joy_map;
 
-	FDirectInputJoystickFactory(){}
+public:
+	FDirectInputJoystickFactory();
 	~FDirectInputJoystickFactory(){ Fin(); }
 
 	bool Init(HWND hWnd, const TSharedPtr<FDirectInputDriver>& pDriver, bool bBackGround=false);
@@ -276,3 +285,5 @@ private:
 	FDirectInputJoystickEnum	joyEnum_;
 	joy_map						mapJoy_;
 };
+
+#include "HideWindowsPlatformTypes.h"

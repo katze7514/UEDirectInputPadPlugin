@@ -7,7 +7,7 @@
 	"CreatedBy" : "katze7514",
 	"CreatedByURL" : "https://github.com/katze7514/UEDirectInputPadPlugin",
 	"EngineVersion" : "4.10.0",
-	"Description" : "DirectInputPad plugin.",
+	"Description" : "Plugin for DirectInputPad.",
 	"Category" : "Input",
 	
 	"Modules" :

@@ -1,2 +1,2 @@
 # UEDirectInputPlugin
-DirectInput Plugin for UnrealEngine4.10
+DirectInputPad Plugin for UnrealEngine4.10

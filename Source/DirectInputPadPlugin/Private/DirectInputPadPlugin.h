@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Public/IDirectInputPadPlugin.h"
+#include "IDirectInputPadPlugin.h"
 
 class FDirectInputPadDevice;
 

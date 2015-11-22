@@ -5,6 +5,8 @@
 
 DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
 
+#include "AllowWindowsPlatformTypes.h"
+
 //////////////////////////////////////
 // FDirectInputDrive
 /////////////////////////////////////
@@ -27,8 +29,11 @@ bool FDirectInputDriver::Init()
 
 void FDirectInputDriver::Fin()
 {
-	pDriver_->Release();
-	pDriver_ = nullptr;
+	if(pDriver_)
+	{
+		pDriver_->Release();
+		pDriver_ = nullptr;
+	}
 }
 
 //////////////////////////////////////
@@ -151,9 +156,12 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 
 void FDirectInputJoystick::Fin()
 {
-	if(pDevice_ && bAcquire_) pDevice_->Unacquire();
-	pDevice_->Release();
-	pDevice_=nullptr;
+	if(pDevice_)
+	{
+		if(bAcquire_) pDevice_->Unacquire();
+		pDevice_->Release();
+		pDevice_=nullptr;
+	}
 }
 
 BOOL CALLBACK FDirectInputJoystick::OnEnumAxis(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID pvRef)
@@ -536,6 +544,8 @@ bool FDirectInputJoystick::IsRelease(uint32_t nBtn)const
 //////////////////////////////////////
 // joystick_factory
 /////////////////////////////////////
+FDirectInputJoystickFactory::FDirectInputJoystickFactory(){}
+
 bool FDirectInputJoystickFactory::Init(HWND hWnd, const TSharedPtr<FDirectInputDriver>& pDriver, bool bBackGround)
 {
 	hWnd_		= hWnd;
@@ -566,3 +576,5 @@ TSharedPtr<FDirectInputJoystick> FDirectInputJoystickFactory::GetJoystick(uint32
 	
 	return mapJoy_.Emplace(nNo, pJoy);
 }
+
+#include "HideWindowsPlatformTypes.h"
