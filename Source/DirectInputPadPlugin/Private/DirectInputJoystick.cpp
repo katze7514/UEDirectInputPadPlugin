@@ -1,4 +1,6 @@
 #include "DirectInputPadPluginPrivatePCH.h"
+
+#include "DirectInputPadState.h"
 #include "DirectInputJoystick.h"
 
 #include <tuple>
@@ -148,10 +150,44 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 		return false;
 	}
 
+	// デフォルトのマップを設定
+	InitDefaultMap();
+
 //	const string sFlag = (flags&DISCL_BACKGROUND)>0 ? "BACKGROUND" : "FOREGROUND";
 	UE_LOG(DirectInputPadPlugin, Log, TEXT("Joystick Device Create Success."));
 
 	return true;
+}
+
+void FDirectInputJoystick::InitDefaultMap()
+{
+	JoystickMap_.Reset(EDirectInputPadKeyName::DIGamePad_END);
+
+	JoystickMap_[DIGamePad_AXIS_X]	= FGamepadKeyNames::LeftAnalogX;
+	JoystickMap_[DIGamePad_AXIS_Y]	= FGamepadKeyNames::LeftAnalogY;
+	JoystickMap_[DIGamePad_AXIS_Z]	= FGamepadKeyNames::RightAnalogX;
+	JoystickMap_[DIGamePad_ROT_X]	= FName();
+	JoystickMap_[DIGamePad_ROT_Y]	= FName();
+	JoystickMap_[DIGamePad_ROT_Z]	= FGamepadKeyNames::RightAnalogY;
+
+	JoystickMap_[DIGamePad_POV]		= FName("DIGamePad_POV"); // POVは入力を取る段階で分解する
+
+	JoystickMap_[DIGamePad_Button1] = FGamepadKeyNames::FaceButtonBottom;		// A
+	JoystickMap_[DIGamePad_Button2] = FGamepadKeyNames::FaceButtonRight;		// B
+	JoystickMap_[DIGamePad_Button3] = FGamepadKeyNames::FaceButtonLeft;			// X
+	JoystickMap_[DIGamePad_Button4] = FGamepadKeyNames::FaceButtonTop;			// Y
+	JoystickMap_[DIGamePad_Button5] = FGamepadKeyNames::LeftShoulder;			// L1
+	JoystickMap_[DIGamePad_Button6] = FGamepadKeyNames::RightShoulder;			// R1
+	JoystickMap_[DIGamePad_Button7] = FGamepadKeyNames::LeftTriggerThreshold;	// L2
+	JoystickMap_[DIGamePad_Button8] = FGamepadKeyNames::RightTriggerThreshold;	// R2
+	JoystickMap_[DIGamePad_Button9] = FGamepadKeyNames::SpecialRight;			// START
+	JoystickMap_[DIGamePad_Button10] = FGamepadKeyNames::SpecialLeft;			// SELECT
+	JoystickMap_[DIGamePad_Button11] = FGamepadKeyNames::LeftThumb;				// Lスティック押し
+	JoystickMap_[DIGamePad_Button12] = FGamepadKeyNames::RightThumb;			// Rスティック押し
+
+	// 残りのボタンは、とりあえず、空
+	for(uint8 i = DIGamePad_Button13; i<=DIGamePad_Button32; ++i)
+		JoystickMap_[i] = FName();
 }
 
 void FDirectInputJoystick::Fin()
@@ -262,10 +298,27 @@ bool FDirectInputJoystick::Input()
 	return true;
 }
 
+void FDirectInputJoystick::Event(const TSharedRef<FGenericApplicationMessageHandler>& MessageHandler)
+{
+}
+
+
 void FDirectInputJoystick::SetGuard(bool bGuard)
 {
 	bGuard_ = bGuard;
 	if(bGuard_) ClearBuf();
+}
+
+FName FDirectInputJoystick::GetUEKey(EDirectInputPadKeyName ePadKey)
+{
+	if(ePadKey>= EDirectInputPadKeyName::DIGamePad_END) return FName("");
+	return JoystickMap_[ePadKey];
+}
+
+void FDirectInputJoystick::SetUEKey(EDirectInputPadKeyName ePadKey, FName UEKeyName)
+{
+	if(ePadKey >= EDirectInputPadKeyName::DIGamePad_END) return;
+	JoystickMap_[ePadKey] = UEKeyName;
 }
 
 //////////////////////////////

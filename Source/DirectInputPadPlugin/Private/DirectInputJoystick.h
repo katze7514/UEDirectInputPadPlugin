@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DirectInputPadState.h"
+
 #include "AllowWindowsPlatformTypes.h"
 
 #define DIRECTINPUT_VERSION 0x0800 
@@ -16,8 +18,6 @@
 #pragma warning(pop) 
 
 #include <dinputd.h>
-
-#include "Core.h"
 
 //! DirectInputドライバークラス
 class FDirectInputDriver
@@ -82,7 +82,6 @@ enum EDirectInputArrow : uint8
 	ARROW_END,
 };
 
-
 /*! @brief ジョイスティック一つを表すクラス
  *
  *	FDirectInputJoystick_enumから、取得した情報を元にデバイスを作成し
@@ -119,6 +118,9 @@ public:
 	//! ジョイスティック入力を取得
 	bool Input();
 
+	//! 現在の入力状態に合わせてイベントを飛ばす
+	void Event(const TSharedRef<FGenericApplicationMessageHandler>& MessageHandler);
+
 	//! AD変換が有効か
 	bool IsAdConvFlag()const{ return bADConv_; }
 	//! AD変換フラグ設定
@@ -130,8 +132,12 @@ public:
 	void SetRotThreshold(uint32 nX, uint32 nY, uint32 nZ){ nXrot_Threshold_=nX; nYrot_Threshold_=nY; nZrot_Threshold_=nZ; }
 
 public:
-	int32 GetPlayerID()const{ return nPlayerID_; }
-	void  SetPlayerID(int32 nPlayerID){ nPlayerID_ = nPlayerID; }
+	int32	GetPlayerID()const{ return nPlayerID_; }
+	void	SetPlayerID(int32 nPlayerID){ nPlayerID_ = nPlayerID; }
+
+	// Joystickの実キーと、UE4のGameKeyを一致させるマップ
+	FName	GetUEKey(EDirectInputPadKeyName ePadKey);
+	void	SetUEKey(EDirectInputPadKeyName ePadKey, FName UEKeyName);
 
 public:
 	//! x軸の値
@@ -185,6 +191,9 @@ public:
 	void ClearCurBuf(){ ::ZeroMemory(&joyBuf_[nCurIndex_], sizeof(DIJOYSTATE)); }
 
 private:
+	// デフォルトキーマップ
+	void InitDefaultMap();
+
 	//! POVが押されている
 	bool IsPovPress(enum EDirectInputArrow eArrow)const;
 	//! POVが押された瞬間
@@ -250,6 +259,11 @@ private:
 	/*! trueになすると入力バッファがクリアされ、inputを呼んでも更新されない
 	 *  つまり、入力されてない扱いになる */
 	bool		bGuard_;
+
+
+	//UE4のゲームパッドIDとのマップ
+	// Joystickの名前になんのゲームパッド軸が割り当てられているのか
+	TArray<FName> JoystickMap_;
 };
 
 

@@ -44,3 +44,9 @@ const FKey EKeysDirectInputPad::DIGamePad_Button29("DIGamePad_Button29");
 const FKey EKeysDirectInputPad::DIGamePad_Button30("DIGamePad_Button30");
 const FKey EKeysDirectInputPad::DIGamePad_Button31("DIGamePad_Button31");
 const FKey EKeysDirectInputPad::DIGamePad_Button32("DIGamePad_Button32");
+
+const FKey EKeysDirectInputPad::DIGamePad_POV_None("DIGamePad_POV_None");
+const FKey EKeysDirectInputPad::DIGamePad_POV_Up("DIGamePad_POV_Up");
+const FKey EKeysDirectInputPad::DIGamePad_POV_Left("DIGamePad_POV_Left");
+const FKey EKeysDirectInputPad::DIGamePad_POV_Bottom("DIGamePad_POV_Bottom");
+const FKey EKeysDirectInputPad::DIGamePad_POV_Right("DIGamePad_POV_Right");

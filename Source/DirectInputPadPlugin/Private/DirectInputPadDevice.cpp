@@ -7,6 +7,10 @@
 
 DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
 
+namespace{
+const uint32 MAX_JOYSTICKS = 8;
+}
+
 #include "AllowWindowsPlatformTypes.h"
 
 bool FDirectInputPadDevice::Init(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler)
@@ -38,26 +42,19 @@ bool FDirectInputPadDevice::Init(const TSharedRef< FGenericApplicationMessageHan
 	DDriver_ = MakeShareable<FDirectInputDriver>(new FDirectInputDriver());
 	if(!DDriver_->Init()) return false;
 
-	DJoysticks_.Reset();
-
 	DFactory_ = MakeShareable<FDirectInputJoystickFactory>(new FDirectInputJoystickFactory());
 	if(!DFactory_->Init(hWnd, DDriver_)) return false;
 
-	DJoysticks_.Reserve(8); // PlayerIDは0～7までの8個
-
-	// 必要なだけArrayにいれておく
-	uint32 DJoyNum = 8 - XInputDeviceNum_;
+	DJoysticks_.Reset(MAX_JOYSTICKS);
+	
+	uint32 DJoyNum = MAX_JOYSTICKS - XInputDeviceNum_;
 	for(uint32 i= XInputDeviceNum_; i<DJoyNum; ++i)
 	{
 		auto joy = DFactory_->GetJoystick(i);
 		if(joy.IsValid())
 		{
 			joy->SetPlayerID(i);
-			DJoysticks_.Add(joy);
-		}
-		else
-		{
-			break;
+			DJoysticks_[i]=joy;
 		}
 	}
 
@@ -81,9 +78,10 @@ void FDirectInputPadDevice::SendControllerEvents()
 		{
 			// まずは入力チェック
 			const auto& Joystick = j.Pin();
-			Joystick->Input();
-
-			// 入力に合わせてイベントを飛ばす
+			if(Joystick->Input())
+			{// 入力に合わせてイベントを飛ばす
+				Joystick->Event(MessageHandler_);
+			}
 		}
 	}
 }
