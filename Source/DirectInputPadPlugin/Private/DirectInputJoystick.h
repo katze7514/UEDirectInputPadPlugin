@@ -19,6 +19,8 @@
 
 #include <dinputd.h>
 
+#include <functional>
+
 //! DirectInputドライバークラス
 class FDirectInputDriver
 {
@@ -69,16 +71,16 @@ private:
 enum EDirectInputArrow : uint8
 {
 	// 通常のボタンの次からの番号を振る
-	POV_NONE = 32,	//!< POV何も押されていない
-	POV_UP,			//!< POV↑
+	POV_UP=32,		//!< POV↑
 	POV_RIGHT,		//!< POV→
 	POV_DOWN,		//!< POV↓
 	POV_LEFT,		//!< POV←
-	AXIS_NONE,		//!< XY軸何も押されていない
 	AXIS_UP,		//!< 軸Y↑
 	AXIS_RIGHT,		//!< 軸X→
 	AXIS_DOWN,		//!< 軸Y↓
 	AXIS_LEFT,		//!< 軸X←
+	POV_NONE,		//!< POV何も押されていない
+	AXIS_NONE,		//!< XY軸何も押されていない
 	ARROW_END,
 };
 
@@ -88,8 +90,8 @@ enum EDirectInputArrow : uint8
  *	実際に入力処理を行う
  *  軸・回転の範囲は、-1.0～1.0 を取る。あそびの範囲にある時は0.0が返る
  *
- *  AD変換をONにすると、XY軸デジタルがPOVとして、POVがXY軸デジタル入力としても扱われる
- *  XY軸がis_pov系メソッドで、POV系がis_axis系メソッドで取得できるようになる
+ *  AD変換をONにすると、LeftAnalogXY軸がPOVとして、POVがLeftAnalogXY軸入力としても扱われる
+ *  どの軸がLeftAnalog扱いなのかは、SetUEKeyで設定する
  */
 class FDirectInputJoystick
 {
@@ -98,7 +100,7 @@ public:
 
 public:
 	FDirectInputJoystick():pDevice_(nullptr),nPlayerID_(-1),nCurIndex_(0),bAcquire_(false),
-				  bADConv_(true),
+				  bADConv_(false),
 				  nX_Threshold_(300),nY_Threshold_(300),nZ_Threshold_(300),
 				  nXrot_Threshold_(300),nYrot_Threshold_(300),nZrot_Threshold_(300),
 				  bGuard_(false){ ClearBuf(); }
@@ -119,7 +121,7 @@ public:
 	bool Input();
 
 	//! 現在の入力状態に合わせてイベントを飛ばす
-	void Event(const TSharedRef<FGenericApplicationMessageHandler>& MessageHandler);
+	void Event(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
 
 	//! AD変換が有効か
 	bool IsAdConvFlag()const{ return bADConv_; }
@@ -180,6 +182,7 @@ public:
 	//! ボタンが離れた瞬間。0～31はボタン。32～はPOVと軸
 	bool IsRelease(uint32 nBtn)const;
 
+public:
 	// 入力ガード
 	void SetGuard(bool bGuard);
 	bool IsGuard()const{ return bGuard_; }
@@ -194,6 +197,19 @@ private:
 	// デフォルトキーマップ
 	void InitDefaultMap();
 
+	void SetDelegateLeftAnalogX(EDirectInputPadKeyName ePadKey);
+	void SetDelegateLeftAnalogY(EDirectInputPadKeyName ePadKey);
+
+	// アナログイベントを発生させる
+	void EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyName ePadName, FKey DIKey);
+	// ボタン押したイベントを発生させる
+	void EventButtonPressed(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey);
+	// ボタン離したイベントを発生させる
+	void EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey);
+	// POVイベント発生させる
+	void EventPov(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
+
+private:
 	//! POVが押されている
 	bool IsPovPress(enum EDirectInputArrow eArrow)const;
 	//! POVが押された瞬間
@@ -260,10 +276,16 @@ private:
 	 *  つまり、入力されてない扱いになる */
 	bool		bGuard_;
 
-
+private:
 	//UE4のゲームパッドIDとのマップ
 	// Joystickの名前になんのゲームパッド軸が割り当てられているのか
 	TArray<FName> JoystickMap_;
+
+	// 左スティック扱いとなる軸の値を取るメンバ関数
+	std::function<float(const FDirectInputJoystick&)> LeftAnalogX;
+	std::function<float(const FDirectInputJoystick&)> LeftAnalogPrevX;
+	std::function<float(const FDirectInputJoystick&)> LeftAnalogY;
+	std::function<float(const FDirectInputJoystick&)> LeftAnalogPrevY;
 };
 
 

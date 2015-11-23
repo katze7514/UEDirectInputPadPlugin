@@ -25,7 +25,7 @@ bool FDirectInputDriver::Init()
 		return false;
 	}
 
-	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputDriver initialied."));
+	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputDriver initialized."));
 	return true;
 }
 
@@ -117,7 +117,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	r = pDevice_->SetCooperativeLevel(hWnd, flags);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetCooperativeLevel fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetCooperativeLevel fail. : %n"), r);
 		Fin();
 		return false;
 	}
@@ -161,32 +161,35 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 
 void FDirectInputJoystick::InitDefaultMap()
 {
-	JoystickMap_.Reset(EDirectInputPadKeyName::DIGamePad_END);
+	JoystickMap_.Reset(DIGamePad_END);
 
-	JoystickMap_[DIGamePad_AXIS_X]	= FGamepadKeyNames::LeftAnalogX;
-	JoystickMap_[DIGamePad_AXIS_Y]	= FGamepadKeyNames::LeftAnalogY;
-	JoystickMap_[DIGamePad_AXIS_Z]	= FGamepadKeyNames::RightAnalogX;
-	JoystickMap_[DIGamePad_ROT_X]	= FName();
-	JoystickMap_[DIGamePad_ROT_Y]	= FName();
-	JoystickMap_[DIGamePad_ROT_Z]	= FGamepadKeyNames::RightAnalogY;
+	SetDelegateLeftAnalogX(DIGamePad_AXIS_X);
+	SetDelegateLeftAnalogY(DIGamePad_AXIS_Y);
+	
+	JoystickMap_[DIGamePad_AXIS_X]		= FGamepadKeyNames::LeftAnalogX;
+	JoystickMap_[DIGamePad_AXIS_Y]		= FGamepadKeyNames::LeftAnalogY;
+	JoystickMap_[DIGamePad_AXIS_Z]		= FGamepadKeyNames::RightAnalogX;
+	JoystickMap_[DIGamePad_ROT_X]		= FName();
+	JoystickMap_[DIGamePad_ROT_Y]		= FName();
+	JoystickMap_[DIGamePad_ROT_Z]		= FGamepadKeyNames::RightAnalogY;
 
-	JoystickMap_[DIGamePad_POV]		= FName("DIGamePad_POV"); // POVは入力を取る段階で分解する
+	JoystickMap_[DIGamePad_POV]			= FName(); // POVは入力を取る段階で分解する
 
-	JoystickMap_[DIGamePad_Button1] = FGamepadKeyNames::FaceButtonBottom;		// A
-	JoystickMap_[DIGamePad_Button2] = FGamepadKeyNames::FaceButtonRight;		// B
-	JoystickMap_[DIGamePad_Button3] = FGamepadKeyNames::FaceButtonLeft;			// X
-	JoystickMap_[DIGamePad_Button4] = FGamepadKeyNames::FaceButtonTop;			// Y
-	JoystickMap_[DIGamePad_Button5] = FGamepadKeyNames::LeftShoulder;			// L1
-	JoystickMap_[DIGamePad_Button6] = FGamepadKeyNames::RightShoulder;			// R1
-	JoystickMap_[DIGamePad_Button7] = FGamepadKeyNames::LeftTriggerThreshold;	// L2
-	JoystickMap_[DIGamePad_Button8] = FGamepadKeyNames::RightTriggerThreshold;	// R2
-	JoystickMap_[DIGamePad_Button9] = FGamepadKeyNames::SpecialRight;			// START
-	JoystickMap_[DIGamePad_Button10] = FGamepadKeyNames::SpecialLeft;			// SELECT
-	JoystickMap_[DIGamePad_Button11] = FGamepadKeyNames::LeftThumb;				// Lスティック押し
-	JoystickMap_[DIGamePad_Button12] = FGamepadKeyNames::RightThumb;			// Rスティック押し
+	JoystickMap_[DIGamePad_Button1]		= FGamepadKeyNames::FaceButtonBottom;		// A
+	JoystickMap_[DIGamePad_Button2]		= FGamepadKeyNames::FaceButtonRight;		// B
+	JoystickMap_[DIGamePad_Button3]		= FGamepadKeyNames::FaceButtonLeft;			// X
+	JoystickMap_[DIGamePad_Button4]		= FGamepadKeyNames::FaceButtonTop;			// Y
+	JoystickMap_[DIGamePad_Button5]		= FGamepadKeyNames::LeftShoulder;			// L1
+	JoystickMap_[DIGamePad_Button6]		= FGamepadKeyNames::RightShoulder;			// R1
+	JoystickMap_[DIGamePad_Button7]		= FGamepadKeyNames::LeftTriggerThreshold;	// L2
+	JoystickMap_[DIGamePad_Button8]		= FGamepadKeyNames::RightTriggerThreshold;	// R2
+	JoystickMap_[DIGamePad_Button9]		= FGamepadKeyNames::SpecialLeft;			// SELECT
+	JoystickMap_[DIGamePad_Button10]	= FGamepadKeyNames::SpecialRight;			// START
+	JoystickMap_[DIGamePad_Button11]	= FGamepadKeyNames::LeftThumb;				// Lスティック押し
+	JoystickMap_[DIGamePad_Button12]	= FGamepadKeyNames::RightThumb;				// Rスティック押し
 
 	// 残りのボタンは、とりあえず、空
-	for(uint8 i = DIGamePad_Button13; i<=DIGamePad_Button32; ++i)
+	for(uint8 i=DIGamePad_Button13; i<=DIGamePad_Button32; ++i)
 		JoystickMap_[i] = FName();
 }
 
@@ -298,10 +301,107 @@ bool FDirectInputJoystick::Input()
 	return true;
 }
 
-void FDirectInputJoystick::Event(const TSharedRef<FGenericApplicationMessageHandler>& MessageHandler)
+void FDirectInputJoystick::Event(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler)
 {
+	// JoystickMapをぶん回す
+
+	// 軸チェック
+	EventAnalog(MessageHandler, X(), DIGamePad_AXIS_X, EKeysDirectInputPad::DIGamePad_AxisX);
+	EventAnalog(MessageHandler, Y(), DIGamePad_AXIS_Y, EKeysDirectInputPad::DIGamePad_AxisY);
+	EventAnalog(MessageHandler, Z(), DIGamePad_AXIS_Z, EKeysDirectInputPad::DIGamePad_AxisZ);
+
+	EventAnalog(MessageHandler, RotX(), DIGamePad_ROT_X, EKeysDirectInputPad::DIGamePad_RotX);
+	EventAnalog(MessageHandler, RotY(), DIGamePad_ROT_Y, EKeysDirectInputPad::DIGamePad_RotY);
+	EventAnalog(MessageHandler, RotZ(), DIGamePad_ROT_Z, EKeysDirectInputPad::DIGamePad_RotZ);
+
+	EventPov(MessageHandler);
+
+	// ボタンチェック
+	EventButtonPressed(MessageHandler, DIGamePad_Button1, EKeysDirectInputPad::DIGamePad_Button1);
+	EventButtonPressed(MessageHandler, DIGamePad_Button2, EKeysDirectInputPad::DIGamePad_Button2);
+	EventButtonPressed(MessageHandler, DIGamePad_Button3, EKeysDirectInputPad::DIGamePad_Button3);
+	EventButtonPressed(MessageHandler, DIGamePad_Button4, EKeysDirectInputPad::DIGamePad_Button4);
+	EventButtonPressed(MessageHandler, DIGamePad_Button5, EKeysDirectInputPad::DIGamePad_Button5);
+	EventButtonPressed(MessageHandler, DIGamePad_Button6, EKeysDirectInputPad::DIGamePad_Button6);
+	EventButtonPressed(MessageHandler, DIGamePad_Button7, EKeysDirectInputPad::DIGamePad_Button7);
+	EventButtonPressed(MessageHandler, DIGamePad_Button8, EKeysDirectInputPad::DIGamePad_Button8);
+	EventButtonPressed(MessageHandler, DIGamePad_Button9, EKeysDirectInputPad::DIGamePad_Button9);
+	EventButtonPressed(MessageHandler, DIGamePad_Button10, EKeysDirectInputPad::DIGamePad_Button10);
+	EventButtonPressed(MessageHandler, DIGamePad_Button11, EKeysDirectInputPad::DIGamePad_Button11);
+	EventButtonPressed(MessageHandler, DIGamePad_Button12, EKeysDirectInputPad::DIGamePad_Button12);
+	EventButtonPressed(MessageHandler, DIGamePad_Button13, EKeysDirectInputPad::DIGamePad_Button13);
+	EventButtonPressed(MessageHandler, DIGamePad_Button14, EKeysDirectInputPad::DIGamePad_Button14);
+	EventButtonPressed(MessageHandler, DIGamePad_Button15, EKeysDirectInputPad::DIGamePad_Button15);
+	EventButtonPressed(MessageHandler, DIGamePad_Button16, EKeysDirectInputPad::DIGamePad_Button16);
+	EventButtonPressed(MessageHandler, DIGamePad_Button17, EKeysDirectInputPad::DIGamePad_Button17);
+	EventButtonPressed(MessageHandler, DIGamePad_Button18, EKeysDirectInputPad::DIGamePad_Button18);
+	EventButtonPressed(MessageHandler, DIGamePad_Button19, EKeysDirectInputPad::DIGamePad_Button19);
+	EventButtonPressed(MessageHandler, DIGamePad_Button20, EKeysDirectInputPad::DIGamePad_Button20);
+	EventButtonPressed(MessageHandler, DIGamePad_Button21, EKeysDirectInputPad::DIGamePad_Button21);
+	EventButtonPressed(MessageHandler, DIGamePad_Button22, EKeysDirectInputPad::DIGamePad_Button22);
+	EventButtonPressed(MessageHandler, DIGamePad_Button23, EKeysDirectInputPad::DIGamePad_Button23);
+	EventButtonPressed(MessageHandler, DIGamePad_Button24, EKeysDirectInputPad::DIGamePad_Button24);
+	EventButtonPressed(MessageHandler, DIGamePad_Button25, EKeysDirectInputPad::DIGamePad_Button25);
+	EventButtonPressed(MessageHandler, DIGamePad_Button26, EKeysDirectInputPad::DIGamePad_Button26);
+	EventButtonPressed(MessageHandler, DIGamePad_Button27, EKeysDirectInputPad::DIGamePad_Button27);
+	EventButtonPressed(MessageHandler, DIGamePad_Button28, EKeysDirectInputPad::DIGamePad_Button28);
+	EventButtonPressed(MessageHandler, DIGamePad_Button29, EKeysDirectInputPad::DIGamePad_Button29);
+	EventButtonPressed(MessageHandler, DIGamePad_Button30, EKeysDirectInputPad::DIGamePad_Button30);
+	EventButtonPressed(MessageHandler, DIGamePad_Button31, EKeysDirectInputPad::DIGamePad_Button31);
+	EventButtonPressed(MessageHandler, DIGamePad_Button32, EKeysDirectInputPad::DIGamePad_Button32);
 }
 
+void FDirectInputJoystick::EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyName ePadName, FKey DIKey)
+{
+	if(Analog==0.0f) return;
+
+	MessageHandler->OnControllerAnalog(DIKey.GetFName(), GetPlayerID(), Analog);
+	if(!JoystickMap_[ePadName].IsNone())
+		MessageHandler->OnControllerAnalog(JoystickMap_[ePadName], GetPlayerID(), Analog);
+}
+
+void FDirectInputJoystick::EventButtonPressed(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey)
+{
+	if(!IsPush(ePadName-DIGamePad_Button1)) return;
+
+	MessageHandler->OnControllerButtonPressed(DIKey.GetFName(), GetPlayerID(), false);
+	if(!JoystickMap_[ePadName].IsNone())
+		MessageHandler->OnControllerButtonPressed(JoystickMap_[ePadName], GetPlayerID(), false);
+}
+
+void FDirectInputJoystick::EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey)
+{
+	if(!IsRelease(ePadName-DIGamePad_Button1)) return;
+
+	MessageHandler->OnControllerButtonReleased(DIKey.GetFName(), GetPlayerID(), false);
+	if(!JoystickMap_[ePadName].IsNone())
+		MessageHandler->OnControllerButtonReleased(JoystickMap_[ePadName], GetPlayerID(), false);
+}
+
+void FDirectInputJoystick::EventPov(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler)
+{
+	if(IsPush(POV_UP))
+	{
+		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Up.GetFName(), GetPlayerID(), false);
+		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadUp, GetPlayerID(), false);
+	}
+	else if(IsPush(POV_DOWN))
+	{
+		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Down.GetFName(), GetPlayerID(), false);
+		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadDown, GetPlayerID(), false);
+	}
+
+	if(IsPush(POV_RIGHT))
+	{
+		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Right.GetFName(), GetPlayerID(), false);
+		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadRight, GetPlayerID(), false);
+	}
+	else if(IsPush(POV_LEFT))
+	{
+		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Left.GetFName(), GetPlayerID(), false);
+		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadLeft, GetPlayerID(), false);
+	}
+}
 
 void FDirectInputJoystick::SetGuard(bool bGuard)
 {
@@ -317,8 +417,116 @@ FName FDirectInputJoystick::GetUEKey(EDirectInputPadKeyName ePadKey)
 
 void FDirectInputJoystick::SetUEKey(EDirectInputPadKeyName ePadKey, FName UEKeyName)
 {
-	if(ePadKey >= EDirectInputPadKeyName::DIGamePad_END) return;
+	if(ePadKey >= DIGamePad_END) return;
+
+	// 軸は軸にしか設定できない
+	if(ePadKey>=DIGamePad_AXIS_X && ePadKey<=DIGamePad_ROT_Z)
+	{
+		if(!(  UEKeyName == FGamepadKeyNames::LeftAnalogX
+			|| UEKeyName == FGamepadKeyNames::LeftAnalogY
+			|| UEKeyName == FGamepadKeyNames::RightAnalogX
+			|| UEKeyName == FGamepadKeyNames::RightAnalogY
+			)) return;
+
+		if(UEKeyName == FGamepadKeyNames::LeftAnalogX)
+		{	SetDelegateLeftAnalogX(ePadKey);	}
+
+		if(UEKeyName == FGamepadKeyNames::LeftAnalogY)
+		{	SetDelegateLeftAnalogY(ePadKey);	}
+	}
+
+	// ボタンにはボタンしか設定できない
+	if(ePadKey>=DIGamePad_Button1 && ePadKey<=DIGamePad_Button32)
+	{
+		if(!(  UEKeyName == FGamepadKeyNames::FaceButtonBottom
+			|| UEKeyName == FGamepadKeyNames::FaceButtonRight
+			|| UEKeyName == FGamepadKeyNames::FaceButtonLeft
+			|| UEKeyName == FGamepadKeyNames::FaceButtonTop
+			|| UEKeyName == FGamepadKeyNames::LeftShoulder
+			|| UEKeyName == FGamepadKeyNames::RightShoulder
+			|| UEKeyName == FGamepadKeyNames::LeftTriggerThreshold
+			|| UEKeyName == FGamepadKeyNames::RightTriggerThreshold
+			|| UEKeyName == FGamepadKeyNames::SpecialLeft
+			|| UEKeyName == FGamepadKeyNames::SpecialRight
+			|| UEKeyName == FGamepadKeyNames::LeftThumb
+			|| UEKeyName == FGamepadKeyNames::RightThumb
+			))
+			return;
+	}
+
 	JoystickMap_[ePadKey] = UEKeyName;
+}
+
+void FDirectInputJoystick::SetDelegateLeftAnalogX(EDirectInputPadKeyName ePadKey)
+{
+	switch(ePadKey)
+	{
+	case DIGamePad_AXIS_X:
+		LeftAnalogX		= &FDirectInputJoystick::X;
+		LeftAnalogPrevX = &FDirectInputJoystick::PrevX;
+	break;
+
+	case DIGamePad_AXIS_Y:
+		LeftAnalogX		= &FDirectInputJoystick::Y;
+		LeftAnalogPrevX = &FDirectInputJoystick::PrevY;
+	break;
+
+	case DIGamePad_AXIS_Z:
+		LeftAnalogX		= &FDirectInputJoystick::Z;
+		LeftAnalogPrevX = &FDirectInputJoystick::PrevZ;
+	break;
+
+	case DIGamePad_ROT_X:
+		LeftAnalogX		= &FDirectInputJoystick::RotX;
+		LeftAnalogPrevX = &FDirectInputJoystick::RotPrevX;
+	break;
+
+	case DIGamePad_ROT_Y:
+		LeftAnalogX		= &FDirectInputJoystick::RotY;
+		LeftAnalogPrevX = &FDirectInputJoystick::RotPrevY;
+	break;
+
+	case DIGamePad_ROT_Z:
+		LeftAnalogX		= &FDirectInputJoystick::RotZ;
+		LeftAnalogPrevX = &FDirectInputJoystick::RotPrevZ;
+	break;
+	}
+}
+
+void FDirectInputJoystick::SetDelegateLeftAnalogY(EDirectInputPadKeyName ePadKey)
+{
+	switch(ePadKey)
+	{
+	case DIGamePad_AXIS_X:
+		LeftAnalogY		= &FDirectInputJoystick::X;
+		LeftAnalogPrevY = &FDirectInputJoystick::PrevX;
+	break;
+
+	case DIGamePad_AXIS_Y:
+		LeftAnalogY		= &FDirectInputJoystick::Y;
+		LeftAnalogPrevY = &FDirectInputJoystick::PrevY;
+	break;
+
+	case DIGamePad_AXIS_Z:
+		LeftAnalogY		= &FDirectInputJoystick::Z;
+		LeftAnalogPrevY = &FDirectInputJoystick::PrevZ;
+	break;
+
+	case DIGamePad_ROT_X:
+		LeftAnalogY		= &FDirectInputJoystick::RotX;
+		LeftAnalogPrevY = &FDirectInputJoystick::RotPrevX;
+	break;
+
+	case DIGamePad_ROT_Y:
+		LeftAnalogY		= &FDirectInputJoystick::RotY;
+		LeftAnalogPrevY = &FDirectInputJoystick::RotPrevY;
+	break;
+
+	case DIGamePad_ROT_Z:
+		LeftAnalogY		= &FDirectInputJoystick::RotZ;
+		LeftAnalogPrevY = &FDirectInputJoystick::RotPrevZ;
+	break;
+	}
 }
 
 //////////////////////////////
@@ -489,11 +697,11 @@ bool FDirectInputJoystick::IsPovPressInner(enum EDirectInputArrow eArrow, uint32
 	// 斜め入力対応
 	switch(eArrow)
 	{
-	case POV_NONE:	return LOWORD(pov)==0xFFFF;
 	case POV_UP:	return pov==0     || pov==4500  || pov==31500;
 	case POV_RIGHT:	return pov==9000  || pov==4500  || pov==13500;
 	case POV_DOWN:	return pov==18000 || pov==13500 || pov==22500;
 	case POV_LEFT:	return pov==27000 || pov==22500 || pov==31500;
+	case POV_NONE:	return LOWORD(pov)==0xFFFF;
 	default:		return false;
 	}
 }
@@ -529,17 +737,16 @@ bool FDirectInputJoystick::IsAxisRelease(enum EDirectInputArrow eArrow)const
 		&&  IsAxisPressInner(eArrow, nCurIndex_^1);
 }
 
-
 bool FDirectInputJoystick::IsAxisPressInner(enum EDirectInputArrow eArrow, uint32_t nIndex)const
 {
 	bool bCur = (nIndex==nCurIndex_);
 	switch (eArrow)
 	{
-	case AXIS_NONE:	return (bCur ? X() : PrevX())==0.f && (bCur ? Y() : PrevY())==0.f;
-	case AXIS_UP:	return (bCur ? Y() : PrevY())<0.f;
-	case AXIS_RIGHT:return (bCur ? X() : PrevX())>0.f;
-	case AXIS_DOWN:	return (bCur ? Y() : PrevY())>0.f;
-	case AXIS_LEFT:	return (bCur ? X() : PrevX())<0.f;
+	case AXIS_UP:	return (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this))<0.f;
+	case AXIS_RIGHT:return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this))>0.f;
+	case AXIS_DOWN:	return (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this))>0.f;
+	case AXIS_LEFT:	return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this))<0.f;
+	case AXIS_NONE:	return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this))==0.f && (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this))==0.f;
 	default:		return false;
 	}
 }
@@ -548,16 +755,16 @@ enum EDirectInputArrow FDirectInputJoystick::SwapPovAxis(enum EDirectInputArrow 
 {
 	switch(eArrow)
 	{
-	case AXIS_NONE: return POV_NONE;
+	case POV_UP:	return AXIS_UP;
+	case POV_RIGHT: return AXIS_RIGHT;
+	case POV_DOWN:  return AXIS_DOWN;
+	case POV_LEFT:  return AXIS_LEFT;
 	case AXIS_UP:	return POV_UP;
 	case AXIS_RIGHT:return POV_RIGHT;
 	case AXIS_DOWN:	return POV_DOWN;
 	case AXIS_LEFT:	return POV_LEFT;
 	case POV_NONE:  return AXIS_NONE;
-	case POV_UP:	return AXIS_UP;
-	case POV_RIGHT: return AXIS_RIGHT;
-	case POV_DOWN:  return AXIS_DOWN;
-	case POV_LEFT:  return AXIS_LEFT;
+	case AXIS_NONE: return POV_NONE;
 	default:		return ARROW_END;
 	}
 }

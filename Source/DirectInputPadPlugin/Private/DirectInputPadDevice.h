@@ -27,11 +27,11 @@ public:
 	virtual void SetChannelValues(int32 ControllerId, const FForceFeedbackValues &values){}
 
 private:
-	TSharedRef<FGenericApplicationMessageHandler>	MessageHandler_;
+	TSharedPtr<FGenericApplicationMessageHandler>	MessageHandler_;
 
-	TSharedPtr<FDirectInputDriver>				DDriver_;
-	TSharedPtr<FDirectInputJoystickFactory>		DFactory_;
-	TArray<TWeakPtr<FDirectInputJoystick>>		DJoysticks_; // 必ずMAX_JOYSITCKS分確保される。IndexがPlayerIDと一致している
+	TSharedPtr<FDirectInputDriver>					DDriver_;
+	TSharedPtr<FDirectInputJoystickFactory>			DFactory_;
+	TArray<TWeakPtr<FDirectInputJoystick>>			DJoysticks_; // 必ずMAX_JOYSITCKS分確保される。IndexがPlayerIDと一致している
 
-	uint32										XInputDeviceNum_ = 0; // つながっているXInputデバイス数、最大4
+	uint32											XInputDeviceNum_ = 0; // つながっているXInputデバイス数、最大4
 };

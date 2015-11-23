@@ -9,7 +9,11 @@ const FKey EKeysDirectInputPad::DIGamePad_RotX("DIGamePad_RotX");
 const FKey EKeysDirectInputPad::DIGamePad_RotY("DIGamePad_RotY");
 const FKey EKeysDirectInputPad::DIGamePad_RotZ("DIGamePad_RotZ");
 
-const FKey EKeysDirectInputPad::DIGamePad_POV("DIGamePad_POV");
+//const FKey EKeysDirectInputPad::DIGamePad_POV("DIGamePad_POV");
+const FKey EKeysDirectInputPad::DIGamePad_POV_Up("DIGamePad_POV_Up");
+const FKey EKeysDirectInputPad::DIGamePad_POV_Left("DIGamePad_POV_Left");
+const FKey EKeysDirectInputPad::DIGamePad_POV_Down("DIGamePad_POV_Down");
+const FKey EKeysDirectInputPad::DIGamePad_POV_Right("DIGamePad_POV_Right");
 
 const FKey EKeysDirectInputPad::DIGamePad_Button1("DIGamePad_Button1");
 const FKey EKeysDirectInputPad::DIGamePad_Button2("DIGamePad_Button2");
@@ -44,9 +48,3 @@ const FKey EKeysDirectInputPad::DIGamePad_Button29("DIGamePad_Button29");
 const FKey EKeysDirectInputPad::DIGamePad_Button30("DIGamePad_Button30");
 const FKey EKeysDirectInputPad::DIGamePad_Button31("DIGamePad_Button31");
 const FKey EKeysDirectInputPad::DIGamePad_Button32("DIGamePad_Button32");
-
-const FKey EKeysDirectInputPad::DIGamePad_POV_None("DIGamePad_POV_None");
-const FKey EKeysDirectInputPad::DIGamePad_POV_Up("DIGamePad_POV_Up");
-const FKey EKeysDirectInputPad::DIGamePad_POV_Left("DIGamePad_POV_Left");
-const FKey EKeysDirectInputPad::DIGamePad_POV_Bottom("DIGamePad_POV_Bottom");
-const FKey EKeysDirectInputPad::DIGamePad_POV_Right("DIGamePad_POV_Right");

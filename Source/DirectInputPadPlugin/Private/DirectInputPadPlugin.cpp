@@ -28,7 +28,12 @@ void FDirectInputPadPlugin::StartupModule()
 	ADDKEY(DIGamePad_RotX,  "DIGamePad_RotX",  "DIGamePad Rot X",  ATTR_ANALOG);
 	ADDKEY(DIGamePad_RotY,  "DIGamePad_RotY",  "DIGamePad Rot Y",  ATTR_ANALOG);
 	ADDKEY(DIGamePad_RotZ,  "DIGamePad_RotZ",  "DIGamePad Rot Z",  ATTR_ANALOG);
-	ADDKEY(DIGamePad_POV,   "DIGamePad_POV",   "DIGamePad POV",    ATTR_ANALOG);
+
+	//ADDKEY(DIGamePad_POV,   "DIGamePad_POV",   "DIGamePad POV",    ATTR_ANALOG);
+	ADDKEY(DIGamePad_POV_Up,	"DIGamePad_POV_Up",		"DIGamePad POV Up",		ATTR_BTN);
+	ADDKEY(DIGamePad_POV_Left,	"DIGamePad_POV_Left",	"DIGamePad POV Left",	ATTR_BTN);
+	ADDKEY(DIGamePad_POV_Down,	"DIGamePad_POV_Down",	"DIGamePad POV Down",	ATTR_BTN);
+	ADDKEY(DIGamePad_POV_Right,	"DIGamePad_POV_Right",	"DIGamePad POV Right",	ATTR_BTN);
 
 	ADDKEY(DIGamePad_Button1,  "DIGamePad_Button1",  "DIGamePad Button 1",  ATTR_BTN);
 	ADDKEY(DIGamePad_Button2,  "DIGamePad_Button2",  "DIGamePad Button 2",  ATTR_BTN);
@@ -63,11 +68,6 @@ void FDirectInputPadPlugin::StartupModule()
 	ADDKEY(DIGamePad_Button30, "DIGamePad_Button30", "DIGamePad Button 30", ATTR_BTN);
 	ADDKEY(DIGamePad_Button31, "DIGamePad_Button31", "DIGamePad Button 31", ATTR_BTN);
 	ADDKEY(DIGamePad_Button32, "DIGamePad_Button32", "DIGamePad Button 32", ATTR_BTN);
-
-	ADDKEY(DIGamePad_POV, "DIGamePad_POV_Up",		"DIGamePad POV Up",		ATTR_BTN);
-	ADDKEY(DIGamePad_POV, "DIGamePad_POV_Left",		"DIGamePad POV Left",	ATTR_BTN);
-	ADDKEY(DIGamePad_POV, "DIGamePad_POV_Bottom",	"DIGamePad POV Bottom", ATTR_BTN);
-	ADDKEY(DIGamePad_POV, "DIGamePad_POV_Right",	"DIGamePad POV Right",	ATTR_BTN);
 
 #undef ATTR_ANALOG
 #undef ATTR_BTN

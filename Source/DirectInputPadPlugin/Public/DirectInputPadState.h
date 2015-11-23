@@ -47,7 +47,7 @@ enum EDirectInputPadKeyName : uint8
 	DIGamePad_Button31 UMETA(DisplayName = "DIGamePad_Button31"),
 	DIGamePad_Button32 UMETA(DisplayName = "DIGamePad_Button32"),
 
-	DIGamePad_END,
+	DIGamePad_END UMETA(DisplayName = "DIGamePad_END"),
 };
 
 // DirectInputPad—pFKey
@@ -60,7 +60,11 @@ struct EKeysDirectInputPad
 	static const FKey DIGamePad_RotY;
 	static const FKey DIGamePad_RotZ;
 
-	static const FKey DIGamePad_POV;
+	//static const FKey DIGamePad_POV;
+	static const FKey DIGamePad_POV_Up;
+	static const FKey DIGamePad_POV_Left;
+	static const FKey DIGamePad_POV_Down;
+	static const FKey DIGamePad_POV_Right;
 
 	static const FKey DIGamePad_Button1;
 	static const FKey DIGamePad_Button2;
@@ -95,10 +99,4 @@ struct EKeysDirectInputPad
 	static const FKey DIGamePad_Button30;
 	static const FKey DIGamePad_Button31;
 	static const FKey DIGamePad_Button32;
-
-	static const FKey DIGamePad_POV_None;
-	static const FKey DIGamePad_POV_Up;
-	static const FKey DIGamePad_POV_Left;
-	static const FKey DIGamePad_POV_Bottom;
-	static const FKey DIGamePad_POV_Right;
 };
