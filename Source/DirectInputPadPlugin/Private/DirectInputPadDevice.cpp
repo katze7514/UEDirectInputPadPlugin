@@ -28,11 +28,10 @@ bool FDirectInputPadDevice::Init(const TSharedRef< FGenericApplicationMessageHan
 		MainWindow = MainFrameModule.GetParentWindow();
 	}
 	else
-#else
+#endif
 	{
 		MainWindow = GEngine->GameViewport->GetWindow();
 	}
-#endif
 
 	if(MainWindow.IsValid() && MainWindow->GetNativeWindow().IsValid())
 	{
@@ -45,16 +44,25 @@ bool FDirectInputPadDevice::Init(const TSharedRef< FGenericApplicationMessageHan
 	DFactory_ = MakeShareable<FDirectInputJoystickFactory>(new FDirectInputJoystickFactory());
 	if(!DFactory_->Init(hWnd, DDriver_)) return false;
 
-	DJoysticks_.Reset(MAX_JOYSTICKS);
+	DInputDeviceNum_ = 0;
+	DJoysticks_.SetNum(MAX_JOYSTICKS);
 	
 	uint32 DJoyNum = MAX_JOYSTICKS - XInputDeviceNum_;
+	DJoyNum =( DFactory_->EnabledJoystickNum() < DJoyNum) ? DFactory_->EnabledJoystickNum() : DJoyNum;
+
+	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputPad detected: %d"), DJoyNum);
+
 	for(uint32 i= XInputDeviceNum_; i<DJoyNum; ++i)
 	{
+		//UE_LOG(DirectInputPadPlugin, Log, TEXT("DIPad %d"),i);
+
 		auto joy = DFactory_->GetJoystick(i);
 		if(joy.IsValid())
 		{
 			joy->SetPlayerID(i);
-			DJoysticks_[i]=joy;
+			DJoysticks_[i] = joy;
+
+			++DInputDeviceNum_;
 		}
 	}
 
@@ -67,10 +75,9 @@ void FDirectInputPadDevice::Fin()
 	DDriver_->Fin();
 }
 
-
 void FDirectInputPadDevice::SendControllerEvents()
 {
-	if(DJoysticks_.Num()<=0) return;
+	if(DInputDeviceNum_==0) return;
 
 	for(const auto& j : DJoysticks_)
 	{

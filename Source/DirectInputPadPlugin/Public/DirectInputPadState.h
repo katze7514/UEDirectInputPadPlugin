@@ -1,7 +1,7 @@
 #pragma once
 
 //* Joystick‚ÌÀƒL[‚ğw‚·‚½‚ß‚Ì—ñ‹“Œ^
-UENUM(BluprintableType)
+UENUM()
 enum EDirectInputPadKeyName : uint8
 {
 	DIGamePad_AXIS_X UMETA(DisplayName = "DIGamePad_AxisX"),

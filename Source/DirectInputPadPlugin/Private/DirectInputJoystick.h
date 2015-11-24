@@ -71,7 +71,7 @@ private:
 enum EDirectInputArrow : uint8
 {
 	// ’Êí‚Ìƒ{ƒ^ƒ“‚ÌŸ‚©‚ç‚Ì”Ô†‚ğU‚é
-	POV_UP=32,		//!< POVª
+	POV_UP	  =32,	//!< POVª
 	POV_RIGHT,		//!< POV¨
 	POV_DOWN,		//!< POV«
 	POV_LEFT,		//!< POV©

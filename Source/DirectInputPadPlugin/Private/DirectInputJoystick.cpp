@@ -94,14 +94,14 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	HRESULT r = driver->CreateDevice(joyins.guidInstance, &pDevice_, NULL);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick CreateDevice fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick CreateDevice fail. : %x"),r);
 		return false;
 	}
 
 	r = pDevice_->SetDataFormat(&c_dfDIJoystick);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetDataformat fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetDataformat fail. : %x"),r);
 		Fin();
 		return false;
 	}
@@ -117,7 +117,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	r = pDevice_->SetCooperativeLevel(hWnd, flags);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetCooperativeLevel fail. : %n"), r);
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetCooperativeLevel fail. : %x"), r);
 		Fin();
 		return false;
 	}
@@ -135,7 +135,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	r = pDevice_->SetProperty(DIPROP_AXISMODE, &diprop.diph);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick AxisMode Setup fail."));
+		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick AxisMode Setup fail. : %x"), r);
 		Fin();
 		return false;
 	}
@@ -161,7 +161,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 
 void FDirectInputJoystick::InitDefaultMap()
 {
-	JoystickMap_.Reset(DIGamePad_END);
+	JoystickMap_.SetNumUninitialized(DIGamePad_END);
 
 	SetDelegateLeftAnalogX(DIGamePad_AXIS_X);
 	SetDelegateLeftAnalogY(DIGamePad_AXIS_Y);
@@ -385,10 +385,21 @@ void FDirectInputJoystick::EventPov(const TSharedPtr<FGenericApplicationMessageH
 		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Up.GetFName(), GetPlayerID(), false);
 		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadUp, GetPlayerID(), false);
 	}
-	else if(IsPush(POV_DOWN))
+	else if(IsRelease(POV_UP))
+	{
+		MessageHandler->OnControllerButtonReleased(EKeysDirectInputPad::DIGamePad_POV_Up.GetFName(), GetPlayerID(), false);
+		MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::DPadUp, GetPlayerID(), false);
+	}
+	
+	if(IsPush(POV_DOWN))
 	{
 		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Down.GetFName(), GetPlayerID(), false);
 		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadDown, GetPlayerID(), false);
+	}
+	else if(IsRelease(POV_DOWN))
+	{
+		MessageHandler->OnControllerButtonReleased(EKeysDirectInputPad::DIGamePad_POV_Down.GetFName(), GetPlayerID(), false);
+		MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::DPadDown, GetPlayerID(), false);
 	}
 
 	if(IsPush(POV_RIGHT))
@@ -396,10 +407,21 @@ void FDirectInputJoystick::EventPov(const TSharedPtr<FGenericApplicationMessageH
 		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Right.GetFName(), GetPlayerID(), false);
 		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadRight, GetPlayerID(), false);
 	}
-	else if(IsPush(POV_LEFT))
+	else if(IsRelease(POV_RIGHT))
+	{
+		MessageHandler->OnControllerButtonReleased(EKeysDirectInputPad::DIGamePad_POV_Right.GetFName(), GetPlayerID(), false);
+		MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::DPadRight, GetPlayerID(), false);
+	}
+
+	if(IsPush(POV_LEFT))
 	{
 		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Left.GetFName(), GetPlayerID(), false);
 		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadLeft, GetPlayerID(), false);
+	}
+	else if(IsRelease(POV_LEFT))
+	{
+		MessageHandler->OnControllerButtonReleased(EKeysDirectInputPad::DIGamePad_POV_Left.GetFName(), GetPlayerID(), false);
+		MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::DPadLeft, GetPlayerID(), false);
 	}
 }
 
@@ -775,8 +797,25 @@ enum EDirectInputArrow FDirectInputJoystick::SwapPovAxis(enum EDirectInputArrow 
 bool FDirectInputJoystick::IsPress(uint32_t nBtn)const
 {
 	if(nBtn>=ARROW_END)	return false;
-	if(nBtn>=AXIS_NONE) return IsAxisPress(static_cast<enum EDirectInputArrow>(nBtn));
-	if(nBtn>=POV_NONE)	return IsPovPress(static_cast<enum EDirectInputArrow>(nBtn));
+
+	switch(nBtn)
+	{
+	case POV_UP:
+	case POV_RIGHT:
+	case POV_DOWN:
+	case POV_LEFT:
+	case POV_NONE:
+		return IsPovPress(static_cast<enum EDirectInputArrow>(nBtn));
+	break;
+
+	case AXIS_UP:
+	case AXIS_RIGHT:
+	case AXIS_DOWN:
+	case AXIS_LEFT:
+	case AXIS_NONE:
+		return IsAxisPress(static_cast<enum EDirectInputArrow>(nBtn));
+	break;
+	}
 
 	return (joyBuf_[nCurIndex_].rgbButtons[nBtn] & 0x80)>0;
 }
@@ -784,8 +823,25 @@ bool FDirectInputJoystick::IsPress(uint32_t nBtn)const
 bool FDirectInputJoystick::IsPush(uint32_t nBtn)const
 {
 	if(nBtn>=ARROW_END)	return false; 
-	if(nBtn>=AXIS_NONE) return IsAxisPush(static_cast<enum EDirectInputArrow>(nBtn));
-	if(nBtn>=POV_NONE)	return IsPovPush(static_cast<enum EDirectInputArrow>(nBtn));
+
+	switch(nBtn)
+	{
+	case POV_UP:
+	case POV_RIGHT:
+	case POV_DOWN:
+	case POV_LEFT:
+	case POV_NONE:
+		return IsPovPush(static_cast<enum EDirectInputArrow>(nBtn));
+	break;
+
+	case AXIS_UP:
+	case AXIS_RIGHT:
+	case AXIS_DOWN:
+	case AXIS_LEFT:
+	case AXIS_NONE:
+		return IsAxisPush(static_cast<enum EDirectInputArrow>(nBtn));
+	break;
+	}
 
 	return (joyBuf_[nCurIndex_].rgbButtons[nBtn] & 0x80)>0
 		&& (joyBuf_[nCurIndex_^1].rgbButtons[nBtn] & 0x80)==0;
@@ -794,8 +850,25 @@ bool FDirectInputJoystick::IsPush(uint32_t nBtn)const
 bool FDirectInputJoystick::IsRelease(uint32_t nBtn)const
 {
 	if(nBtn>=ARROW_END)	return false;
-	if(nBtn>=AXIS_NONE) return IsAxisRelease(static_cast<enum EDirectInputArrow>(nBtn));
-	if(nBtn>=POV_NONE)	return IsPovRelease(static_cast<enum EDirectInputArrow>(nBtn));
+
+	switch(nBtn)
+	{
+	case POV_UP:
+	case POV_RIGHT:
+	case POV_DOWN:
+	case POV_LEFT:
+	case POV_NONE:
+		return IsPovRelease(static_cast<enum EDirectInputArrow>(nBtn));
+	break;
+
+	case AXIS_UP:
+	case AXIS_RIGHT:
+	case AXIS_DOWN:
+	case AXIS_LEFT:
+	case AXIS_NONE:
+		return IsAxisRelease(static_cast<enum EDirectInputArrow>(nBtn));
+	break;
+	}
 
 	return (joyBuf_[nCurIndex_].rgbButtons[nBtn] & 0x80)==0
 		&& (joyBuf_[nCurIndex_^1].rgbButtons[nBtn] & 0x80)>0;
@@ -825,7 +898,7 @@ void FDirectInputJoystickFactory::Fin()
 TSharedPtr<FDirectInputJoystick> FDirectInputJoystickFactory::GetJoystick(uint32 nNo)
 {
 	auto joy = mapJoy_.Find(nNo);
-	if(joy) return *joy;
+	if(joy && (*joy).IsValid()) return *joy;
 
 	const DIDEVICEINSTANCE* info = joyEnum_.GetJoystickInfo(nNo);
 	if(!info) return nullptr;
