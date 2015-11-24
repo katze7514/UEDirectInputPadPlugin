@@ -18,11 +18,12 @@ UE4が元からもっている「ゲームパッドAボタン」「ゲームパ�
 
 もちろん、DIPad専用のイベントもあります。こちらの場合、最大で6つ軸、1つのPOV、32個のボタンイベントを扱うことができます。
 
-
 # 使用方法
-UE4のプラグインとして入れて有効にするだけで使うことができます。  
+UE4のプラグインとして入れて有効にするだけで使うことができます。
 プラグインのフォルダ名は、「DirectInputPadPlugin」としてください。  
-DIPadとしてのイベントは、BPエディタでDIGamePadで検索してください。
+VS2015は入れて、ソースからビルドしてください。バイナリ(DLL)はつけていません。
+
+DIPadとしてのイベントは、BPエディタでDIGamePadで検索！
 
 # 使用上の注意
 - XInputのゲームパッドが刺さっていた場合は、ちゃんと動きません
@@ -39,10 +40,12 @@ DIPadとしてのイベントは、BPエディタでDIGamePadで検索してく�
 - 軸の反転フラグ
 
 # Misc
-VS2015で開発していますが、たぶん、VS2013でもコンパイルできるとは思いますのでUE4.9以前でも使用できるとは思います。
+VS2015で開発していますが、VS2013でもコンパイルできるとは思いますのでUE4.9以前でも使用できるとは思います。  
+内部でtuple/functionalを使っていますので、VS2012以前ではその部分を書き換えれば、たぶん
 
 # 参考
 https://github.com/Ikarus76/UEJoystickPlugin/
 
 # 連絡先
-Twitter : [katze_7514](http://twitter.com/katze_7514)
+Twitter : [katze_7514](http://twitter.com/katze_7514)  
+blog    : [GameProgrammer's Night](http://katze.hatenablog.jp/)
