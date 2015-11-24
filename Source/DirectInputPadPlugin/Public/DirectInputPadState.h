@@ -1,8 +1,10 @@
 #pragma once
 
+#include "DirectInputPadState.generated.h"
+
 //* Joystick‚ÌÀƒL[‚ğw‚·‚½‚ß‚Ì—ñ‹“Œ^
 UENUM()
-enum EDirectInputPadKeyName : uint8
+enum EDirectInputPadKeyName
 {
 	DIGamePad_AXIS_X UMETA(DisplayName = "DIGamePad_AxisX"),
 	DIGamePad_AXIS_Y UMETA(DisplayName = "DIGamePad_AxisX"),

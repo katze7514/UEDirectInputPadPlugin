@@ -301,6 +301,9 @@ bool FDirectInputJoystick::Input()
 	return true;
 }
 
+/////////////////////////////
+// ƒCƒxƒ“ƒg
+/////////////////////////////
 void FDirectInputJoystick::Event(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler)
 {
 	// JoystickMap‚ð‚Ô‚ñ‰ñ‚·
@@ -353,8 +356,6 @@ void FDirectInputJoystick::Event(const TSharedPtr<FGenericApplicationMessageHand
 
 void FDirectInputJoystick::EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyName ePadName, FKey DIKey)
 {
-	if(Analog==0.0f) return;
-
 	MessageHandler->OnControllerAnalog(DIKey.GetFName(), GetPlayerID(), Analog);
 	if(!JoystickMap_[ePadName].IsNone())
 		MessageHandler->OnControllerAnalog(JoystickMap_[ePadName], GetPlayerID(), Analog);
@@ -425,6 +426,9 @@ void FDirectInputJoystick::EventPov(const TSharedPtr<FGenericApplicationMessageH
 	}
 }
 
+/////////////////////////////
+// ConfigÝ’è
+/////////////////////////////
 void FDirectInputJoystick::SetGuard(bool bGuard)
 {
 	bGuard_ = bGuard;
@@ -551,7 +555,7 @@ void FDirectInputJoystick::SetDelegateLeftAnalogY(EDirectInputPadKeyName ePadKey
 	}
 }
 
-//////////////////////////////
+/////////////////////////////
 // Ž²
 /////////////////////////////
 namespace{
@@ -822,7 +826,7 @@ bool FDirectInputJoystick::IsPress(uint32_t nBtn)const
 
 bool FDirectInputJoystick::IsPush(uint32_t nBtn)const
 {
-	if(nBtn>=ARROW_END)	return false; 
+	if(nBtn >= ARROW_END)	return false;
 
 	switch(nBtn)
 	{
@@ -831,7 +835,7 @@ bool FDirectInputJoystick::IsPush(uint32_t nBtn)const
 	case POV_DOWN:
 	case POV_LEFT:
 	case POV_NONE:
-		return IsPovPush(static_cast<enum EDirectInputArrow>(nBtn));
+	return IsPovPush(static_cast<enum EDirectInputArrow>(nBtn));
 	break;
 
 	case AXIS_UP:
@@ -839,12 +843,12 @@ bool FDirectInputJoystick::IsPush(uint32_t nBtn)const
 	case AXIS_DOWN:
 	case AXIS_LEFT:
 	case AXIS_NONE:
-		return IsAxisPush(static_cast<enum EDirectInputArrow>(nBtn));
+	return IsAxisPush(static_cast<enum EDirectInputArrow>(nBtn));
 	break;
 	}
 
 	return (joyBuf_[nCurIndex_].rgbButtons[nBtn] & 0x80)>0
-		&& (joyBuf_[nCurIndex_^1].rgbButtons[nBtn] & 0x80)==0;
+		&& (joyBuf_[nCurIndex_ ^ 1].rgbButtons[nBtn] & 0x80) == 0;
 }
 
 bool FDirectInputJoystick::IsRelease(uint32_t nBtn)const
