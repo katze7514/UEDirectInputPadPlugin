@@ -202,12 +202,16 @@ private:
 
 	// アナログイベントを発生させる
 	void EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyName ePadName, FKey DIKey);
+	// ボタンイベントを発生させる
+	void EventButton(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey);
+	// POVイベント発生させる
+	void EventPov(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
+
 	// ボタン押したイベントを発生させる
 	void EventButtonPressed(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey);
 	// ボタン離したイベントを発生させる
 	void EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey);
-	// POVイベント発生させる
-	void EventPov(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
+	
 
 private:
 	//! POVが押されている
