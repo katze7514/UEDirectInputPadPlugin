@@ -2,7 +2,9 @@
 
 #include "MainFrame.h"
 
+#include "DirectInputDriver.h"
 #include "DirectInputJoystick.h"
+
 #include "DirectInputPadDevice.h"
 
 DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
