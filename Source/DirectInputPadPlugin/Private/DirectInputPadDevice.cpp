@@ -46,23 +46,24 @@ bool FDirectInputPadDevice::Init(const TSharedRef< FGenericApplicationMessageHan
 	DFactory_ = MakeShareable<FDirectInputJoystickFactory>(new FDirectInputJoystickFactory());
 	if(!DFactory_->Init(hWnd, DDriver_)) return false;
 
+	uint32 XInputDeviceNum = DFactory_->GetXInputDeviceNum();
 	DInputDeviceNum_ = 0;
 	DJoysticks_.SetNum(MAX_JOYSTICKS);
 	
-	uint32 DJoyNum = MAX_JOYSTICKS - XInputDeviceNum_;
+	uint32 DJoyNum = MAX_JOYSTICKS - XInputDeviceNum;
 	DJoyNum =( DFactory_->EnabledJoystickNum() < DJoyNum) ? DFactory_->EnabledJoystickNum() : DJoyNum;
 
 	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputPad detected: %d"), DJoyNum);
 
-	for(uint32 i= XInputDeviceNum_; i<DJoyNum; ++i)
+	for(uint32 i=0; i<DJoyNum; ++i)
 	{
 		//UE_LOG(DirectInputPadPlugin, Log, TEXT("DIPad %d"),i);
 
 		auto joy = DFactory_->GetJoystick(i);
 		if(joy.IsValid())
 		{
-			joy->SetPlayerID(i);
-			DJoysticks_[i] = joy;
+			joy->SetPlayerID(XInputDeviceNum+i);
+			DJoysticks_[XInputDeviceNum+i] = joy;
 
 			++DInputDeviceNum_;
 		}

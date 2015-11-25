@@ -16,4 +16,5 @@ public:
 
 private:
 	TSharedPtr<FDirectInputPadDevice> device_;
+	bool bDeviceInit = true;
 };

@@ -47,6 +47,9 @@ public:
 
 	bool Init(FDirectInputDriver& adapter);
 
+	//! 検出したXInputデバイスの数
+	uint32 GetXInputDeviceNum()const{ return nXInputDeviceNum_; }
+
 	//! 使用可能なジョイスティックの数
 	uint32 EnabledJoystickNum()const{ return vecJoyStickInfo_.Num(); }
 
@@ -62,6 +65,8 @@ private:
 private:
 	//! ジョイスティック情報配列
 	TArray<DIDEVICEINSTANCE> vecJoyStickInfo_;
+
+	uint32 nXInputDeviceNum_ = 0;
 };
 
 
@@ -81,6 +86,9 @@ public:
 
 	bool Init(HWND hWnd, const TSharedPtr<FDirectInputDriver>& pDriver, bool bBackGround=false);
 	void Fin();
+
+	//! 検出したXInputデバイスの数
+	uint32 GetXInputDeviceNum()const{ return joyEnum_.GetXInputDeviceNum(); }
 
 	//! 使用可能なジョイスティックの数
 	uint32 EnabledJoystickNum()const{ return joyEnum_.EnabledJoystickNum(); }

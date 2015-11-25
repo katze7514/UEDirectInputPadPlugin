@@ -33,6 +33,5 @@ private:
 	TSharedPtr<FDirectInputJoystickFactory>			DFactory_;
 	TArray<TWeakPtr<FDirectInputJoystick>>			DJoysticks_; // 必ずMAX_JOYSITCKS分確保される。IndexがPlayerIDと一致している
 
-	uint32											XInputDeviceNum_ = 0; // つながっているXInputデバイス数、最大4
-	uint32											DInputDeviceNum_ = 0; // つながっている有効なDInputデバイス数
+	uint32											DInputDeviceNum_ = 0; // 有効なDInputデバイス数
 };
