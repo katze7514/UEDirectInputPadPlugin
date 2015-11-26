@@ -94,8 +94,8 @@ public:
 	void	SetPlayerID(int32 nPlayerID){ nPlayerID_ = nPlayerID; }
 
 	// Joystickの実キーと、UE4のGameKeyを一致させるマップ
-	FName	GetUEKey(EDirectInputPadKeyName ePadKey);
-	void	SetUEKey(EDirectInputPadKeyName ePadKey, FName UEKeyName);
+	FName	GetUEKey(EDirectInputPadKeyNames ePadKey);
+	void	SetUEKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName);
 
 public:
 	//! x軸の値
@@ -153,20 +153,20 @@ private:
 	// デフォルトキーマップ
 	void InitDefaultMap();
 
-	void SetDelegateLeftAnalogX(EDirectInputPadKeyName ePadKey);
-	void SetDelegateLeftAnalogY(EDirectInputPadKeyName ePadKey);
+	void SetDelegateLeftAnalogX(EDirectInputPadKeyNames ePadKey);
+	void SetDelegateLeftAnalogY(EDirectInputPadKeyNames ePadKey);
 
 	// アナログイベントを発生させる
-	void EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyName ePadName, FKey DIKey);
+	void EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyNames ePadName, FKey DIKey);
 	// ボタンイベントを発生させる
-	void EventButton(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey);
+	void EventButton(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey);
 	// POVイベント発生させる
 	void EventPov(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
 
 	// ボタン押したイベントを発生させる
-	void EventButtonPressed(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey);
+	void EventButtonPressed(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey);
 	// ボタン離したイベントを発生させる
-	void EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey);
+	void EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey);
 	
 
 private:

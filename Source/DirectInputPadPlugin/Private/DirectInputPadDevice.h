@@ -26,6 +26,9 @@ public:
 	virtual void SetChannelValue(int32 ControllerId, FForceFeedbackChannelType ChannelType, float Value){}
 	virtual void SetChannelValues(int32 ControllerId, const FForceFeedbackValues &values){}
 
+public:
+	TWeakPtr<FDirectInputJoystick> GetJoystick(uint32 nPlayerID);
+
 private:
 	TSharedPtr<FGenericApplicationMessageHandler>	MessageHandler_;
 

@@ -2,6 +2,8 @@
 
 #include "MainFrame.h"
 
+#include "DirectInputPadJoystick.h"
+
 #include "DirectInputDriver.h"
 #include "DirectInputJoystick.h"
 
@@ -74,6 +76,7 @@ bool FDirectInputPadDevice::Init(const TSharedRef< FGenericApplicationMessageHan
 
 void FDirectInputPadDevice::Fin()
 {
+	UDirectInputPadFunctionLibrary::ClearDirectInputPadJoystickMap();
 	DFactory_->Fin();
 	DDriver_->Fin();
 }
@@ -94,6 +97,17 @@ void FDirectInputPadDevice::SendControllerEvents()
 			}
 		}
 	}
+}
+
+TWeakPtr<FDirectInputJoystick> FDirectInputPadDevice::GetJoystick(uint32 nPlayerID)
+{
+	if(!DJoysticks_.IsValidIndex(nPlayerID))
+		return nullptr;
+
+	if(DJoysticks_[nPlayerID].IsValid()) 
+		return DJoysticks_[nPlayerID];
+
+	return nullptr;
 }
 
 #include "HideWindowsPlatformTypes.h"

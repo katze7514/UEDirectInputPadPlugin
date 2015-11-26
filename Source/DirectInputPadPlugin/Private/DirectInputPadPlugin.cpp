@@ -74,7 +74,6 @@ void FDirectInputPadPlugin::StartupModule()
 #undef ADDKEY
 }
 
-
 void FDirectInputPadPlugin::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
@@ -94,4 +93,7 @@ TSharedPtr< class IInputDevice > FDirectInputPadPlugin::CreateInputDevice(const 
 	return nullptr;
 }
 
-
+TSharedPtr<FDirectInputPadDevice> FDirectInputPadPlugin::GetDirectInputPadDevice()
+{
+	return device_;
+}

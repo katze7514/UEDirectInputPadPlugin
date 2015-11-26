@@ -14,7 +14,10 @@ public:
 	/** IInputDeviceModule immplementaion **/
 	virtual TSharedPtr< class IInputDevice > CreateInputDevice(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler);
 
+
+public:
+	TSharedPtr<FDirectInputPadDevice> GetDirectInputPadDevice();
+
 private:
 	TSharedPtr<FDirectInputPadDevice> device_;
-	bool bDeviceInit = true;
 };

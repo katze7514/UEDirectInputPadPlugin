@@ -283,7 +283,7 @@ void FDirectInputJoystick::Event(const TSharedPtr<FGenericApplicationMessageHand
 	EventButton(MessageHandler, DIGamePad_Button32, EKeysDirectInputPad::DIGamePad_Button32);
 }
 
-void FDirectInputJoystick::EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyName ePadName, FKey DIKey)
+void FDirectInputJoystick::EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyNames ePadName, FKey DIKey)
 {
 	MessageHandler->OnControllerAnalog(DIKey.GetFName(), GetPlayerID(), Analog);
 
@@ -340,13 +340,13 @@ void FDirectInputJoystick::EventAnalog(const TSharedPtr<FGenericApplicationMessa
 	}
 }
 
-void FDirectInputJoystick::EventButton(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey)
+void FDirectInputJoystick::EventButton(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey)
 {
 	EventButtonPressed(MessageHandler, ePadName, DIKey);
 	EventButtonReleased(MessageHandler, ePadName, DIKey);
 }
 
-void FDirectInputJoystick::EventButtonPressed(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey)
+void FDirectInputJoystick::EventButtonPressed(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey)
 {
 	if(!IsPush(ePadName-DIGamePad_Button1)) return;
 
@@ -355,7 +355,7 @@ void FDirectInputJoystick::EventButtonPressed(const TSharedPtr<FGenericApplicati
 		MessageHandler->OnControllerButtonPressed(JoystickMap_[ePadName], GetPlayerID(), false);
 }
 
-void FDirectInputJoystick::EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyName ePadName, FKey DIKey)
+void FDirectInputJoystick::EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey)
 {
 	if(!IsRelease(ePadName-DIGamePad_Button1)) return;
 
@@ -418,13 +418,13 @@ void FDirectInputJoystick::SetGuard(bool bGuard)
 	if(bGuard_) ClearBuf();
 }
 
-FName FDirectInputJoystick::GetUEKey(EDirectInputPadKeyName ePadKey)
+FName FDirectInputJoystick::GetUEKey(EDirectInputPadKeyNames ePadKey)
 {
-	if(ePadKey>= EDirectInputPadKeyName::DIGamePad_END) return FName("");
+	if(ePadKey>= EDirectInputPadKeyNames::DIGamePad_END) return FName("");
 	return JoystickMap_[ePadKey];
 }
 
-void FDirectInputJoystick::SetUEKey(EDirectInputPadKeyName ePadKey, FName UEKeyName)
+void FDirectInputJoystick::SetUEKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName)
 {
 	if(ePadKey >= DIGamePad_END) return;
 
@@ -466,7 +466,7 @@ void FDirectInputJoystick::SetUEKey(EDirectInputPadKeyName ePadKey, FName UEKeyN
 	JoystickMap_[ePadKey] = UEKeyName;
 }
 
-void FDirectInputJoystick::SetDelegateLeftAnalogX(EDirectInputPadKeyName ePadKey)
+void FDirectInputJoystick::SetDelegateLeftAnalogX(EDirectInputPadKeyNames ePadKey)
 {
 	switch(ePadKey)
 	{
@@ -502,7 +502,7 @@ void FDirectInputJoystick::SetDelegateLeftAnalogX(EDirectInputPadKeyName ePadKey
 	}
 }
 
-void FDirectInputJoystick::SetDelegateLeftAnalogY(EDirectInputPadKeyName ePadKey)
+void FDirectInputJoystick::SetDelegateLeftAnalogY(EDirectInputPadKeyNames ePadKey)
 {
 	switch(ePadKey)
 	{
