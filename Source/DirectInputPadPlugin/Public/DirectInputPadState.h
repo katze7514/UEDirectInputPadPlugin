@@ -52,10 +52,30 @@ enum EDirectInputPadKeyNames
 	DIGamePad_END UMETA(DisplayName = "DIGamePad END"),
 };
 
+/* XInputのボタン配置を表す列挙型
+/* XBOXパッドの名称に合わせてある */
 UENUM()
 enum EXInputPadKeyNames
 {
-	XIGamePad_LeftAnalogX UMETA(DisplayName = "XIGamePad LeftAnalog X"),
+	XIGamePad_LeftAnalogX		UMETA(DisplayName = "XIGamePad L Analog X"),
+	XIGamePad_LeftAnalogY		UMETA(DisplayName = "XIGamePad L Analog Y"),
+	XIGamePad_RightAnalogX		UMETA(DisplayName = "XIGamePad R Analog X"),
+	XIGamePad_RightAnalogY		UMETA(DisplayName = "XIGamePad R Analog Y"),
+
+	XIGamePad_Button_A			UMETA(DisplayName = "XIGamePad Button A"),
+	XIGamePad_Button_B			UMETA(DisplayName = "XIGamePad Button B"),
+	XIGamePad_Button_X			UMETA(DisplayName = "XIGamePad Button X"),
+	XIGamePad_Button_Y			UMETA(DisplayName = "XIGamePad Button Y"),
+	XIGamePad_Button_LB			UMETA(DisplayName = "XIGamePad Button LB"),
+	XIGamePad_Button_RB			UMETA(DisplayName = "XIGamePad Button RB"),
+	XIGamePad_Button_LTrigger	UMETA(DisplayName = "XIGamePad Button L Trigger"),
+	XIGamePad_Button_RTrigger	UMETA(DisplayName = "XIGamePad Button R Trigger"),
+	XIGamePad_Button_BACK		UMETA(DisplayName = "XIGamePad Button BACK"),
+	XIGamePad_Button_START		UMETA(DisplayName = "XIGamePad Button START"),
+	XIGamePad_Button_LStick		UMETA(DisplayName = "XIGamePad Button L Stick"),
+	XIGamePad_Button_RStick		UMETA(DisplayName = "XIGamePad Button R Stick"),
+
+	XIGamePad_END UMETA(DisplayName = "XIGamePad END")
 };
 
 // DirectInputPad用FKey

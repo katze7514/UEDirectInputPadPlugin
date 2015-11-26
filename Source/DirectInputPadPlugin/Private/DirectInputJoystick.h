@@ -93,9 +93,9 @@ public:
 	int32	GetPlayerID()const{ return nPlayerID_; }
 	void	SetPlayerID(int32 nPlayerID){ nPlayerID_ = nPlayerID; }
 
-	// Joystickの実キーと、UE4のGameKeyを一致させるマップ
-	FName	GetUEKey(EDirectInputPadKeyNames ePadKey);
-	void	SetUEKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName);
+	// Joystickの実キーと、XInputのGameKeyを一致させるマップ
+	FName	GetXIKey(EDirectInputPadKeyNames ePadKey);
+	void	SetXIKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName);
 
 public:
 	//! x軸の値

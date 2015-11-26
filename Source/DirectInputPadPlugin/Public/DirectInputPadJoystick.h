@@ -14,14 +14,16 @@ class UDirectInputPadJoystick : public UObject
 	GENERATED_BODY()
 
 public:
-	void SetJoysticks(const TWeakPtr<FDirectInputJoystick>& Joystick);
+	// DIKey‚Éİ’è‚³‚ê‚Ä‚¢‚éXIKey‚ğæ“¾‚·‚éB‰½‚àİ’è‚³‚ê‚Ä‚È‚¢‚Æ‚«‚ÍAXIGamePad_END
+	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
+	EXInputPadKeyNames	GetKeyMap(EDirectInputPadKeyNames DIKey);
+
+	// DIKey‚ğAXIKey‚Æ‚µ‚Äİ’è‚·‚é
+	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
+	void				SetKeyMap(EDirectInputPadKeyNames DIKey, EXInputPadKeyNames XIKey);
 
 public:
-	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
-	EXInputPadKeyNames	GetKeyMap(EDirectInputPadKeyNames eDIKey);
-
-	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
-	void				SetKeyMap(EDirectInputPadKeyNames eDIKey, EXInputPadKeyNames eXIKey);
+	void SetJoysticks(const TWeakPtr<FDirectInputJoystick>& Joystick);
 
 private:
 	TWeakPtr<FDirectInputJoystick> Joystick_;
@@ -35,9 +37,11 @@ class UDirectInputPadFunctionLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
+	// 
 	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
 	static UDirectInputPadJoystick* GetDirectInputPadJoystick(int32 PlayerID);
 
 public:
-	static void ClearDirectInputPadJoystickMap();
+	static void InitDirectInputPadJoystickLibrary();
+	static void FinDirectInputPadJoystickLibrary();
 };

@@ -34,7 +34,4 @@ public:
 	{
 		return FModuleManager::Get().IsModuleLoaded( "DirectInputPadPlugin" );
 	}
-
-	//DirectInputPadDevice>
 };
-

@@ -418,13 +418,13 @@ void FDirectInputJoystick::SetGuard(bool bGuard)
 	if(bGuard_) ClearBuf();
 }
 
-FName FDirectInputJoystick::GetUEKey(EDirectInputPadKeyNames ePadKey)
+FName FDirectInputJoystick::GetXIKey(EDirectInputPadKeyNames ePadKey)
 {
 	if(ePadKey>= EDirectInputPadKeyNames::DIGamePad_END) return FName("");
 	return JoystickMap_[ePadKey];
 }
 
-void FDirectInputJoystick::SetUEKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName)
+void FDirectInputJoystick::SetXIKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName)
 {
 	if(ePadKey >= DIGamePad_END) return;
 
