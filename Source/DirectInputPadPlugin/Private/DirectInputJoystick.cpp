@@ -83,7 +83,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	InitDefaultMap();
 
 //	const string sFlag = (flags&DISCL_BACKGROUND)>0 ? "BACKGROUND" : "FOREGROUND";
-	UE_LOG(DirectInputPadPlugin, Log, TEXT("Joystick Device Create Success. : %d"), GetPlayerID());
+	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInput Joystick Create Success. : %s"), joyins.tszProductName);
 
 	return true;
 }
