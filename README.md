@@ -1,6 +1,5 @@
 # UEDirectInputPadPlugin
 UE4.10(Windows)で、DirectInputのゲームパッド(以下DIPad)を使用できるようするプラグインです。  
-まだ開発中ではありますが、最低限動くようにはなりましたので公開します。
 
 # 特徴
 - 複数のゲームパッドに対応
