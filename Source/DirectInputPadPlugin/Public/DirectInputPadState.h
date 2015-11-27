@@ -2,7 +2,7 @@
 
 #include "DirectInputPadState.generated.h"
 
-//* Joystick‚ÌÀƒL[‚ğw‚·‚½‚ß‚Ì—ñ‹“Œ^
+//* Joystickã®å®Ÿã‚­ãƒ¼ã‚’æŒ‡ã™ãŸã‚ã®åˆ—æŒ™å‹
 UENUM()
 enum EDirectInputPadKeyNames
 {
@@ -52,15 +52,15 @@ enum EDirectInputPadKeyNames
 	DIGamePad_END UMETA(DisplayName = "DIGamePad END"),
 };
 
-/* XInput‚Ìƒ{ƒ^ƒ“”z’u‚ğ•\‚·—ñ‹“Œ^
-/* XBOXƒpƒbƒh‚Ì–¼Ì‚É‡‚í‚¹‚Ä‚ ‚é */
+/* XInputã®ãƒœã‚¿ãƒ³é…ç½®ã‚’è¡¨ã™åˆ—æŒ™å‹
+/* XBOXãƒ‘ãƒƒãƒ‰ã®åç§°ã«åˆã‚ã›ã¦ã‚ã‚‹ */
 UENUM()
 enum EXInputPadKeyNames
 {
-	XIGamePad_LeftAnalogX		UMETA(DisplayName = "XIGamePad L Analog X"),
-	XIGamePad_LeftAnalogY		UMETA(DisplayName = "XIGamePad L Analog Y"),
-	XIGamePad_RightAnalogX		UMETA(DisplayName = "XIGamePad R Analog X"),
-	XIGamePad_RightAnalogY		UMETA(DisplayName = "XIGamePad R Analog Y"),
+	XIGamePad_LeftAnalogX		UMETA(DisplayName = "XIGamePad Left Analog X"),
+	XIGamePad_LeftAnalogY		UMETA(DisplayName = "XIGamePad Left Analog Y"),
+	XIGamePad_RightAnalogX		UMETA(DisplayName = "XIGamePad Right Analog X"),
+	XIGamePad_RightAnalogY		UMETA(DisplayName = "XIGamePad Right Analog Y"),
 
 	XIGamePad_Button_A			UMETA(DisplayName = "XIGamePad Button A"),
 	XIGamePad_Button_B			UMETA(DisplayName = "XIGamePad Button B"),
@@ -78,7 +78,7 @@ enum EXInputPadKeyNames
 	XIGamePad_END UMETA(DisplayName = "XIGamePad END")
 };
 
-// DirectInputPad—pFKey
+// DirectInputPadç”¨FKey
 struct EKeysDirectInputPad
 {
 	static const FKey DIGamePad_AxisX;

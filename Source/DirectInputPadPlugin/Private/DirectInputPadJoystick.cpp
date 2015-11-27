@@ -6,6 +6,8 @@
 
 #include "DirectInputPadJoystick.h"
 
+DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
+
 namespace{
 const FName XIGamepadKeyNames[] =
 {
@@ -59,7 +61,36 @@ void UDirectInputPadJoystick::SetKeyMap(EDirectInputPadKeyNames DIKey, EXInputPa
 		const auto& Joy = Joystick_.Pin();
 		if(Joy.IsValid())
 		{
-			Joy->SetXIKey(DIKey, XIGamepadKeyNames[XIKey]);
+			if(XIKey==XIGamePad_END)
+			{	Joy->SetXIKey(DIKey, FName());	}
+			else
+			{	Joy->SetXIKey(DIKey, XIGamepadKeyNames[XIKey]);	}
+		}
+	}
+}
+
+bool UDirectInputPadJoystick::IsAxisReverse(EDirectInputPadKeyNames DIAxis)
+{
+	if(Joystick_.IsValid())
+	{
+		const auto& Joy = Joystick_.Pin();
+		if(Joy.IsValid())
+		{
+			return Joy->IsAxisReverse(DIAxis);
+		}
+	}
+
+	return false;
+}
+
+void UDirectInputPadJoystick::SetAxisReverse(EDirectInputPadKeyNames DIAxis, bool bReverse)
+{
+	if(Joystick_.IsValid())
+	{
+		const auto& Joy = Joystick_.Pin();
+		if(Joy.IsValid())
+		{
+			Joy->SetAxisReverse(DIAxis, bReverse);
 		}
 	}
 }
@@ -68,26 +99,47 @@ void UDirectInputPadJoystick::SetKeyMap(EDirectInputPadKeyNames DIKey, EXInputPa
 // UDirectInputPadFunctionLibrary
 //////////////////////////////////
 namespace{
-TMap<int32, UDirectInputPadJoystick*> MapJoysticks;
+TArray<TWeakObjectPtr<UDirectInputPadJoystick>> ArrayJoysticks;
+
+inline TSharedPtr<FDirectInputPadDevice> GetDirectInputPadDevice()
+{
+	auto& DIPadPlugin = static_cast<FDirectInputPadPlugin&>(IDirectInputPadPlugin::Get());
+	return DIPadPlugin.GetDirectInputPadDevice();
+}
+} // namespace
+
+int32 UDirectInputPadFunctionLibrary::GetXInputPadNum()
+{
+	const auto& DIDevice = GetDirectInputPadDevice();
+	return DIDevice->GetXInputDeviceNum();
 }
 
-UDirectInputPadJoystick* UDirectInputPadFunctionLibrary::GetDirectInputPadJoystick(int32 PlayerID)
+int32 UDirectInputPadFunctionLibrary::GetDirectInputPadNum()
 {
-	auto Joy = MapJoysticks.Find(PlayerID);
-	if(Joy) return *Joy;
+	const auto& DIDevice = GetDirectInputPadDevice();
+	return DIDevice->GetDInputDeviceNum();
+}
 
-	auto& DIPadPlugin = static_cast<FDirectInputPadPlugin&>(IDirectInputPadPlugin::Get());
-	const auto& DIDevice = DIPadPlugin.GetDirectInputPadDevice();
-
-	auto DIPad = DIDevice->GetJoystick(PlayerID);
-	if(DIPad.IsValid())
+UDirectInputPadJoystick* UDirectInputPadFunctionLibrary::GetDirectInputPadJoystick(int32 PlayerIndex)
+{
+	if(PlayerIndex>=0 && PlayerIndex<=7)
 	{
-		UDirectInputPadJoystick* pJoyPad = NewObject<UDirectInputPadJoystick>();
-		pJoyPad->SetJoysticks(DIPad);
-		MapJoysticks.Emplace(PlayerID, pJoyPad);
-		return pJoyPad;
+		auto Joy = ArrayJoysticks[PlayerIndex];
+		if(Joy.IsValid()) return Joy.Get();
+
+		const auto& DIDevice = GetDirectInputPadDevice();
+
+		auto DIPad = DIDevice->GetJoystick(PlayerIndex);
+		if(DIPad.IsValid())
+		{
+			UDirectInputPadJoystick* pJoyPad = NewObject<UDirectInputPadJoystick>();
+			pJoyPad->SetJoysticks(DIPad);
+			ArrayJoysticks[PlayerIndex] = pJoyPad;
+			return pJoyPad;
+		}
 	}
 
+	UE_LOG(DirectInputPadPlugin, Warning, TEXT("Not Found PlayerIndex(%d) DirectInputJoystick."), PlayerIndex);
 	return nullptr;
 }
 
@@ -111,9 +163,11 @@ void UDirectInputPadFunctionLibrary::InitDirectInputPadJoystickLibrary()
 	XINameToEnumMap.Emplace(FGamepadKeyNames::RightThumb,			XIGamePad_Button_RStick);
 
 	XINameToEnumMap.Shrink();
+
+	ArrayJoysticks.SetNum(8);
 }
 
 void UDirectInputPadFunctionLibrary::FinDirectInputPadJoystickLibrary()
 {
-	MapJoysticks.Empty();
+	ArrayJoysticks.Empty();
 }

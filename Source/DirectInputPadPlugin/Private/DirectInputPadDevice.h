@@ -27,14 +27,17 @@ public:
 	virtual void SetChannelValues(int32 ControllerId, const FForceFeedbackValues &values){}
 
 public:
-	TWeakPtr<FDirectInputJoystick> GetJoystick(uint32 nPlayerID);
+	TWeakPtr<FDirectInputJoystick>	GetJoystick(uint32 nPlayerID);
+	int32							GetXInputDeviceNum()const{ return XInputDeviceNum_; }
+	int32							GetDInputDeviceNum()const{ return DInputDeviceNum_; }
 
 private:
 	TSharedPtr<FGenericApplicationMessageHandler>	MessageHandler_;
 
 	TSharedPtr<FDirectInputDriver>					DDriver_;
 	TSharedPtr<FDirectInputJoystickFactory>			DFactory_;
-	TArray<TWeakPtr<FDirectInputJoystick>>			DJoysticks_; // �K��MAX_JOYSITCKS���m�ۂ����BIndex��PlayerID�ƈ�v���Ă���
+	TArray<TWeakPtr<FDirectInputJoystick>>			DJoysticks_; // 必ずMAX_JOYSITCKS分確保される。IndexがPlayerIndexと一致している
 
-	uint32											DInputDeviceNum_ = 0; // �L����DInput�f�o�C�X��
+	int32											XInputDeviceNum_ = 0; // 有効なXInputデバイス数
+	int32											DInputDeviceNum_ = 0; // 有効なDInputデバイス数
 };

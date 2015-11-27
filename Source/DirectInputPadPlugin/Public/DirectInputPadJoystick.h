@@ -6,21 +6,27 @@
 
 class FDirectInputJoystick;
 
-// BPŒöŠJ—pDIPadƒNƒ‰ƒX
-// BP‚©‚ç‚ÍA‚±‚ÌƒNƒ‰ƒX‚ğ‰î‚µ‚Ä‘€ì‚·‚é
+// BPå…¬é–‹ç”¨DIPadã‚¯ãƒ©ã‚¹
+// BPã‹ã‚‰ã¯ã€ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ä»‹ã—ã¦æ“ä½œã™ã‚‹
 UCLASS()
 class UDirectInputPadJoystick : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	// DIKey‚Éİ’è‚³‚ê‚Ä‚¢‚éXIKey‚ğæ“¾‚·‚éB‰½‚àİ’è‚³‚ê‚Ä‚È‚¢‚Æ‚«‚ÍAXIGamePad_END
-	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
+	// DIKeyã«è¨­å®šã•ã‚Œã¦ã„ã‚‹XIKeyã‚’å–å¾—ã™ã‚‹ã€‚ä½•ã‚‚è¨­å®šã•ã‚Œã¦ãªã„ã¨ãã¯ã€XIGamePad_ENDãŒè¿”ã‚‹
+	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
 	EXInputPadKeyNames	GetKeyMap(EDirectInputPadKeyNames DIKey);
 
-	// DIKey‚ğAXIKey‚Æ‚µ‚Äİ’è‚·‚é
+	// DIKeyã‚’XIKeyã¨ã—ã¦è¨­å®šã™ã‚‹ã€‚XIKeyã«XIGamePad_ENDã‚’æŒ‡å®šã™ã‚‹ã¨KeyMapã‚’å‰Šé™¤ã™ã‚‹
 	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
 	void				SetKeyMap(EDirectInputPadKeyNames DIKey, EXInputPadKeyNames XIKey);
+
+	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
+	bool				IsAxisReverse(EDirectInputPadKeyNames DIAxis);
+
+	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
+	void				SetAxisReverse(EDirectInputPadKeyNames DIAxis, bool bReverse);
 
 public:
 	void SetJoysticks(const TWeakPtr<FDirectInputJoystick>& Joystick);
@@ -30,16 +36,22 @@ private:
 };
 
 
-// ‚±‚ÌŠÖ”‚ğg‚Á‚ÄUDirectInputPadJoystick‚ğæ“¾‚·‚é
+// ã“ã®é–¢æ•°ã‚’ä½¿ã£ã¦UDirectInputPadJoystickã‚’å–å¾—ã™ã‚‹
 UCLASS()
 class UDirectInputPadFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
 public:
-	// 
-	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
-	static UDirectInputPadJoystick* GetDirectInputPadJoystick(int32 PlayerID);
+	UFUNCTION(BlueprintCallable,BlueprintPure,Category="DirectInputPad")
+	static int32 GetXInputPadNum();
+
+	UFUNCTION(BlueprintCallable,BlueprintPure,Category="DirectInputPad")
+	static int32 GetDirectInputPadNum();
+
+
+	UFUNCTION(BlueprintCallable,BlueprintPure,Category="DirectInputPad")
+	static UDirectInputPadJoystick* GetDirectInputPadJoystick(int32 PlayerIndex);
 
 public:
 	static void InitDirectInputPadJoystickLibrary();

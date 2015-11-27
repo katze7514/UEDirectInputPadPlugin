@@ -23,31 +23,31 @@
 
 class FDirectInputDriver;
 
-//! PVO‚ЖЋІ‚М“ь—Н•ыЊь‚рЋ¦‚·—с‹“Ћq
+//! PVOгЃЁи»ёгЃ®е…ҐеЉ›ж–№еђ‘г‚’з¤єгЃ™е€—жЊ™е­ђ
 enum EDirectInputArrow : uint8
 {
-	// ’КЏн‚Мѓ{ѓ^ѓ“‚МЋџ‚©‚з‚М”ФЌ†‚рђU‚й
-	POV_UP	  =32,	//!< POVЃЄ
-	POV_RIGHT,		//!< POVЃЁ
-	POV_DOWN,		//!< POVЃ«
-	POV_LEFT,		//!< POVЃ©
-	AXIS_UP,		//!< ЋІYЃЄ
-	AXIS_RIGHT,		//!< ЋІXЃЁ
-	AXIS_DOWN,		//!< ЋІYЃ«
-	AXIS_LEFT,		//!< ЋІXЃ©
-	POV_NONE,		//!< POV‰Ѕ‚а‰џ‚і‚к‚Д‚ў‚И‚ў
-	AXIS_NONE,		//!< XYЋІ‰Ѕ‚а‰џ‚і‚к‚Д‚ў‚И‚ў
+	// йЂљеёёгЃ®гѓњг‚їгѓігЃ®ж¬ЎгЃ‹г‚‰гЃ®з•ЄеЏ·г‚’жЊЇг‚‹
+	POV_UP	  =32,	//!< POVв†‘
+	POV_RIGHT,		//!< POVв†’
+	POV_DOWN,		//!< POVв†“
+	POV_LEFT,		//!< POVв†ђ
+	AXIS_UP,		//!< и»ёYв†‘
+	AXIS_RIGHT,		//!< и»ёXв†’
+	AXIS_DOWN,		//!< и»ёYв†“
+	AXIS_LEFT,		//!< и»ёXв†ђ
+	POV_NONE,		//!< POVдЅ•г‚‚жЉјгЃ•г‚ЊгЃ¦гЃ„гЃЄгЃ„
+	AXIS_NONE,		//!< XYи»ёдЅ•г‚‚жЉјгЃ•г‚ЊгЃ¦гЃ„гЃЄгЃ„
 	ARROW_END,
 };
 
-/*! @brief ѓWѓ‡ѓCѓXѓeѓBѓbѓN€к‚В‚р•\‚·ѓNѓ‰ѓX
+/*! @brief г‚ёгѓ§г‚¤г‚№гѓ†г‚Јгѓѓг‚ЇдёЂгЃ¤г‚’иЎЁгЃ™г‚Їгѓ©г‚№
  *
- *	FDirectInputJoystick_enum‚©‚зЃAЋж“ѕ‚µ‚ЅЏо•с‚рЊі‚ЙѓfѓoѓCѓX‚рЌмђ¬‚µ
- *	ЋАЌЫ‚Й“ь—НЏ€—ќ‚рЌs‚¤
- *  ЋІЃE‰с“]‚М”Н€Н‚НЃA-1.0Ѓ`1.0 ‚рЋж‚йЃB‚ ‚»‚С‚М”Н€Н‚Й‚ ‚йЋћ‚Н0.0‚Є•Ф‚й
+ *	FDirectInputJoystick_enumгЃ‹г‚‰гЂЃеЏ–еѕ—гЃ—гЃџжѓ…е ±г‚’е…ѓгЃ«гѓ‡гѓђг‚¤г‚№г‚’дЅњж€ђгЃ—
+ *	е®џйљ›гЃ«е…ҐеЉ›е‡¦зђ†г‚’иЎЊгЃ†
+ *  и»ёгѓ»е›ћи»ўгЃ®зЇ„е›ІгЃЇгЂЃ-1.0пЅћ1.0 г‚’еЏ–г‚‹гЂ‚гЃ‚гЃќгЃігЃ®зЇ„е›ІгЃ«гЃ‚г‚‹ж™‚гЃЇ0.0гЃЊиї”г‚‹
  *
- *  AD•ПЉ·‚рON‚Й‚·‚й‚ЖЃALeftAnalogXYЋІ‚ЄPOV‚Ж‚µ‚ДЃAPOV‚ЄLeftAnalogXYЋІ“ь—Н‚Ж‚µ‚Д‚а€µ‚н‚к‚й
- *  ‚З‚МЋІ‚ЄLeftAnalog€µ‚ў‚И‚М‚©‚НЃASetUEKey‚ЕђЭ’и‚·‚й
+ *  ADе¤‰жЏ›г‚’ONгЃ«гЃ™г‚‹гЃЁгЂЃLeftAnalogXYи»ёгЃЊPOVгЃЁгЃ—гЃ¦гЂЃPOVгЃЊLeftAnalogXYи»ёе…ҐеЉ›гЃЁгЃ—гЃ¦г‚‚ж‰±г‚Џг‚Њг‚‹
+ *  гЃ©гЃ®и»ёгЃЊLeftAnalogж‰±гЃ„гЃЄгЃ®гЃ‹гЃЇгЂЃSetUEKeyгЃ§иЁ­е®љгЃ™г‚‹
  */
 class FDirectInputJoystick
 {
@@ -55,7 +55,7 @@ public:
 	static const int32 MAX_AXIS_VALUE;
 
 public:
-	FDirectInputJoystick():pDevice_(nullptr),nPlayerID_(-1),nCurIndex_(0),bAcquire_(false),
+	FDirectInputJoystick():pDevice_(nullptr),nPlayerIndex_(-1),nCurIndex_(0),bAcquire_(false),
 				  bADConv_(false),
 				  nX_Threshold_(300),nY_Threshold_(300),nZ_Threshold_(300),
 				  nXrot_Threshold_(300),nYrot_Threshold_(300),nZrot_Threshold_(300),
@@ -63,165 +63,168 @@ public:
 
 	~FDirectInputJoystick(){ Fin(); }
 
-	//! @brief Џ‰Љъ‰»
-	/*! @param[in] joyins ѓfѓoѓCѓX‚рЌмђ¬‚·‚йѓfѓoѓCѓXѓCѓ“ѓXѓ^ѓ“ѓX
-		@param[in] adaptar DirectInputѓAѓ_ѓvѓ^Ѓ[ѓCѓ“ѓXѓ^ѓ“ѓX
-	    @param[in] hWnd ѓLЃ[ѓ{Ѓ[ѓh“ь—Н‚рЋу‚Ї•t‚Ї‚йѓEѓCѓ“ѓhѓEѓnѓ“ѓhѓ‹
-		@param[in] bBackGraound true‚ѕ‚Ж”сѓAѓNѓeѓBѓu‚Е‚аѓLЃ[“ь—Н‚рЋу‚Ї•t‚Ї‚й‚ж‚¤‚Й‚И‚й */
+	//! @brief е€ќжњџеЊ–
+	/*! @param[in] joyins гѓ‡гѓђг‚¤г‚№г‚’дЅњж€ђгЃ™г‚‹гѓ‡гѓђг‚¤г‚№г‚¤гѓіг‚№г‚їгѓіг‚№
+		@param[in] adaptar DirectInputг‚ўгѓЂгѓ—г‚їгѓјг‚¤гѓіг‚№г‚їгѓіг‚№
+	    @param[in] hWnd г‚­гѓјгѓњгѓјгѓ‰е…ҐеЉ›г‚’еЏ—гЃ‘д»гЃ‘г‚‹г‚¦г‚¤гѓігѓ‰г‚¦гѓЏгѓігѓ‰гѓ«
+		@param[in] bBackGraound trueгЃ гЃЁйќћг‚ўг‚Їгѓ†г‚Јгѓ–гЃ§г‚‚г‚­гѓје…ҐеЉ›г‚’еЏ—гЃ‘д»гЃ‘г‚‹г‚€гЃ†гЃ«гЃЄг‚‹ */
 	bool Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriver& adapter, HWND hWnd, bool bBackGround=false);
 
-	//! ЏI—№Џ€—ќ
+	//! зµ‚дє†е‡¦зђ†
 	void Fin();
 
-	//! ѓWѓ‡ѓCѓXѓeѓBѓbѓN“ь—Н‚рЋж“ѕ
+	//! г‚ёгѓ§г‚¤г‚№гѓ†г‚Јгѓѓг‚Їе…ҐеЉ›г‚’еЏ–еѕ—
 	bool Input();
 
-	//! Њ»ЌЭ‚М“ь—НЏу‘Ф‚ЙЌ‡‚н‚№‚ДѓCѓxѓ“ѓg‚р”т‚О‚·
+	//! зЏѕењЁгЃ®е…ҐеЉ›зЉ¶ж…‹гЃ«еђ€г‚ЏгЃ›гЃ¦г‚¤гѓ™гѓігѓ€г‚’йЈ›гЃ°гЃ™
 	void Event(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
 
-	//! AD•ПЉ·‚Є—LЊш‚©
+	//! ADе¤‰жЏ›гЃЊжњ‰еЉ№гЃ‹
 	bool IsAdConvFlag()const{ return bADConv_; }
-	//! AD•ПЉ·ѓtѓ‰ѓOђЭ’и
+	//! ADе¤‰жЏ›гѓ•гѓ©г‚°иЁ­е®љ
 	bool SetAdConvFlag(bool bAD){ bADConv_ = bAD; }
 
-	//! ѓAѓiѓЌѓOЋІ‚М‚ ‚»‚С‚Ми‡’lђЭ’иЃB‚±‚М’l€И‰є‚М“ь—Н‚Н–іЊш€µ‚ў
+	//! г‚ўгѓЉгѓ­г‚°и»ёгЃ®гЃ‚гЃќгЃігЃ®й–ѕеЂ¤иЁ­е®љгЂ‚гЃ“гЃ®еЂ¤д»Ґдё‹гЃ®е…ҐеЉ›гЃЇз„ЎеЉ№ж‰±гЃ„
 	void SetAxisThreshold(uint32 nX, uint32 nY, uint32 nZ){ nX_Threshold_=nX; nY_Threshold_=nY; nZ_Threshold_=nZ; }
-	//! ѓAѓiѓЌѓO‰с“]‚М‚ ‚»‚С‚Ми‡’lђЭ’иЃB‚±‚М’l€И‰є‚М“ь—Н‚Н–іЊш€µ‚ў
+	//! г‚ўгѓЉгѓ­г‚°е›ћи»ўгЃ®гЃ‚гЃќгЃігЃ®й–ѕеЂ¤иЁ­е®љгЂ‚гЃ“гЃ®еЂ¤д»Ґдё‹гЃ®е…ҐеЉ›гЃЇз„ЎеЉ№ж‰±гЃ„
 	void SetRotThreshold(uint32 nX, uint32 nY, uint32 nZ){ nXrot_Threshold_=nX; nYrot_Threshold_=nY; nZrot_Threshold_=nZ; }
 
 public:
-	int32	GetPlayerID()const{ return nPlayerID_; }
-	void	SetPlayerID(int32 nPlayerID){ nPlayerID_ = nPlayerID; }
+	int32	GetPlayerIndex()const{ return nPlayerIndex_; }
+	void	SetPlayerIndex(int32 nPlayerIndex){ nPlayerIndex_ = nPlayerIndex; }
 
-	// Joystick‚МЋАѓLЃ[‚ЖЃAXInput‚МGameKey‚р€к’v‚і‚№‚йѓ}ѓbѓv
+	// JoystickгЃ®е®џг‚­гѓјгЃЁгЂЃXInputгЃ®GameKeyг‚’дёЂи‡ґгЃ•гЃ›г‚‹гѓћгѓѓгѓ—
 	FName	GetXIKey(EDirectInputPadKeyNames ePadKey);
 	void	SetXIKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName);
 
+	bool	IsAxisReverse(EDirectInputPadKeyNames ePadAxis)const;
+	void	SetAxisReverse(EDirectInputPadKeyNames ePadAxis, bool bReverse);
+
 public:
-	//! xЋІ‚М’l
+	//! xи»ёгЃ®еЂ¤
 	float	X()const;
-	//! yЋІ‚М’l
+	//! yи»ёгЃ®еЂ¤
 	float	Y()const;
-	//! zЋІ‚М’l
+	//! zи»ёгЃ®еЂ¤
 	float	Z()const;
 
-	//! xЋІ‚М1‚В‘O‚М’l
+	//! xи»ёгЃ®1гЃ¤е‰ЌгЃ®еЂ¤
 	float	PrevX()const;
-	//! yЋІ‚М1‚В‘O‚М’l
+	//! yи»ёгЃ®1гЃ¤е‰ЌгЃ®еЂ¤
 	float	PrevY()const;
-	//! zЋІ‚М1‚В‘O‚М’l
+	//! zи»ёгЃ®1гЃ¤е‰ЌгЃ®еЂ¤
 	float	PrevZ()const;
 
-	//! x‰с“]‚М’l
+	//! xе›ћи»ўгЃ®еЂ¤
 	float	RotX()const;
-	//! y‰с“]‚М’l
+	//! yе›ћи»ўгЃ®еЂ¤
 	float	RotY()const;
-	//! z‰с“]‚М’l
+	//! zе›ћи»ўгЃ®еЂ¤
 	float	RotZ()const;
 
-	//! x‰с“]‚М1‚В‘O‚М’l
+	//! xе›ћи»ўгЃ®1гЃ¤е‰ЌгЃ®еЂ¤
 	float	RotPrevX()const;
-	//! y‰с“]‚М1‚В‘O‚М’l
+	//! yе›ћи»ўгЃ®1гЃ¤е‰ЌгЃ®еЂ¤
 	float	RotPrevY()const;
-	//! z‰с“]‚М1‚В‘O‚М’l
+	//! zе›ћи»ўгЃ®1гЃ¤е‰ЌгЃ®еЂ¤
 	float	RotPrevZ()const;
 
-	//! pov’l
+	//! povеЂ¤
 	int32 Pov()const;
-	//! pov‚М1‚В‘O‚М’l
+	//! povгЃ®1гЃ¤е‰ЌгЃ®еЂ¤
 	int32 PrevPov()const;
 
-	//! ѓ{ѓ^ѓ“‚Є‰џ‚і‚к‚Д‚ў‚йЃB0Ѓ`31‚Нѓ{ѓ^ѓ“ЃB32Ѓ`‚НPOV‚ЖЋІ
+	//! гѓњг‚їгѓігЃЊжЉјгЃ•г‚ЊгЃ¦гЃ„г‚‹гЂ‚0пЅћ31гЃЇгѓњг‚їгѓігЂ‚32пЅћгЃЇPOVгЃЁи»ё
 	bool IsPress(uint32 nBtn)const;
-	//! ѓ{ѓ^ѓ“‚Є‰џ‚і‚к‚ЅЏuЉФЃB0Ѓ`31‚Нѓ{ѓ^ѓ“ЃB32Ѓ`‚НPOV‚ЖЋІ
+	//! гѓњг‚їгѓігЃЊжЉјгЃ•г‚ЊгЃџзћ¬й–“гЂ‚0пЅћ31гЃЇгѓњг‚їгѓігЂ‚32пЅћгЃЇPOVгЃЁи»ё
 	bool IsPush(uint32 nBtn)const;
-	//! ѓ{ѓ^ѓ“‚Є—Ј‚к‚ЅЏuЉФЃB0Ѓ`31‚Нѓ{ѓ^ѓ“ЃB32Ѓ`‚НPOV‚ЖЋІ
+	//! гѓњг‚їгѓігЃЊй›ўг‚ЊгЃџзћ¬й–“гЂ‚0пЅћ31гЃЇгѓњг‚їгѓігЂ‚32пЅћгЃЇPOVгЃЁи»ё
 	bool IsRelease(uint32 nBtn)const;
 
 public:
-	// “ь—НѓKЃ[ѓh
+	// е…ҐеЉ›г‚¬гѓјгѓ‰
 	void SetGuard(bool bGuard);
 	bool IsGuard()const{ return bGuard_; }
 
-	//! ѓoѓbѓtѓ@‚рѓNѓЉѓA‚·‚й
+	//! гѓђгѓѓгѓ•г‚Ўг‚’г‚ЇгѓЄг‚ўгЃ™г‚‹
 	void ClearBuf(){ nCurIndex_=0; ::ZeroMemory(joyBuf_, sizeof(joyBuf_)); }
 
-	//! Њ»ЌЭ‚Мѓoѓbѓtѓ@‚рѓNѓЉѓA‚·‚й
+	//! зЏѕењЁгЃ®гѓђгѓѓгѓ•г‚Ўг‚’г‚ЇгѓЄг‚ўгЃ™г‚‹
 	void ClearCurBuf(){ ::ZeroMemory(&joyBuf_[nCurIndex_], sizeof(DIJOYSTATE)); }
 
 private:
-	// ѓfѓtѓHѓ‹ѓgѓLЃ[ѓ}ѓbѓv
+	// гѓ‡гѓ•г‚©гѓ«гѓ€г‚­гѓјгѓћгѓѓгѓ—
 	void InitDefaultMap();
 
 	void SetDelegateLeftAnalogX(EDirectInputPadKeyNames ePadKey);
 	void SetDelegateLeftAnalogY(EDirectInputPadKeyNames ePadKey);
 
-	// ѓAѓiѓЌѓOѓCѓxѓ“ѓg‚р”­ђ¶‚і‚№‚й
+	// г‚ўгѓЉгѓ­г‚°г‚¤гѓ™гѓігѓ€г‚’з™єз”џгЃ•гЃ›г‚‹
 	void EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyNames ePadName, FKey DIKey);
-	// ѓ{ѓ^ѓ“ѓCѓxѓ“ѓg‚р”­ђ¶‚і‚№‚й
+	// гѓњг‚їгѓіг‚¤гѓ™гѓігѓ€г‚’з™єз”џгЃ•гЃ›г‚‹
 	void EventButton(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey);
-	// POVѓCѓxѓ“ѓg”­ђ¶‚і‚№‚й
+	// POVг‚¤гѓ™гѓігѓ€з™єз”џгЃ•гЃ›г‚‹
 	void EventPov(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
 
-	// ѓ{ѓ^ѓ“‰џ‚µ‚ЅѓCѓxѓ“ѓg‚р”­ђ¶‚і‚№‚й
+	// гѓњг‚їгѓіжЉјгЃ—гЃџг‚¤гѓ™гѓігѓ€г‚’з™єз”џгЃ•гЃ›г‚‹
 	void EventButtonPressed(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey);
-	// ѓ{ѓ^ѓ“—Ј‚µ‚ЅѓCѓxѓ“ѓg‚р”­ђ¶‚і‚№‚й
+	// гѓњг‚їгѓій›ўгЃ—гЃџг‚¤гѓ™гѓігѓ€г‚’з™єз”џгЃ•гЃ›г‚‹
 	void EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey);
 	
 
 private:
-	//! POV‚Є‰џ‚і‚к‚Д‚ў‚й
+	//! POVгЃЊжЉјгЃ•г‚ЊгЃ¦гЃ„г‚‹
 	bool IsPovPress(enum EDirectInputArrow eArrow)const;
-	//! POV‚Є‰џ‚і‚к‚ЅЏuЉФ
+	//! POVгЃЊжЉјгЃ•г‚ЊгЃџзћ¬й–“
 	bool IsPovPush(enum EDirectInputArrow eArrow)const;
-	//! POV‚Є—Ј‚к‚ЅЏuЉФ
+	//! POVгЃЊй›ўг‚ЊгЃџзћ¬й–“
 	bool IsPovRelease(enum EDirectInputArrow eArrow)const;
 
 
-	//! POV‚Є‰џ‚і‚к‚Д‚ў‚й‚©‚З‚¤‚©‚Мѓ`ѓFѓbѓN
-	/*! @param[in] eArrow ѓ`ѓFѓbѓN‚·‚й•ыЊь
-		@param[in] index ѓ`ѓFѓbѓN‚·‚йѓoѓbѓtѓ@ѓCѓ“ѓfѓbѓNѓX */
+	//! POVгЃЊжЉјгЃ•г‚ЊгЃ¦гЃ„г‚‹гЃ‹гЃ©гЃ†гЃ‹гЃ®гѓЃг‚§гѓѓг‚Ї
+	/*! @param[in] eArrow гѓЃг‚§гѓѓг‚ЇгЃ™г‚‹ж–№еђ‘
+		@param[in] index гѓЃг‚§гѓѓг‚ЇгЃ™г‚‹гѓђгѓѓгѓ•г‚Ўг‚¤гѓігѓ‡гѓѓг‚Їг‚№ */
 	bool IsPovPressInner(enum EDirectInputArrow eArrow, uint32 nIndex)const;
 
-	//! XYЋІ‚ЄѓfѓWѓ^ѓ‹“I‚Й‰џ‚і‚к‚Д‚ў‚й
+	//! XYи»ёгЃЊгѓ‡г‚ёг‚їгѓ«зљ„гЃ«жЉјгЃ•г‚ЊгЃ¦гЃ„г‚‹
 	bool IsAxisPress(enum EDirectInputArrow eArrow)const;
-	//! XYЋІ‚ЄѓfѓWѓ^ѓ‹“I‚Й‰џ‚і‚к‚ЅЏuЉФ
+	//! XYи»ёгЃЊгѓ‡г‚ёг‚їгѓ«зљ„гЃ«жЉјгЃ•г‚ЊгЃџзћ¬й–“
 	bool IsAxisPush(enum EDirectInputArrow eArrow)const;
-	//! XYЋІ‚ЄѓfѓWѓ^ѓ‹“I‚Й—Ј‚к‚ЅЏuЉФ
+	//! XYи»ёгЃЊгѓ‡г‚ёг‚їгѓ«зљ„гЃ«й›ўг‚ЊгЃџзћ¬й–“
 	bool IsAxisRelease(enum EDirectInputArrow eArrow)const;
 
-	//! XYЋІ‚ЄѓfѓWѓ^ѓ‹“I‚Й‰џ‚і‚к‚Д‚ў‚й‚©‚З‚¤‚©‚Мѓ`ѓFѓbѓN
-	/*! @param[in] eArrow ѓ`ѓFѓbѓN‚·‚й•ыЊь
-		@param[in] index ѓ`ѓFѓbѓN‚·‚йѓoѓbѓtѓ@ѓCѓ“ѓfѓbѓNѓX */
+	//! XYи»ёгЃЊгѓ‡г‚ёг‚їгѓ«зљ„гЃ«жЉјгЃ•г‚ЊгЃ¦гЃ„г‚‹гЃ‹гЃ©гЃ†гЃ‹гЃ®гѓЃг‚§гѓѓг‚Ї
+	/*! @param[in] eArrow гѓЃг‚§гѓѓг‚ЇгЃ™г‚‹ж–№еђ‘
+		@param[in] index гѓЃг‚§гѓѓг‚ЇгЃ™г‚‹гѓђгѓѓгѓ•г‚Ўг‚¤гѓігѓ‡гѓѓг‚Їг‚№ */
 	bool IsAxisPressInner(enum EDirectInputArrow eArrow, uint32 nIndex)const;
 
-	//! POV_*‚ЖAXIS_* ‚р‘ЉЊЭ•ПЉ·‚·‚й
+	//! POV_*гЃЁAXIS_* г‚’з›ёдє’е¤‰жЏ›гЃ™г‚‹
 	enum EDirectInputArrow SwapPovAxis(enum EDirectInputArrow eArrow)const;
 
 private:
-	//! DirectInputDevice::EnumObjects‚Й“n‚·ѓRЃ[ѓ‹ѓoѓbѓNЉЦђ”
+	//! DirectInputDevice::EnumObjectsгЃ«жёЎгЃ™г‚ігѓјгѓ«гѓђгѓѓг‚Їй–ўж•°
 	static BOOL CALLBACK OnEnumAxis(LPCDIDEVICEOBJECTINSTANCE lpddoi, LPVOID pvRef);
 
 private:
-	//! ѓfѓoѓCѓX
+	//! гѓ‡гѓђг‚¤г‚№
 	LPDIRECTINPUTDEVICE8	pDevice_;
 
-	// ‘О‰ћ‚·‚йPlayerID
-	int32		nPlayerID_;
+	// еЇѕеїњгЃ™г‚‹PlayerIndex
+	int32		nPlayerIndex_;
 
-	//! ѓWѓ‡ѓCѓXѓeѓBѓbѓN“ь—Нѓoѓbѓtѓ@
+	//! г‚ёгѓ§г‚¤г‚№гѓ†г‚Јгѓѓг‚Їе…ҐеЉ›гѓђгѓѓгѓ•г‚Ў
 	DIJOYSTATE	joyBuf_[2];
-	//! ѓWѓ‡ѓCѓXѓeѓBѓbѓNѓoѓbѓtѓ@€К’u
+	//! г‚ёгѓ§г‚¤г‚№гѓ†г‚Јгѓѓг‚Їгѓђгѓѓгѓ•г‚ЎдЅЌзЅ®
 	uint32		nCurIndex_;
 
-	//! ѓfѓoѓCѓX‚рЉl“ѕ‚µ‚Д‚ў‚й‚©‚З‚¤‚©
+	//! гѓ‡гѓђг‚¤г‚№г‚’зЌІеѕ—гЃ—гЃ¦гЃ„г‚‹гЃ‹гЃ©гЃ†гЃ‹
 	bool		bAcquire_;
 
-	//! ѓAѓiѓЌѓOX,Y‚рPOV(Џ\ЋљѓLЃ[)‚Ж‚µ‚ДЊ©‚И‚·‚©‚З‚¤‚© 
+	//! г‚ўгѓЉгѓ­г‚°X,Yг‚’POV(еЌЃе­—г‚­гѓј)гЃЁгЃ—гЃ¦и¦‹гЃЄгЃ™гЃ‹гЃ©гЃ†гЃ‹ 
 	bool		bADConv_;
 
-	// joystick‚МѓAѓiѓЌѓO‚М—V‚С‚М’lЃ@-thresholdЃ`threshold ‚М”Н€Н‚Й‚И‚й
-	// ‚±‚к€И‰є‚М’l‚МЋћ‚Н“ь—Н‚И‚µ€µ‚ў
+	// joystickгЃ®г‚ўгѓЉгѓ­г‚°гЃ®йЃЉгЃігЃ®еЂ¤гЂЂ-thresholdпЅћthreshold гЃ®зЇ„е›ІгЃ«гЃЄг‚‹
+	// гЃ“г‚Њд»Ґдё‹гЃ®еЂ¤гЃ®ж™‚гЃЇе…ҐеЉ›гЃЄгЃ—ж‰±гЃ„
 
 	uint32		nX_Threshold_;
 	uint32		nY_Threshold_;
@@ -231,17 +234,20 @@ private:
 	uint32		nYrot_Threshold_;
 	uint32		nZrot_Threshold_;
 
-	//! @brief “ь—НѓKЃ[ѓhѓtѓ‰ѓO
-	/*! true‚Й‚И‚·‚й‚Ж“ь—Нѓoѓbѓtѓ@‚ЄѓNѓЉѓA‚і‚кЃAinput‚рЊД‚с‚Е‚аЌXђV‚і‚к‚И‚ў
-	 *  ‚В‚Ь‚иЃA“ь—Н‚і‚к‚Д‚И‚ў€µ‚ў‚Й‚И‚й */
+	//! @brief е…ҐеЉ›г‚¬гѓјгѓ‰гѓ•гѓ©г‚°
+	/*! trueгЃ«гЃЄгЃ™г‚‹гЃЁе…ҐеЉ›гѓђгѓѓгѓ•г‚ЎгЃЊг‚ЇгѓЄг‚ўгЃ•г‚ЊгЂЃinputг‚’е‘јг‚“гЃ§г‚‚ж›ґж–°гЃ•г‚ЊгЃЄгЃ„
+	 *  гЃ¤гЃѕг‚ЉгЂЃе…ҐеЉ›гЃ•г‚ЊгЃ¦гЃЄгЃ„ж‰±гЃ„гЃ«гЃЄг‚‹ */
 	bool		bGuard_;
 
 private:
-	//UE4‚МѓQЃ[ѓЂѓpѓbѓhID‚Ж‚Мѓ}ѓbѓv
-	// Joystick‚М–ј‘O‚Й‚И‚с‚МѓQЃ[ѓЂѓpѓbѓhЋІ‚ЄЉ„‚и“–‚Д‚з‚к‚Д‚ў‚й‚М‚©
-	TArray<FName> JoystickMap_;
+	//UE4гЃ®г‚Ігѓјгѓ гѓ‘гѓѓгѓ‰IDгЃЁгЃ®гѓћгѓѓгѓ—
+	// JoystickгЃ®еђЌе‰ЌгЃ«гЃЄг‚“гЃ®г‚Ігѓјгѓ гѓ‘гѓѓгѓ‰и»ёгЃЊе‰Іг‚ЉеЅ“гЃ¦г‚‰г‚ЊгЃ¦гЃ„г‚‹гЃ®гЃ‹
+	TArray<FName>	JoystickMap_;
 
-	// Ќ¶ѓXѓeѓBѓbѓN€µ‚ў‚Ж‚И‚йЋІ‚М’l‚рЋж‚йѓЃѓ“ѓoЉЦђ”
+	// и»ёгЃ®еЏЌи»ўгѓ•гѓ©г‚°
+	TArray<bool>	AxisReverseFlagMap_;
+
+	// е·¦г‚№гѓ†г‚Јгѓѓг‚Їж‰±гЃ„гЃЁгЃЄг‚‹и»ёгЃ®еЂ¤г‚’еЏ–г‚‹гѓЎгѓігѓђй–ўж•°
 	std::function<float(const FDirectInputJoystick&)> LeftAnalogX;
 	std::function<float(const FDirectInputJoystick&)> LeftAnalogPrevX;
 	std::function<float(const FDirectInputJoystick&)> LeftAnalogY;

@@ -47,9 +47,9 @@ void FDirectInputDriver::Fin()
 // FDirectInputJoystickEnum
 /////////////////////////////////////
 namespace{
-// MSDN(https://msdn.microsoft.com/ja-jp/library/bb173051(v=vs.85).aspx)‚©‚ç‚Ì
-// ƒRƒsƒy‚Æ­‚µ‰ü•ÏBDInput‚Ìî•ñ‚©‚çXInput‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éŠÖ”‚ç‚µ‚¢
-// XInput‚Æ”»’è‚³‚ê‚½‚ç,DInputî•ñ”z—ñ‚©‚çíœ‚·‚é
+// MSDN(https://msdn.microsoft.com/ja-jp/library/bb173051(v=vs.85).aspx)ã‹ã‚‰ã®
+// ã‚³ãƒ”ãƒšã¨å°‘ã—æ”¹å¤‰ã€‚DInputã®æƒ…å ±ã‹ã‚‰XInputã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹é–¢æ•°ã‚‰ã—ã„
+// XInputã¨åˆ¤å®šã•ã‚ŒãŸã‚‰,DInputæƒ…å ±é…åˆ—ã‹ã‚‰å‰Šé™¤ã™ã‚‹
 //-----------------------------------------------------------------------------
 // Enum each PNP device using WMI and check each device ID to see if it contains 
 // "IG_" (ex. "VID_045E&PID_028E&IG_00").  If it does, then it's an XInput device
@@ -134,8 +134,8 @@ uint32 RemoveXInputDevice( TArray<DIDEVICEINSTANCE>& DeviceInstanceArray )
                     // Compare the VID/PID to the DInput device
                     DWORD dwVidPid = MAKELONG( dwVid, dwPid );
 
-					// æ“¾Ï‚İ‚ÌDirectInputƒfƒoƒCƒXî•ñ‚©‚çXInput‚Ì‚à‚Ì‚ğ’T‚·
-					// XInput‚¾‚Á‚½‚ç”z—ñ‚©‚çíœ‚µ‚Ä‚¨‚­
+					// å–å¾—æ¸ˆã¿ã®DirectInputãƒ‡ãƒã‚¤ã‚¹æƒ…å ±ã‹ã‚‰XInputã®ã‚‚ã®ã‚’æ¢ã™
+					// XInputã ã£ãŸã‚‰é…åˆ—ã‹ã‚‰å‰Šé™¤ã—ã¦ãŠã
 					for(int32 i=0; i<DeviceInstanceArray.Num(); ++i)
 					{
 						auto& DDevice = DeviceInstanceArray[i];
@@ -194,7 +194,7 @@ const DIDEVICEINSTANCE* FDirectInputJoystickEnum::GetJoystickInfo(uint32 nJoyNo)
 {
 	if(!vecJoyStickInfo_.IsValidIndex(nJoyNo))
 	{
-		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Unsuable DirectInputPadFNo. %n"), nJoyNo);
+		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Unsuable DirectInputPadï¼šNo. %n"), nJoyNo);
 		return nullptr;
 	}
 

@@ -19,7 +19,7 @@
 
 class FDirectInputJoystick;
 
-//! DirectInputƒhƒ‰ƒCƒo[ƒNƒ‰ƒX
+//! DirectInputãƒ‰ãƒ©ã‚¤ãƒãƒ¼ã‚¯ãƒ©ã‚¹
 class FDirectInputDriver
 {
 public:
@@ -35,10 +35,10 @@ private:
 	LPDIRECTINPUT8 pDriver_;
 };
 
-/*! @brief g—p‰Â”\‚ÈƒWƒ‡ƒCƒXƒeƒBƒbƒN‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+/*! @brief ä½¿ç”¨å¯èƒ½ãªã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
  *
- *	g—p‰Â”\‚ÈƒWƒ‡ƒCƒXƒeƒBƒbƒN‚Ìî•ñ‚ğW‚ß‚Ä‚¨‚«A•K—v‚É‰‚¶‚Ä
- *	‚»‚Ìî•ñ‚ğ•Ô‚·
+ *	ä½¿ç”¨å¯èƒ½ãªã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æƒ…å ±ã‚’é›†ã‚ã¦ãŠãã€å¿…è¦ã«å¿œã˜ã¦
+ *	ãã®æƒ…å ±ã‚’è¿”ã™
  */
 class FDirectInputJoystickEnum
 {
@@ -47,33 +47,33 @@ public:
 
 	bool Init(FDirectInputDriver& adapter);
 
-	//! ŒŸo‚µ‚½XInputƒfƒoƒCƒX‚Ì”
+	//! æ¤œå‡ºã—ãŸXInputãƒ‡ãƒã‚¤ã‚¹ã®æ•°
 	uint32 GetXInputDeviceNum()const{ return nXInputDeviceNum_; }
 
-	//! g—p‰Â”\‚ÈƒWƒ‡ƒCƒXƒeƒBƒbƒN‚Ì”
+	//! ä½¿ç”¨å¯èƒ½ãªã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ•°
 	uint32 EnabledJoystickNum()const{ return vecJoyStickInfo_.Num(); }
 
-	//! @brief g—p‰Â”\‚ÈƒWƒ‡ƒCƒXƒeƒBƒbƒN‚Ìî•ñ‚ğæ“¾‚·‚é
-	/*! @param[in] nJoyNo î•ñ‚ğæ“¾‚·‚éƒWƒ‡ƒCƒXƒeƒBƒbƒN”Ô†B0ˆÈãenable_joystick_num()ˆÈ‰º 
-	 *  @return ƒWƒ‡ƒCƒXƒeƒBƒbƒNî•ñ‚ÌoptioanlBƒWƒ‡ƒCƒXƒeƒBƒbƒN‚ª‘¶İ‚µ‚Ä‚¢‚ê‚ÎŠY“–‚Ì’l‚ª“ü‚Á‚Ä‚¢‚é */
+	//! @brief ä½¿ç”¨å¯èƒ½ãªã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æƒ…å ±ã‚’å–å¾—ã™ã‚‹
+	/*! @param[in] nJoyNo æƒ…å ±ã‚’å–å¾—ã™ã‚‹ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ç•ªå·ã€‚0ä»¥ä¸Šenable_joystick_num()ä»¥ä¸‹ 
+	 *  @return ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯æƒ…å ±ã®optioanlã€‚ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãŒå­˜åœ¨ã—ã¦ã„ã‚Œã°è©²å½“ã®å€¤ãŒå…¥ã£ã¦ã„ã‚‹ */
 	const DIDEVICEINSTANCE* GetJoystickInfo(uint32_t nJoyNo)const;
 
 private:
-	//! DirectInput::EnumDevice‚É“n‚·ƒR[ƒ‹ƒoƒbƒNŠÖ”
+	//! DirectInput::EnumDeviceã«æ¸¡ã™ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 	static BOOL CALLBACK OnEnumDevice(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);
 
 private:
-	//! ƒWƒ‡ƒCƒXƒeƒBƒbƒNî•ñ”z—ñ
+	//! ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯æƒ…å ±é…åˆ—
 	TArray<DIDEVICEINSTANCE> vecJoyStickInfo_;
 
 	uint32 nXInputDeviceNum_ = 0;
 };
 
 
-/*! @brief FDirectInputJoystick‚ğì¬ŠÇ—‚·‚éƒNƒ‰ƒX
+/*! @brief FDirectInputJoystickã‚’ä½œæˆç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
  *
- *  FDirectInputJoystick_enum/FDirectInputJoystick‚ğ‚Ü‚Æ‚ß‚éB
- *  Joystick‚ğæ“¾‚·‚é‚Í‚±‚ê‚ğg‚¤‚Æ—Ç‚¢
+ *  FDirectInputJoystick_enum/FDirectInputJoystickã‚’ã¾ã¨ã‚ã‚‹ã€‚
+ *  Joystickã‚’å–å¾—ã™ã‚‹æ™‚ã¯ã“ã‚Œã‚’ä½¿ã†ã¨è‰¯ã„
  */
 class FDirectInputJoystickFactory
 {
@@ -87,14 +87,14 @@ public:
 	bool Init(HWND hWnd, const TSharedPtr<FDirectInputDriver>& pDriver, bool bBackGround=false);
 	void Fin();
 
-	//! ŒŸo‚µ‚½XInputƒfƒoƒCƒX‚Ì”
+	//! æ¤œå‡ºã—ãŸXInputãƒ‡ãƒã‚¤ã‚¹ã®æ•°
 	uint32 GetXInputDeviceNum()const{ return joyEnum_.GetXInputDeviceNum(); }
 
-	//! g—p‰Â”\‚ÈƒWƒ‡ƒCƒXƒeƒBƒbƒN‚Ì”
+	//! ä½¿ç”¨å¯èƒ½ãªã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®æ•°
 	uint32 EnabledJoystickNum()const{ return joyEnum_.EnabledJoystickNum(); }
 
-	//! @brief w’è‚Ì”Ô†‚ÌFDirectInputJoystick‚ğæ“¾‚·‚é
-	/*! @return ‚·‚Å‚É‘¶İ‚µ‚½‚ç‚»‚ê‚ğ•Ô‚·B‘¶İ‚µ‚È‚¢joystick‚¾‚Á‚½‚ç¶¬‚·‚éB¶¬‚ª¸”s‚µ‚½‚çnullptr‚ª•Ô‚é */
+	//! @brief æŒ‡å®šã®ç•ªå·ã®FDirectInputJoystickã‚’å–å¾—ã™ã‚‹
+	/*! @return ã™ã§ã«å­˜åœ¨ã—ãŸã‚‰ãã‚Œã‚’è¿”ã™ã€‚å­˜åœ¨ã—ãªã„joystickã ã£ãŸã‚‰ç”Ÿæˆã™ã‚‹ã€‚ç”ŸæˆãŒå¤±æ•—ã—ãŸã‚‰nullptrãŒè¿”ã‚‹ */
 	TSharedPtr<FDirectInputJoystick> GetJoystick(uint32 nNo);
 
 private:
