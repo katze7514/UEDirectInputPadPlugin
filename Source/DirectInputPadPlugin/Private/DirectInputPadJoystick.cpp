@@ -95,6 +95,198 @@ void UDirectInputPadJoystick::SetAxisReverse(EDirectInputPadKeyNames DIAxis, boo
 	}
 }
 
+FString UDirectInputPadJoystick::GetProductName()
+{
+	if(Joystick_.IsValid())
+	{
+		const auto& Joy = Joystick_.Pin();
+		if(Joy.IsValid())
+		{
+			DIDEVICEINSTANCE inst;
+			inst.dwSize = sizeof(DIDEVICEINSTANCE);
+			if(Joy->pDevice_->GetDeviceInfo(&inst)==DI_OK)
+			{
+				return FString(inst.tszProductName);
+			}
+		}
+	}
+
+	return "";
+}
+
+FString	UDirectInputPadJoystick::GetGUID()
+{
+	if(Joystick_.IsValid())
+	{
+		const auto& Joy = Joystick_.Pin();
+		if(Joy.IsValid())
+		{
+			DIDEVICEINSTANCE inst;
+			inst.dwSize = sizeof(DIDEVICEINSTANCE);
+			if(Joy->pDevice_->GetDeviceInfo(&inst)==DI_OK)
+			{
+				LPOLESTR p;
+				if(FAILED(StringFromCLSID(inst.guidInstance,&p)))
+					return "";
+
+				FString s(p);
+				CoTaskMemFree(p);
+				return s;
+			}
+		}
+	}
+
+	return "";
+}
+
+FDIGamePadKeyState UDirectInputPadJoystick::GetChangeKeyState()
+{
+	FDIGamePadKeyState state;
+
+	if(Joystick_.IsValid())
+	{
+		const auto& Joy = Joystick_.Pin();
+		if(Joy.IsValid())
+		{
+			if(Joy->X()!=0)
+			{
+				state.KeyName = DIGamePad_AXIS_X;
+				state.Value   = Joy->X();
+				return state;
+			}
+
+			if(Joy->Y()!=0)
+			{
+				state.KeyName = DIGamePad_AXIS_Y;
+				state.Value   = Joy->Y();
+				return state;
+			}
+
+			if(Joy->Z()!=0)
+			{
+				state.KeyName = DIGamePad_AXIS_Z;
+				state.Value   = Joy->Z();
+				return state;
+			}
+
+			if(Joy->RotX()!=0)
+			{
+				state.KeyName = DIGamePad_ROT_X;
+				state.Value   = Joy->RotX();
+				return state;
+			}
+
+			if(Joy->RotY()!=0)
+			{
+				state.KeyName = DIGamePad_ROT_Y;
+				state.Value   = Joy->RotY();
+				return state;
+			}
+
+			if(Joy->RotZ()!=0)
+			{
+				state.KeyName = DIGamePad_ROT_Z;
+				state.Value   = Joy->RotZ();
+				return state;
+			}
+
+			for(uint8 i=0; i<32; ++i)
+			{
+				if(Joy->IsPush(i))
+				{
+					state.KeyName = TEnumAsByte<EDirectInputPadKeyNames>(DIGamePad_Button1 + i);
+					state.Value   = 1.0f;
+					return state;
+				}
+				else if(Joy->IsRelease(i))
+				{
+					state.KeyName = TEnumAsByte<EDirectInputPadKeyNames>(DIGamePad_Button1 + i);
+					state.Value   = -1.0f;
+					return state;
+				}
+			}
+		}
+	}
+	return state; 
+}
+
+
+TArray<FDIGamePadKeyState> UDirectInputPadJoystick::GetAllChangeKeyState()
+{
+	TArray<FDIGamePadKeyState> aState;
+
+	if(Joystick_.IsValid())
+	{
+		const auto& Joy = Joystick_.Pin();
+		if(Joy.IsValid())
+		{
+			FDIGamePadKeyState state;
+
+			if(Joy->X()!=0)
+			{
+				state.KeyName = DIGamePad_AXIS_X;
+				state.Value   = Joy->X();
+				aState.Add(state);
+			}
+
+			if(Joy->Y()!=0)
+			{
+				state.KeyName = DIGamePad_AXIS_Y;
+				state.Value   = Joy->Y();
+				aState.Add(state);
+			}
+
+			if(Joy->Z()!=0)
+			{
+				state.KeyName = DIGamePad_AXIS_Z;
+				state.Value   = Joy->Z();
+				aState.Add(state);
+			}
+
+			if(Joy->RotX()!=0)
+			{
+				state.KeyName = DIGamePad_ROT_X;
+				state.Value   = Joy->RotX();
+				aState.Add(state);
+			}
+
+			if(Joy->RotY()!=0)
+			{
+				state.KeyName = DIGamePad_ROT_Y;
+				state.Value   = Joy->RotY();
+				aState.Add(state);
+			}
+
+			if(Joy->RotZ()!=0)
+			{
+				state.KeyName = DIGamePad_ROT_Z;
+				state.Value   = Joy->RotZ();
+				aState.Add(state);
+			}
+
+			for(uint8 i=0; i<32; ++i)
+			{
+				if(Joy->IsPush(i))
+				{
+					state.KeyName = TEnumAsByte<EDirectInputPadKeyNames>(DIGamePad_Button1 + i);
+					state.Value   = 1.0f;
+					aState.Add(state);
+				}
+				else if(Joy->IsRelease(i))
+				{
+					state.KeyName = TEnumAsByte<EDirectInputPadKeyNames>(DIGamePad_Button1 + i);
+					state.Value   = -1.0f;
+					aState.Add(state);
+				}
+			}
+		}
+	}
+
+	aState.Shrink();
+
+	return std::move(aState); 
+}
+
 //////////////////////////////////
 // UDirectInputPadFunctionLibrary
 //////////////////////////////////

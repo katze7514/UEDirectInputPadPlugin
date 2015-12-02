@@ -22,6 +22,7 @@
 #include <functional>
 
 class FDirectInputDriver;
+class UDirectInputPadJoystick;
 
 //! PVOと軸の入力方向を示す列挙子
 enum EDirectInputArrow : uint8
@@ -53,6 +54,8 @@ class FDirectInputJoystick
 {
 public:
 	static const int32 MAX_AXIS_VALUE;
+
+	friend class UDirectInputPadJoystick;
 
 public:
 	FDirectInputJoystick():pDevice_(nullptr),nPlayerIndex_(-1),nCurIndex_(0),bAcquire_(false),

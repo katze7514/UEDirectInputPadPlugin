@@ -6,9 +6,26 @@
 
 class FDirectInputJoystick;
 
+USTRUCT(BlueprintType)
+struct FDIGamePadKeyState
+{
+	GENERATED_BODY();
+
+	UPROPERTY(BlueprintReadOnly)
+	TEnumAsByte<EDirectInputPadKeyNames> KeyName;
+
+	// KeyNameが
+	//  軸の時は、軸の値
+	//  ボタンの時、1はPush、-1はRelease
+	UPROPERTY(BlueprintReadOnly)
+	float Value;
+
+	FDIGamePadKeyState():KeyName(DIGamePad_END),Value(0.f){}
+};
+
 // BP公開用DIPadクラス
 // BPからは、このクラスを介して操作する
-UCLASS()
+UCLASS(BlueprintType)
 class UDirectInputPadJoystick : public UObject
 {
 	GENERATED_BODY()
@@ -27,6 +44,24 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
 	void				SetAxisReverse(EDirectInputPadKeyNames DIAxis, bool bReverse);
+
+	// 表示名を取得する。同じパッドだと同じ名前になる可能性があるので、識別には使わないこと
+	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
+	FString				GetProductName();
+
+	// GUID(文字列)を取得する。パッドの識別に使える
+	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
+	FString				GetGUID();
+	
+	// 現在、状態の変化があったキーの情報を得る
+	// 最初に見つかった一つが取得できる。軸(XYZ軸、XYZ回転)＞ボタン(1→32)の優先度でチェックする
+	// なお、POVは含まれない
+	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
+	FDIGamePadKeyState				GetChangeKeyState();
+
+	// 現在、状態の変化があったキーの情報をすべて得る。POVは含まれない
+	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
+	TArray<FDIGamePadKeyState>		GetAllChangeKeyState();
 
 public:
 	void SetJoysticks(const TWeakPtr<FDirectInputJoystick>& Joystick);

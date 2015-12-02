@@ -3,7 +3,7 @@
 #include "DirectInputPadState.generated.h"
 
 //* Joystickの実キーを指すための列挙型
-UENUM()
+UENUM(BlueprintType)
 enum EDirectInputPadKeyNames
 {
 	DIGamePad_AXIS_X UMETA(DisplayName = "DIGamePad Axis X"),
@@ -54,7 +54,7 @@ enum EDirectInputPadKeyNames
 
 /* XInputのボタン配置を表す列挙型
 /* XBOXパッドの名称に合わせてある */
-UENUM()
+UENUM(BlueprintType)
 enum EXInputPadKeyNames
 {
 	XIGamePad_LeftAnalogX		UMETA(DisplayName = "XIGamePad Left Analog X"),
