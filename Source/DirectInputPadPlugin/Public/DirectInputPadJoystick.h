@@ -55,13 +55,13 @@ public:
 	
 	// 現在、状態の変化があったキーの情報を得る
 	// 最初に見つかった一つが取得できる。軸(XYZ軸、XYZ回転)＞ボタン(1→32)の優先度でチェックする
-	// なお、POVは含まれない
+	// POVは含まれない
 	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
-	FDIGamePadKeyState				GetChangeKeyState();
+	FDIGamePadKeyState				GetChangedKeyState();
 
 	// 現在、状態の変化があったキーの情報をすべて得る。POVは含まれない
 	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
-	TArray<FDIGamePadKeyState>		GetAllChangeKeyState();
+	TArray<FDIGamePadKeyState>		GetAllChangedKeyState();
 
 public:
 	void SetJoysticks(const TWeakPtr<FDirectInputJoystick>& Joystick);

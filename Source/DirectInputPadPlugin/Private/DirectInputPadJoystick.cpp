@@ -139,7 +139,7 @@ FString	UDirectInputPadJoystick::GetGUID()
 	return "";
 }
 
-FDIGamePadKeyState UDirectInputPadJoystick::GetChangeKeyState()
+FDIGamePadKeyState UDirectInputPadJoystick::GetChangedKeyState()
 {
 	FDIGamePadKeyState state;
 
@@ -211,7 +211,7 @@ FDIGamePadKeyState UDirectInputPadJoystick::GetChangeKeyState()
 }
 
 
-TArray<FDIGamePadKeyState> UDirectInputPadJoystick::GetAllChangeKeyState()
+TArray<FDIGamePadKeyState> UDirectInputPadJoystick::GetAllChangedKeyState()
 {
 	TArray<FDIGamePadKeyState> aState;
 
