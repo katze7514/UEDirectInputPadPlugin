@@ -63,6 +63,10 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
 	TArray<FDIGamePadKeyState>		GetAllChangedKeyState();
 
+	// 入力データをクリアする
+	UFUNCTION(BlueprintCallable, Category="DirectInputPad")
+	void				ClearInput();
+
 public:
 	void SetJoysticks(const TWeakPtr<FDirectInputJoystick>& Joystick);
 

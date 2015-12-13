@@ -287,6 +287,18 @@ TArray<FDIGamePadKeyState> UDirectInputPadJoystick::GetAllChangedKeyState()
 	return std::move(aState); 
 }
 
+void UDirectInputPadJoystick::ClearInput()
+{
+	if(Joystick_.IsValid())
+	{
+		const auto& Joy = Joystick_.Pin();
+		if(Joy.IsValid())
+		{
+			Joy->ClearBuf();
+		}
+	}
+}
+
 //////////////////////////////////
 // UDirectInputPadFunctionLibrary
 //////////////////////////////////
@@ -353,6 +365,7 @@ void UDirectInputPadFunctionLibrary::InitDirectInputPadJoystickLibrary()
 	XINameToEnumMap.Emplace(FGamepadKeyNames::SpecialRight,			XIGamePad_Button_START);
 	XINameToEnumMap.Emplace(FGamepadKeyNames::LeftThumb,			XIGamePad_Button_LStick);
 	XINameToEnumMap.Emplace(FGamepadKeyNames::RightThumb,			XIGamePad_Button_RStick);
+	XINameToEnumMap.Emplace(FName(""),								XIGamePad_END);
 
 	XINameToEnumMap.Shrink();
 

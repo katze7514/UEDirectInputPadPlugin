@@ -161,6 +161,8 @@ private:
 
 	void SetDelegateLeftAnalogX(EDirectInputPadKeyNames ePadKey);
 	void SetDelegateLeftAnalogY(EDirectInputPadKeyNames ePadKey);
+	void SetDelegateRightAnalogX(EDirectInputPadKeyNames ePadKey);
+	void SetDelegateRightAnalogY(EDirectInputPadKeyNames ePadKey);
 
 	// アナログイベントを発生させる
 	void EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyNames ePadName, FKey DIKey);
@@ -189,17 +191,28 @@ private:
 		@param[in] index チェックするバッファインデックス */
 	bool IsPovPressInner(enum EDirectInputArrow eArrow, uint32 nIndex)const;
 
-	//! XY軸がデジタル的に押されている
+	//! 左スティックがデジタル的に押されている
 	bool IsAxisPress(enum EDirectInputArrow eArrow)const;
-	//! XY軸がデジタル的に押された瞬間
+	//! 左スティックがデジタル的に押された瞬間
 	bool IsAxisPush(enum EDirectInputArrow eArrow)const;
-	//! XY軸がデジタル的に離れた瞬間
+	//! 左スティックがデジタル的に離れた瞬間
 	bool IsAxisRelease(enum EDirectInputArrow eArrow)const;
 
-	//! XY軸がデジタル的に押されているかどうかのチェック
+	//! 左スティックがデジタル的に押されているかどうかのチェック
 	/*! @param[in] eArrow チェックする方向
 		@param[in] index チェックするバッファインデックス */
 	bool IsAxisPressInner(enum EDirectInputArrow eArrow, uint32 nIndex)const;
+
+
+	//! 右スティックがデジタル的に押されている
+	bool IsAxisRightPress(enum EDirectInputArrow eArrow)const;
+	//! 右スティックがデジタル的に押された瞬間
+	bool IsAxisRightPush(enum EDirectInputArrow eArrow)const;
+	//! 右スティックがデジタル的に離れた瞬間
+	bool IsAxisRightRelease(enum EDirectInputArrow eArrow)const;
+
+	//! 右スティックがデジテル的に押されているかのチェック
+	bool IsAxisRightPressInner(enum EDirectInputArrow eArrow, uint32_t nIndex)const;
 
 	//! POV_*とAXIS_* を相互変換する
 	enum EDirectInputArrow SwapPovAxis(enum EDirectInputArrow eArrow)const;
@@ -255,6 +268,12 @@ private:
 	std::function<float(const FDirectInputJoystick&)> LeftAnalogPrevX;
 	std::function<float(const FDirectInputJoystick&)> LeftAnalogY;
 	std::function<float(const FDirectInputJoystick&)> LeftAnalogPrevY;
+
+	// 右スティック扱いとなる軸の値を取るメンバ関数
+	std::function<float(const FDirectInputJoystick&)> RightAnalogX;
+	std::function<float(const FDirectInputJoystick&)> RightAnalogPrevX;
+	std::function<float(const FDirectInputJoystick&)> RightAnalogY;
+	std::function<float(const FDirectInputJoystick&)> RightAnalogPrevY;
 };
 
 #include "HideWindowsPlatformTypes.h"
