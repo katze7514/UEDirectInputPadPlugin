@@ -857,9 +857,9 @@ bool FDirectInputJoystick::IsAxisPressInner(enum EDirectInputArrow eArrow, uint3
 	bool bCur = (nIndex==nCurIndex_);
 	switch (eArrow)
 	{
-	case AXIS_UP:	return (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this)) < -0.6f;
+	case AXIS_UP:	return (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this)) >  0.6f;
 	case AXIS_RIGHT:return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this)) >  0.6f;
-	case AXIS_DOWN:	return (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this)) >  0.6f;
+	case AXIS_DOWN:	return (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this)) < -0.6f;
 	case AXIS_LEFT:	return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this)) < -0.6f;
 	case AXIS_NONE:	return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this))==0.f && (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this))==0.f;
 	default:		return false;
@@ -889,9 +889,9 @@ bool FDirectInputJoystick::IsAxisRightPressInner(enum EDirectInputArrow eArrow, 
 	bool bCur = (nIndex==nCurIndex_);
 	switch (eArrow)
 	{
-	case AXIS_UP:	return (bCur ? RightAnalogY(*this) : RightAnalogPrevY(*this)) < -0.6f;
+	case AXIS_UP:	return (bCur ? RightAnalogY(*this) : RightAnalogPrevY(*this)) >  0.6f;
 	case AXIS_RIGHT:return (bCur ? RightAnalogX(*this) : RightAnalogPrevX(*this)) >  0.6f;
-	case AXIS_DOWN:	return (bCur ? RightAnalogY(*this) : RightAnalogPrevY(*this)) >  0.6f;
+	case AXIS_DOWN:	return (bCur ? RightAnalogY(*this) : RightAnalogPrevY(*this)) < -0.6f;
 	case AXIS_LEFT:	return (bCur ? RightAnalogX(*this) : RightAnalogPrevX(*this)) < -0.6f;
 	case AXIS_NONE:	return (bCur ? RightAnalogX(*this) : RightAnalogPrevX(*this))==0.f && (bCur ? RightAnalogY(*this) : RightAnalogPrevY(*this))==0.f;
 	default:		return false;

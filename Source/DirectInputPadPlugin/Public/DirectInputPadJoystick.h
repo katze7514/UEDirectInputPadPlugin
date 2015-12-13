@@ -56,12 +56,14 @@ public:
 	// 現在、状態の変化があったキーの情報を得る
 	// 最初に見つかった一つが取得できる。軸(XYZ軸、XYZ回転)＞ボタン(1→32)の優先度でチェックする
 	// POVは含まれない
+	// bRealがtrueの時は、反転フラグなどの設定を無視した実データで判定される
 	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
-	FDIGamePadKeyState				GetChangedKeyState();
+	FDIGamePadKeyState				GetChangedKeyState(bool bReal=false);
 
 	// 現在、状態の変化があったキーの情報をすべて得る。POVは含まれない
+	// bRealがtrueの時は、反転フラグなどの設定を無視した実データで判定される
 	UFUNCTION(BlueprintCallable,BlueprintPure, Category="DirectInputPad")
-	TArray<FDIGamePadKeyState>		GetAllChangedKeyState();
+	TArray<FDIGamePadKeyState>		GetAllChangedKeyState(bool bReal=false);
 
 	// 入力データをクリアする
 	UFUNCTION(BlueprintCallable, Category="DirectInputPad")

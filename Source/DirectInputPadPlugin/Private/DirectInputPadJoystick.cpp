@@ -139,7 +139,32 @@ FString	UDirectInputPadJoystick::GetGUID()
 	return "";
 }
 
-FDIGamePadKeyState UDirectInputPadJoystick::GetChangedKeyState()
+namespace
+{
+	struct SwapReverseFlag
+	{
+		SwapReverseFlag(TSharedPtr<FDirectInputJoystick> Joy, EDirectInputPadKeyNames eKey, bool bReal):Joy_(Joy),eKey_(eKey),bReal_(bReal)
+		{
+			if(bReal_)
+			{
+				bFlag_ = Joy_->IsAxisReverse(eKey_);
+				Joy_->SetAxisReverse(eKey_, false);
+			}
+		}
+
+		~SwapReverseFlag()
+		{
+			if(bReal_){ Joy_->SetAxisReverse(eKey_, bFlag_); }
+		}
+
+		TSharedPtr<FDirectInputJoystick>& Joy_;
+		EDirectInputPadKeyNames eKey_;
+		bool bReal_;
+		bool bFlag_;
+	};
+}
+
+FDIGamePadKeyState UDirectInputPadJoystick::GetChangedKeyState(bool bReal)
 {
 	FDIGamePadKeyState state;
 
@@ -148,46 +173,66 @@ FDIGamePadKeyState UDirectInputPadJoystick::GetChangedKeyState()
 		const auto& Joy = Joystick_.Pin();
 		if(Joy.IsValid())
 		{
-			if(Joy->X()!=0)
+			
 			{
-				state.KeyName = DIGamePad_AXIS_X;
-				state.Value   = Joy->X();
-				return state;
+				SwapReverseFlag srf(Joy, DIGamePad_AXIS_X, bReal);
+				if(Joy->X()!=0)
+				{
+					state.KeyName = DIGamePad_AXIS_X;
+					state.Value   = Joy->X();
+					return state;
+				}
 			}
 
-			if(Joy->Y()!=0)
 			{
-				state.KeyName = DIGamePad_AXIS_Y;
-				state.Value   = Joy->Y();
-				return state;
+				SwapReverseFlag srf(Joy, DIGamePad_AXIS_Y, bReal);
+				if(Joy->Y()!=0)
+				{
+					state.KeyName = DIGamePad_AXIS_Y;
+					state.Value   = Joy->Y();
+					return state;
+				}
 			}
 
-			if(Joy->Z()!=0)
 			{
-				state.KeyName = DIGamePad_AXIS_Z;
-				state.Value   = Joy->Z();
-				return state;
+				SwapReverseFlag srf(Joy, DIGamePad_AXIS_Z, bReal);
+				if(Joy->Z()!=0)
+				{
+					state.KeyName = DIGamePad_AXIS_Z;
+					state.Value   = Joy->Z();
+					return state;
+				}
 			}
 
-			if(Joy->RotX()!=0)
 			{
-				state.KeyName = DIGamePad_ROT_X;
-				state.Value   = Joy->RotX();
-				return state;
+				SwapReverseFlag srf(Joy, DIGamePad_ROT_X, bReal);
+
+				if(Joy->RotX()!=0)
+				{
+					state.KeyName = DIGamePad_ROT_X;
+					state.Value   = Joy->RotX();
+					return state;
+				}
 			}
 
-			if(Joy->RotY()!=0)
 			{
-				state.KeyName = DIGamePad_ROT_Y;
-				state.Value   = Joy->RotY();
-				return state;
+				SwapReverseFlag srf(Joy, DIGamePad_ROT_Y, bReal);
+				if(Joy->RotY()!=0)
+				{
+					state.KeyName = DIGamePad_ROT_Y;
+					state.Value   = Joy->RotY();
+					return state;
+				}
 			}
 
-			if(Joy->RotZ()!=0)
 			{
-				state.KeyName = DIGamePad_ROT_Z;
-				state.Value   = Joy->RotZ();
-				return state;
+				SwapReverseFlag srf(Joy, DIGamePad_ROT_Z, bReal);
+				if(Joy->RotZ()!=0)
+				{
+					state.KeyName = DIGamePad_ROT_Z;
+					state.Value   = Joy->RotZ();
+					return state;
+				}
 			}
 
 			for(uint8 i=0; i<32; ++i)
@@ -211,7 +256,7 @@ FDIGamePadKeyState UDirectInputPadJoystick::GetChangedKeyState()
 }
 
 
-TArray<FDIGamePadKeyState> UDirectInputPadJoystick::GetAllChangedKeyState()
+TArray<FDIGamePadKeyState> UDirectInputPadJoystick::GetAllChangedKeyState(bool bReal)
 {
 	TArray<FDIGamePadKeyState> aState;
 
@@ -222,46 +267,64 @@ TArray<FDIGamePadKeyState> UDirectInputPadJoystick::GetAllChangedKeyState()
 		{
 			FDIGamePadKeyState state;
 
-			if(Joy->X()!=0)
 			{
-				state.KeyName = DIGamePad_AXIS_X;
-				state.Value   = Joy->X();
-				aState.Add(state);
+				SwapReverseFlag srf(Joy, DIGamePad_AXIS_X, bReal);
+				if(Joy->X()!=0)
+				{
+					state.KeyName = DIGamePad_AXIS_X;
+					state.Value   = Joy->X();
+					aState.Add(state);
+				}
 			}
 
-			if(Joy->Y()!=0)
 			{
-				state.KeyName = DIGamePad_AXIS_Y;
-				state.Value   = Joy->Y();
-				aState.Add(state);
+				SwapReverseFlag srf(Joy, DIGamePad_AXIS_Y, bReal);
+				if(Joy->Y()!=0)
+				{
+					state.KeyName = DIGamePad_AXIS_Y;
+					state.Value   = Joy->Y();
+					aState.Add(state);
+				}
 			}
 
-			if(Joy->Z()!=0)
 			{
-				state.KeyName = DIGamePad_AXIS_Z;
-				state.Value   = Joy->Z();
-				aState.Add(state);
+				SwapReverseFlag srf(Joy, DIGamePad_AXIS_Z, bReal);
+				if(Joy->Z()!=0)
+				{
+					state.KeyName = DIGamePad_AXIS_Z;
+					state.Value   = Joy->Z();
+					aState.Add(state);
+				}
 			}
 
-			if(Joy->RotX()!=0)
 			{
-				state.KeyName = DIGamePad_ROT_X;
-				state.Value   = Joy->RotX();
-				aState.Add(state);
+				SwapReverseFlag srf(Joy, DIGamePad_ROT_X, bReal);
+				if(Joy->RotX()!=0)
+				{
+					state.KeyName = DIGamePad_ROT_X;
+					state.Value   = Joy->RotX();
+					aState.Add(state);	
+				}
 			}
 
-			if(Joy->RotY()!=0)
 			{
-				state.KeyName = DIGamePad_ROT_Y;
-				state.Value   = Joy->RotY();
-				aState.Add(state);
+				SwapReverseFlag srf(Joy, DIGamePad_ROT_Y, bReal);
+				if(Joy->RotY()!=0)
+				{
+					state.KeyName = DIGamePad_ROT_Y;
+					state.Value   = Joy->RotY();
+					aState.Add(state);
+				}
 			}
 
-			if(Joy->RotZ()!=0)
 			{
-				state.KeyName = DIGamePad_ROT_Z;
-				state.Value   = Joy->RotZ();
-				aState.Add(state);
+				SwapReverseFlag srf(Joy, DIGamePad_ROT_Z, bReal);
+				if(Joy->RotZ()!=0)
+				{
+					state.KeyName = DIGamePad_ROT_Z;
+					state.Value   = Joy->RotZ();
+					aState.Add(state);
+				}
 			}
 
 			for(uint8 i=0; i<32; ++i)
