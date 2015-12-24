@@ -1,6 +1,8 @@
 #include "DirectInputPadPluginPrivatePCH.h"
 
+#if WITH_EDITOR
 #include "MainFrame.h"
+#endif
 
 #include "DirectInputPadJoystick.h"
 

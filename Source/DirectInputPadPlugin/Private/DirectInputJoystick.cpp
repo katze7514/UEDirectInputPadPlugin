@@ -501,33 +501,33 @@ void FDirectInputJoystick::SetDelegateLeftAnalogX(EDirectInputPadKeyNames ePadKe
 	switch(ePadKey)
 	{
 	case DIGamePad_AXIS_X:
-		LeftAnalogX		= &FDirectInputJoystick::X;
-		LeftAnalogPrevX = &FDirectInputJoystick::PrevX;
+		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::X),this);
+		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevX),this);
 	break;
 
 	case DIGamePad_AXIS_Y:
-		LeftAnalogX		= &FDirectInputJoystick::Y;
-		LeftAnalogPrevX = &FDirectInputJoystick::PrevY;
+		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::Y),this);
+		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevY),this);
 	break;
 
 	case DIGamePad_AXIS_Z:
-		LeftAnalogX		= &FDirectInputJoystick::Z;
-		LeftAnalogPrevX = &FDirectInputJoystick::PrevZ;
+		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::Z),this);
+		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevZ),this);
 	break;
 
 	case DIGamePad_ROT_X:
-		LeftAnalogX		= &FDirectInputJoystick::RotX;
-		LeftAnalogPrevX = &FDirectInputJoystick::RotPrevX;
+		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::RotX),this);
+		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevX),this);
 	break;
 
 	case DIGamePad_ROT_Y:
-		LeftAnalogX		= &FDirectInputJoystick::RotY;
-		LeftAnalogPrevX = &FDirectInputJoystick::RotPrevY;
+		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::RotY),this);
+		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevY),this);
 	break;
 
 	case DIGamePad_ROT_Z:
-		LeftAnalogX		= &FDirectInputJoystick::RotZ;
-		LeftAnalogPrevX = &FDirectInputJoystick::RotPrevZ;
+		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::RotZ),this);
+		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevZ),this);
 	break;
 	}
 }
@@ -537,33 +537,33 @@ void FDirectInputJoystick::SetDelegateLeftAnalogY(EDirectInputPadKeyNames ePadKe
 	switch(ePadKey)
 	{
 	case DIGamePad_AXIS_X:
-		LeftAnalogY		= &FDirectInputJoystick::X;
-		LeftAnalogPrevY = &FDirectInputJoystick::PrevX;
+		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::X),this);
+		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevX),this);
 	break;
 
 	case DIGamePad_AXIS_Y:
-		LeftAnalogY		= &FDirectInputJoystick::Y;
-		LeftAnalogPrevY = &FDirectInputJoystick::PrevY;
+		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::Y),this);
+		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevY),this);
 	break;
 
 	case DIGamePad_AXIS_Z:
-		LeftAnalogY		= &FDirectInputJoystick::Z;
-		LeftAnalogPrevY = &FDirectInputJoystick::PrevZ;
+		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::Z),this);
+		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevZ),this);
 	break;
 
 	case DIGamePad_ROT_X:
-		LeftAnalogY		= &FDirectInputJoystick::RotX;
-		LeftAnalogPrevY = &FDirectInputJoystick::RotPrevX;
+		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::RotX),this);
+		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevX),this);
 	break;
 
 	case DIGamePad_ROT_Y:
-		LeftAnalogY		= &FDirectInputJoystick::RotY;
-		LeftAnalogPrevY = &FDirectInputJoystick::RotPrevY;
+		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::RotY),this);
+		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevY),this);
 	break;
 
 	case DIGamePad_ROT_Z:
-		LeftAnalogY		= &FDirectInputJoystick::RotZ;
-		LeftAnalogPrevY = &FDirectInputJoystick::RotPrevZ;
+		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::RotZ),this);
+		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevZ),this);
 	break;
 	}
 }
@@ -573,33 +573,33 @@ void FDirectInputJoystick::SetDelegateRightAnalogX(EDirectInputPadKeyNames ePadK
 	switch(ePadKey)
 	{
 	case DIGamePad_AXIS_X:
-		RightAnalogX	 = &FDirectInputJoystick::X;
-		RightAnalogPrevX = &FDirectInputJoystick::PrevX;
+		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::X),this);
+		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevX),this);
 	break;
 
 	case DIGamePad_AXIS_Y:
-		RightAnalogX	 = &FDirectInputJoystick::Y;
-		RightAnalogPrevX = &FDirectInputJoystick::PrevY;
+		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::Y),this);
+		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevY),this);
 	break;
 
 	case DIGamePad_AXIS_Z:
-		RightAnalogX	 = &FDirectInputJoystick::Z;
-		RightAnalogPrevX = &FDirectInputJoystick::PrevZ;
+		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::Z),this);
+		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevZ),this);
 	break;
 
 	case DIGamePad_ROT_X:
-		RightAnalogX	 = &FDirectInputJoystick::RotX;
-		RightAnalogPrevX = &FDirectInputJoystick::RotPrevX;
+		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotX),this);
+		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevX),this);
 	break;
 
 	case DIGamePad_ROT_Y:
-		RightAnalogX	 = &FDirectInputJoystick::RotY;
-		RightAnalogPrevX = &FDirectInputJoystick::RotPrevY;
+		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotY),this);
+		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevY),this);
 	break;
 
 	case DIGamePad_ROT_Z:
-		RightAnalogX	 = &FDirectInputJoystick::RotZ;
-		RightAnalogPrevX = &FDirectInputJoystick::RotPrevZ;
+		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotZ),this);
+		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevZ),this);
 	break;
 	}
 }
@@ -609,33 +609,33 @@ void FDirectInputJoystick::SetDelegateRightAnalogY(EDirectInputPadKeyNames ePadK
 	switch(ePadKey)
 	{
 	case DIGamePad_AXIS_X:
-		RightAnalogY	 = &FDirectInputJoystick::X;
-		RightAnalogPrevY = &FDirectInputJoystick::PrevX;
+		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::X),this);
+		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevX),this);
 	break;
 
 	case DIGamePad_AXIS_Y:
-		RightAnalogY	 = &FDirectInputJoystick::Y;
-		RightAnalogPrevY = &FDirectInputJoystick::PrevY;
+		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::Y),this);
+		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevY),this);
 	break;
 
 	case DIGamePad_AXIS_Z:
-		RightAnalogY	 = &FDirectInputJoystick::Z;
-		RightAnalogPrevY = &FDirectInputJoystick::PrevZ;
+		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::Z),this);
+		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevZ),this);
 	break;
 
 	case DIGamePad_ROT_X:
-		RightAnalogY	 = &FDirectInputJoystick::RotX;
-		RightAnalogPrevY = &FDirectInputJoystick::RotPrevX;
+		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotX),this);
+		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevX),this);
 	break;
 
 	case DIGamePad_ROT_Y:
-		RightAnalogY	 = &FDirectInputJoystick::RotY;
-		RightAnalogPrevY = &FDirectInputJoystick::RotPrevY;
+		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotY),this);
+		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevY),this);
 	break;
 
 	case DIGamePad_ROT_Z:
-		RightAnalogY	 = &FDirectInputJoystick::RotZ;
-		RightAnalogPrevY = &FDirectInputJoystick::RotPrevZ;
+		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotZ),this);
+		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevZ),this);
 	break;
 	}
 }
@@ -857,11 +857,11 @@ bool FDirectInputJoystick::IsAxisPressInner(enum EDirectInputArrow eArrow, uint3
 	bool bCur = (nIndex==nCurIndex_);
 	switch (eArrow)
 	{
-	case AXIS_UP:	return (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this)) >  0.6f;
-	case AXIS_RIGHT:return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this)) >  0.6f;
-	case AXIS_DOWN:	return (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this)) < -0.6f;
-	case AXIS_LEFT:	return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this)) < -0.6f;
-	case AXIS_NONE:	return (bCur ? LeftAnalogX(*this) : LeftAnalogPrevX(*this))==0.f && (bCur ? LeftAnalogY(*this) : LeftAnalogPrevY(*this))==0.f;
+	case AXIS_UP:	return (bCur ? LeftAnalogY() : LeftAnalogPrevY()) >  0.6f;
+	case AXIS_RIGHT:return (bCur ? LeftAnalogX() : LeftAnalogPrevX()) >  0.6f;
+	case AXIS_DOWN:	return (bCur ? LeftAnalogY() : LeftAnalogPrevY()) < -0.6f;
+	case AXIS_LEFT:	return (bCur ? LeftAnalogX() : LeftAnalogPrevX()) < -0.6f;
+	case AXIS_NONE:	return (bCur ? LeftAnalogX() : LeftAnalogPrevX())==0.f && (bCur ? LeftAnalogY() : LeftAnalogPrevY())==0.f;
 	default:		return false;
 	}
 }
@@ -889,11 +889,11 @@ bool FDirectInputJoystick::IsAxisRightPressInner(enum EDirectInputArrow eArrow, 
 	bool bCur = (nIndex==nCurIndex_);
 	switch (eArrow)
 	{
-	case AXIS_UP:	return (bCur ? RightAnalogY(*this) : RightAnalogPrevY(*this)) >  0.6f;
-	case AXIS_RIGHT:return (bCur ? RightAnalogX(*this) : RightAnalogPrevX(*this)) >  0.6f;
-	case AXIS_DOWN:	return (bCur ? RightAnalogY(*this) : RightAnalogPrevY(*this)) < -0.6f;
-	case AXIS_LEFT:	return (bCur ? RightAnalogX(*this) : RightAnalogPrevX(*this)) < -0.6f;
-	case AXIS_NONE:	return (bCur ? RightAnalogX(*this) : RightAnalogPrevX(*this))==0.f && (bCur ? RightAnalogY(*this) : RightAnalogPrevY(*this))==0.f;
+	case AXIS_UP:	return (bCur ? RightAnalogY() : RightAnalogPrevY()) >  0.6f;
+	case AXIS_RIGHT:return (bCur ? RightAnalogX() : RightAnalogPrevX()) >  0.6f;
+	case AXIS_DOWN:	return (bCur ? RightAnalogY() : RightAnalogPrevY()) < -0.6f;
+	case AXIS_LEFT:	return (bCur ? RightAnalogX() : RightAnalogPrevX()) < -0.6f;
+	case AXIS_NONE:	return (bCur ? RightAnalogX() : RightAnalogPrevX())==0.f && (bCur ? RightAnalogY() : RightAnalogPrevY())==0.f;
 	default:		return false;
 	}
 }

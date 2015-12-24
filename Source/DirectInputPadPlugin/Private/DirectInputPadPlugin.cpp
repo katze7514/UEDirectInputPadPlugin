@@ -13,6 +13,10 @@ IMPLEMENT_MODULE( FDirectInputPadPlugin, DirectInputPadPlugin )
 
 DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
 
+namespace{
+TSharedPtr<FDirectInputPadDevice> device_;
+}
+
 void FDirectInputPadPlugin::StartupModule()
 {
 	IDirectInputPadPlugin::StartupModule();

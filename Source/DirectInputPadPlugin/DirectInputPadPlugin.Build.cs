@@ -37,12 +37,16 @@ namespace UnrealBuildTool.Rules
                     "Slate",
                     "SlateCore",
                     "InputCore",
-                    "MainFrame",
 					// ... add private dependencies that you statically link with here ...
 				}
 				);
 
-			DynamicallyLoadedModuleNames.AddRange(
+            if (UEBuildConfiguration.bBuildEditor)
+            {
+                PrivateDependencyModuleNames.AddRange(new string[]{ "MainFrame", });
+            }
+
+            DynamicallyLoadedModuleNames.AddRange(
 				new string[]
 				{
 					// ... add any modules that your module loads dynamically here ...

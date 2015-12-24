@@ -264,16 +264,16 @@ private:
 	TArray<bool>	AxisReverseFlagMap_;
 
 	// 左スティック扱いとなる軸の値を取るメンバ関数
-	std::function<float(const FDirectInputJoystick&)> LeftAnalogX;
-	std::function<float(const FDirectInputJoystick&)> LeftAnalogPrevX;
-	std::function<float(const FDirectInputJoystick&)> LeftAnalogY;
-	std::function<float(const FDirectInputJoystick&)> LeftAnalogPrevY;
+	std::function<float()> LeftAnalogX;
+	std::function<float()> LeftAnalogPrevX;
+	std::function<float()> LeftAnalogY;
+	std::function<float()> LeftAnalogPrevY;
 
 	// 右スティック扱いとなる軸の値を取るメンバ関数
-	std::function<float(const FDirectInputJoystick&)> RightAnalogX;
-	std::function<float(const FDirectInputJoystick&)> RightAnalogPrevX;
-	std::function<float(const FDirectInputJoystick&)> RightAnalogY;
-	std::function<float(const FDirectInputJoystick&)> RightAnalogPrevY;
+	std::function<float()> RightAnalogX;
+	std::function<float()> RightAnalogPrevX;
+	std::function<float()> RightAnalogY;
+	std::function<float()> RightAnalogPrevY;
 };
 
 #include "HideWindowsPlatformTypes.h"

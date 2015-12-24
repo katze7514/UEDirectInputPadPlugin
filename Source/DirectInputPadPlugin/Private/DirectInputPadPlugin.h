@@ -17,7 +17,4 @@ public:
 
 public:
 	TSharedPtr<FDirectInputPadDevice> GetDirectInputPadDevice();
-
-private:
-	TSharedPtr<FDirectInputPadDevice> device_;
 };

@@ -7,7 +7,7 @@
 class FDirectInputJoystick;
 
 USTRUCT(BlueprintType)
-struct FDIGamePadKeyState
+struct DIRECTINPUTPADPLUGIN_API FDIGamePadKeyState
 {
 	GENERATED_BODY();
 
@@ -26,7 +26,7 @@ struct FDIGamePadKeyState
 // BP公開用DIPadクラス
 // BPからは、このクラスを介して操作する
 UCLASS(BlueprintType)
-class UDirectInputPadJoystick : public UObject
+class DIRECTINPUTPADPLUGIN_API UDirectInputPadJoystick : public UObject
 {
 	GENERATED_BODY()
 
@@ -79,7 +79,7 @@ private:
 
 // この関数を使ってUDirectInputPadJoystickを取得する
 UCLASS()
-class UDirectInputPadFunctionLibrary : public UBlueprintFunctionLibrary
+class DIRECTINPUTPADPLUGIN_API UDirectInputPadFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
