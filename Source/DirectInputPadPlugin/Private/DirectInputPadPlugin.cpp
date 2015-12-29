@@ -88,10 +88,13 @@ void FDirectInputPadPlugin::ShutdownModule()
 TSharedPtr< class IInputDevice > FDirectInputPadPlugin::CreateInputDevice(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler)
 {
 	if(device_.IsValid()) return device_;
-
+	
 	device_ = MakeShareable<FDirectInputPadDevice>(new FDirectInputPadDevice());
-	if(device_->Init(InMessageHandler))
+	if(device_->Init())
+	{
+		device_->SetMessageHandler(InMessageHandler);
 		return device_;
+	}
 
 	device_ = nullptr;
 	return nullptr;

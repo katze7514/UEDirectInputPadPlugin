@@ -389,7 +389,7 @@ int32 UDirectInputPadFunctionLibrary::GetDirectInputPadNum()
 
 UDirectInputPadJoystick* UDirectInputPadFunctionLibrary::GetDirectInputPadJoystick(int32 PlayerIndex)
 {
-	if(PlayerIndex>=0 && PlayerIndex<=7)
+	if(ArrayJoysticks.IsValidIndex(PlayerIndex))
 	{
 		auto Joy = ArrayJoysticks[PlayerIndex];
 		if(Joy.IsValid()) return Joy.Get();

@@ -19,11 +19,9 @@ const uint32 MAX_JOYSTICKS = 8;
 
 #include "AllowWindowsPlatformTypes.h"
 
-bool FDirectInputPadDevice::Init(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler)
+bool FDirectInputPadDevice::Init()
 {
 	UDirectInputPadFunctionLibrary::InitDirectInputPadJoystickLibrary();
-
-	MessageHandler_ = InMessageHandler;
 
 	// MainWindowのウインドウハンドルを取得する
 	HWND hWnd = NULL;

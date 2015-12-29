@@ -10,7 +10,7 @@ class FDirectInputJoystick;
 class FDirectInputPadDevice : public IInputDevice
 {
 public:
-	bool Init(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler);
+	bool Init();
 	void Fin();
 
 public:
