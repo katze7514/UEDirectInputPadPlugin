@@ -84,12 +84,13 @@ class DIRECTINPUTPADPLUGIN_API UDirectInputPadFunctionLibrary : public UBlueprin
 	GENERATED_BODY()
 
 public:
+	// 接続されているXInputパッドの数。取得できなかった時は-1が返る
 	UFUNCTION(BlueprintCallable,BlueprintPure,Category="DirectInputPad")
 	static int32 GetXInputPadNum();
 
+	// 接続されているDirectInputパッドの数。取得できなかった時は-1が返る
 	UFUNCTION(BlueprintCallable,BlueprintPure,Category="DirectInputPad")
 	static int32 GetDirectInputPadNum();
-
 
 	UFUNCTION(BlueprintCallable,BlueprintPure,Category="DirectInputPad")
 	static UDirectInputPadJoystick* GetDirectInputPadJoystick(int32 PlayerIndex);

@@ -378,13 +378,20 @@ inline TSharedPtr<FDirectInputPadDevice> GetDirectInputPadDevice()
 int32 UDirectInputPadFunctionLibrary::GetXInputPadNum()
 {
 	const auto& DIDevice = GetDirectInputPadDevice();
-	return DIDevice->GetXInputDeviceNum();
+	if(DIDevice.IsValid())
+		return DIDevice->GetXInputDeviceNum();
+	else
+		return -1;
 }
 
 int32 UDirectInputPadFunctionLibrary::GetDirectInputPadNum()
 {
 	const auto& DIDevice = GetDirectInputPadDevice();
-	return DIDevice->GetDInputDeviceNum();
+
+	if(DIDevice.IsValid())
+		return DIDevice->GetDInputDeviceNum();
+	else
+		return -1;
 }
 
 UDirectInputPadJoystick* UDirectInputPadFunctionLibrary::GetDirectInputPadJoystick(int32 PlayerIndex)
