@@ -84,6 +84,9 @@ class DIRECTINPUTPADPLUGIN_API UDirectInputPadFunctionLibrary : public UBlueprin
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable,BlueprintPure,Category="DirectInputPad")
+	static bool IsInitilizedDirectInputPadPlugin();
+
 	// 接続されているXInputパッドの数。取得できなかった時は-1が返る
 	UFUNCTION(BlueprintCallable,BlueprintPure,Category="DirectInputPad")
 	static int32 GetXInputPadNum();

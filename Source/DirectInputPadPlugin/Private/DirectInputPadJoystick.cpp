@@ -375,6 +375,15 @@ inline TSharedPtr<FDirectInputPadDevice> GetDirectInputPadDevice()
 }
 } // namespace
 
+bool UDirectInputPadFunctionLibrary::IsInitilizedDirectInputPadPlugin()
+{
+	const auto& DIDevice = GetDirectInputPadDevice();
+	if(DIDevice.IsValid())
+		return DIDevice->IsInitilized();
+	else
+		return false;
+}
+
 int32 UDirectInputPadFunctionLibrary::GetXInputPadNum()
 {
 	const auto& DIDevice = GetDirectInputPadDevice();

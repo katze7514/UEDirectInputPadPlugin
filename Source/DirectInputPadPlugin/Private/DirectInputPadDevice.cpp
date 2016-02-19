@@ -45,10 +45,18 @@ bool FDirectInputPadDevice::Init()
 	}
 
 	DDriver_ = MakeShareable<FDirectInputDriver>(new FDirectInputDriver());
-	if(!DDriver_->Init()) return false;
+	if(!DDriver_->Init())
+	{
+		bInit_ = false;
+		return bInit_;
+	}
 
 	DFactory_ = MakeShareable<FDirectInputJoystickFactory>(new FDirectInputJoystickFactory());
-	if(!DFactory_->Init(hWnd, DDriver_)) return false;
+	if(!DFactory_->Init(hWnd, DDriver_))
+	{
+		bInit_ = false;
+		return bInit_;
+	}
 
 	XInputDeviceNum_ = DFactory_->GetXInputDeviceNum();
 	DInputDeviceNum_ = 0;
@@ -73,7 +81,8 @@ bool FDirectInputPadDevice::Init()
 		}
 	}
 
-	return true;
+	bInit_ = true;
+	return bInit_;
 }
 
 void FDirectInputPadDevice::Fin()

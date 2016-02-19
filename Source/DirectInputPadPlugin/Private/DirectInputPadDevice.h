@@ -31,6 +31,8 @@ public:
 	int32							GetXInputDeviceNum()const{ return XInputDeviceNum_; }
 	int32							GetDInputDeviceNum()const{ return DInputDeviceNum_; }
 
+	bool							IsInitilized()const{ return bInit_; }
+
 private:
 	TSharedPtr<FGenericApplicationMessageHandler>	MessageHandler_;
 
@@ -40,4 +42,6 @@ private:
 
 	int32											XInputDeviceNum_ = 0; // 有効なXInputデバイス数
 	int32											DInputDeviceNum_ = 0; // 有効なDInputデバイス数
+
+	bool											bInit_;
 };
