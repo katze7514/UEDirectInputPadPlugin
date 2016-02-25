@@ -43,5 +43,5 @@ private:
 	int32											XInputDeviceNum_ = 0; // 有効なXInputデバイス数
 	int32											DInputDeviceNum_ = 0; // 有効なDInputデバイス数
 
-	bool											bInit_;
+	bool											bInit_ = false; // 初期化フラグ
 };
