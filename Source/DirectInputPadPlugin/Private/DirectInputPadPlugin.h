@@ -1,4 +1,6 @@
-#pragma once
+﻿#pragma once
+
+DECLARE_LOG_CATEGORY_EXTERN(LogDirectInputPadPlugin, Log, All);
 
 #include "IDirectInputPadPlugin.h"
 

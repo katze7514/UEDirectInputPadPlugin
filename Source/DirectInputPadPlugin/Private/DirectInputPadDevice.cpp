@@ -1,4 +1,4 @@
-#include "DirectInputPadPluginPrivatePCH.h"
+﻿#include "DirectInputPadPluginPrivatePCH.h"
 
 #if WITH_EDITOR
 #include "MainFrame.h"
@@ -11,13 +11,11 @@
 
 #include "DirectInputPadDevice.h"
 
-DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
+#include "AllowWindowsPlatformTypes.h"
 
 namespace{
 const uint32 MAX_JOYSTICKS = 8;
 }
-
-#include "AllowWindowsPlatformTypes.h"
 
 bool FDirectInputPadDevice::Init()
 {
@@ -65,11 +63,11 @@ bool FDirectInputPadDevice::Init()
 	uint32 DJoyNum = MAX_JOYSTICKS - XInputDeviceNum_;
 	DJoyNum =( DFactory_->EnabledJoystickNum() < DJoyNum) ? DFactory_->EnabledJoystickNum() : DJoyNum;
 
-	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputPad detected: %d"), DJoyNum);
+	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("DirectInputPad detected: %d"), DJoyNum);
 
 	for(uint32 i=0; i<DJoyNum; ++i)
 	{
-		//UE_LOG(DirectInputPadPlugin, Log, TEXT("DIPad %d"),i);
+		//UE_LOG(LogDirectInputPadPlugin, Log, TEXT("DIPad %d"),i);
 
 		auto joy = DFactory_->GetJoystick(i);
 		if(joy.IsValid())

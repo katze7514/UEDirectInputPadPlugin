@@ -1,17 +1,16 @@
-// Copyright 1998-2015 Epic Games, Inc. All Rights Reserved.
+﻿// Copyright 1998-2015 Epic Games, Inc. All Rights Reserved.
 
 #include "DirectInputPadPluginPrivatePCH.h"
 #include "DirectInputPadPlugin.h"
 
 #include "DirectInputPadState.h"
-
 #include "DirectInputPadDevice.h"
 
 IMPLEMENT_MODULE( FDirectInputPadPlugin, DirectInputPadPlugin )
 
-#define LOCTEXT_NAMESPACE "DirectInputPadPlugin"
+DEFINE_LOG_CATEGORY(LogDirectInputPadPlugin);
 
-DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
+#define LOCTEXT_NAMESPACE "DirectInputPadPlugin"
 
 namespace{
 TSharedPtr<FDirectInputPadDevice> device_;

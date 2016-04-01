@@ -1,4 +1,4 @@
-#include "DirectInputPadPluginPrivatePCH.h"
+﻿#include "DirectInputPadPluginPrivatePCH.h"
 
 #include "DirectInputPadState.h"
 

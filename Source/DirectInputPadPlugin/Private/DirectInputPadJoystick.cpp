@@ -1,12 +1,10 @@
-#include "DirectInputPadPluginPrivatePCH.h"
+﻿#include "DirectInputPadPluginPrivatePCH.h"
 
 #include "DirectInputPadPlugin.h"
 #include "DirectInputPadDevice.h"
 #include "DirectInputJoystick.h"
 
 #include "DirectInputPadJoystick.h"
-
-DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
 
 namespace{
 const FName XIGamepadKeyNames[] =
@@ -422,7 +420,7 @@ UDirectInputPadJoystick* UDirectInputPadFunctionLibrary::GetDirectInputPadJoysti
 		}
 	}
 
-	UE_LOG(DirectInputPadPlugin, Warning, TEXT("Not Found PlayerIndex(%d) DirectInputJoystick."), PlayerIndex);
+	UE_LOG(LogDirectInputPadPlugin, Warning, TEXT("Not Found PlayerIndex(%d) DirectInputJoystick."), PlayerIndex);
 	return nullptr;
 }
 

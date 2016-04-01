@@ -1,13 +1,11 @@
-#include "DirectInputPadPluginPrivatePCH.h"
+﻿#include "DirectInputPadPluginPrivatePCH.h"
 
 #include "DirectInputPadState.h"
 #include "DirectInputJoystick.h"
 
-#include "DirectInputDriver.h"
-
 #include <tuple>
 
-DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
+#include "DirectInputDriver.h"
 
 #include "AllowWindowsPlatformTypes.h"
 
@@ -26,11 +24,11 @@ bool FDirectInputDriver::Init()
 
 	if(r != DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("DirectInputDriver initialization failed."));
+		UE_LOG(LogDirectInputPadPlugin, Error, TEXT("DirectInputDriver initialization failed."));
 		return false;
 	}
 
-	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInputDriver initialized."));
+	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("DirectInputDriver initialized."));
 	return true;
 }
 
@@ -180,7 +178,7 @@ bool FDirectInputJoystickEnum::Init(FDirectInputDriver& adapter)
 	HRESULT r = pDriver->EnumDevices(DI8DEVCLASS_GAMECTRL, &FDirectInputJoystickEnum::OnEnumDevice, this, DIEDFL_ATTACHEDONLY);
 	if(FAILED(r))
 	{
-		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Search DirectInputPad Error."));
+		UE_LOG(LogDirectInputPadPlugin, Warning, TEXT("Search DirectInputPad Error."));
 		return false;
 	}
 
@@ -194,7 +192,7 @@ const DIDEVICEINSTANCE* FDirectInputJoystickEnum::GetJoystickInfo(uint32 nJoyNo)
 {
 	if(!vecJoyStickInfo_.IsValidIndex(nJoyNo))
 	{
-		UE_LOG(DirectInputPadPlugin, Warning, TEXT("Unsuable DirectInputPad：No. %n"), nJoyNo);
+		UE_LOG(LogDirectInputPadPlugin, Warning, TEXT("Unsuable DirectInputPad：No. %n"), nJoyNo);
 		return nullptr;
 	}
 

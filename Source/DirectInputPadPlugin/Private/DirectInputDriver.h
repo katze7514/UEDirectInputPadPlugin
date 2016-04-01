@@ -1,21 +1,6 @@
-#pragma once
+﻿#pragma once
 
 #include "AllowWindowsPlatformTypes.h"
-
-#define DIRECTINPUT_VERSION 0x0800 
-#define _CRT_SECURE_NO_DEPRECATE
-
-#pragma comment(lib, "dinput8.lib")
-#pragma comment(lib, "dxguid.lib")
-
-#include <windows.h>
-
-#pragma warning(push) 
-#pragma warning(disable:6000 28251) 
-#include <dinput.h> 
-#pragma warning(pop) 
-
-#include <dinputd.h>
 
 class FDirectInputJoystick;
 

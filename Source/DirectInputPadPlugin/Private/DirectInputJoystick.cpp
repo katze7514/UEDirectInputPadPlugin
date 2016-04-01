@@ -1,11 +1,8 @@
-#include "DirectInputPadPluginPrivatePCH.h"
+﻿#include "DirectInputPadPluginPrivatePCH.h"
 
 #include "DirectInputPadState.h"
-
 #include "DirectInputDriver.h"
 #include "DirectInputJoystick.h"
-
-DEFINE_LOG_CATEGORY_STATIC(DirectInputPadPlugin, Log, All)
 
 #include "AllowWindowsPlatformTypes.h"
 
@@ -23,14 +20,14 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	HRESULT r = driver->CreateDevice(joyins.guidInstance, &pDevice_, NULL);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick CreateDevice fail. : %x"),r);
+		UE_LOG(LogDirectInputPadPlugin, Error, TEXT("Joystick CreateDevice fail. : %x"),r);
 		return false;
 	}
 
 	r = pDevice_->SetDataFormat(&c_dfDIJoystick);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetDataformat fail. : %x"),r);
+		UE_LOG(LogDirectInputPadPlugin, Error, TEXT("Joystick SetDataformat fail. : %x"),r);
 		Fin();
 		return false;
 	}
@@ -46,7 +43,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	r = pDevice_->SetCooperativeLevel(hWnd, flags);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick SetCooperativeLevel fail. : %x"), r);
+		UE_LOG(LogDirectInputPadPlugin, Error, TEXT("Joystick SetCooperativeLevel fail. : %x"), r);
 		Fin();
 		return false;
 	}
@@ -64,7 +61,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 	r = pDevice_->SetProperty(DIPROP_AXISMODE, &diprop.diph);
 	if(r!=DI_OK)
 	{
-		UE_LOG(DirectInputPadPlugin, Error, TEXT("Joystick AxisMode Setup fail. : %x"), r);
+		UE_LOG(LogDirectInputPadPlugin, Error, TEXT("Joystick AxisMode Setup fail. : %x"), r);
 		Fin();
 		return false;
 	}
@@ -87,7 +84,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 		AxisReverseFlagMap_[i] = false;
 
 //	const string sFlag = (flags&DISCL_BACKGROUND)>0 ? "BACKGROUND" : "FOREGROUND";
-	UE_LOG(DirectInputPadPlugin, Log, TEXT("DirectInput Joystick Create Success. : %s"), joyins.tszProductName);
+	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("DirectInput Joystick Create Success. : %s"), joyins.tszProductName);
 
 	return true;
 }
@@ -432,7 +429,7 @@ FName FDirectInputJoystick::GetXIKey(EDirectInputPadKeyNames ePadKey)
 
 void FDirectInputJoystick::SetXIKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName)
 {
-	//UE_LOG(DirectInputPadPlugin, Log, TEXT("SetXIKey: %d, %s"), (int32)ePadKey, *(UEKeyName.ToString()));
+	//UE_LOG(LogDirectInputPadPlugin, Log, TEXT("SetXIKey: %d, %s"), (int32)ePadKey, *(UEKeyName.ToString()));
 
 	if(ePadKey >= DIGamePad_END) return;
 
@@ -998,3 +995,5 @@ bool FDirectInputJoystick::IsRelease(uint32_t nBtn)const
 	return (joyBuf_[nCurIndex_].rgbButtons[nBtn] & 0x80)==0
 		&& (joyBuf_[nCurIndex_^1].rgbButtons[nBtn] & 0x80)>0;
 }
+
+#include "HideWindowsPlatformTypes.h"

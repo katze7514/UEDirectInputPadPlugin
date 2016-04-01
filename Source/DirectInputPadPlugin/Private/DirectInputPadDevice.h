@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "InputCoreTypes.h"
 #include "InputDevice.h"
