@@ -6,7 +6,7 @@
 	"VersionName" : "0.8",
 	"CreatedBy" : "katze7514",
 	"CreatedByURL" : "https://github.com/katze7514/UEDirectInputPadPlugin",
-	"EngineVersion" : "4.11.0",
+	"EngineVersion" : "4.12.0",
 	"Description" : "Plugin for DirectInputPad.",
 	"Category" : "Input Devices",
 	

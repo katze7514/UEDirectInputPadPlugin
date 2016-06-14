@@ -17,7 +17,7 @@ namespace{
 const uint32 MAX_JOYSTICKS = 8;
 }
 
-bool FDirectInputPadDevice::Init()
+bool FDirectInputPadDevice::Init(bool bBackGround)
 {
 	UDirectInputPadFunctionLibrary::InitDirectInputPadJoystickLibrary();
 
@@ -50,7 +50,7 @@ bool FDirectInputPadDevice::Init()
 	}
 
 	DFactory_ = MakeShareable<FDirectInputJoystickFactory>(new FDirectInputJoystickFactory());
-	if(!DFactory_->Init(hWnd, DDriver_))
+	if(!DFactory_->Init(hWnd, DDriver_, bBackGround))
 	{
 		bInit_ = false;
 		return bInit_;

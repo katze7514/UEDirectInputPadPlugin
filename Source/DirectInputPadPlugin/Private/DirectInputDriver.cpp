@@ -220,7 +220,15 @@ bool FDirectInputJoystickFactory::Init(HWND hWnd, const TSharedPtr<FDirectInputD
 {
 	hWnd_		= hWnd;
 	pAdapter_	= pDriver;
-	bBackGround_= bBackGround;
+
+#if WITH_EDITOR
+	if(GIsEditor)
+	{	bBackGround_ = true; }
+	else
+#endif
+	{	bBackGround_= bBackGround; }
+
+	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("Background %d"),bBackGround_);
 
 	bool r = joyEnum_.Init(*pAdapter_);
 	if(r) mapJoy_.Reserve(joyEnum_.EnabledJoystickNum());

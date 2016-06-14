@@ -88,8 +88,15 @@ TSharedPtr< class IInputDevice > FDirectInputPadPlugin::CreateInputDevice(const 
 {
 	if(device_.IsValid()) return device_;
 	
+	bool bBackGround = false;
+
+	check(GConfig);
+	GConfig->GetBool(TEXT("DirectInputPadPlugin"), TEXT("Background"), bBackGround, GInputIni);
+
+	//UE_LOG(LogDirectInputPadPlugin,Log, TEXT("Background %d"),bBackGround);
+
 	device_ = MakeShareable<FDirectInputPadDevice>(new FDirectInputPadDevice());
-	if(device_->Init())
+	if(device_->Init(bBackGround))
 	{
 		device_->SetMessageHandler(InMessageHandler);
 		return device_;

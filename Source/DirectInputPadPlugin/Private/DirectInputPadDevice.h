@@ -10,7 +10,7 @@ class FDirectInputJoystick;
 class FDirectInputPadDevice : public IInputDevice
 {
 public:
-	bool Init();
+	bool Init(bool bBackground=false);
 	void Fin();
 
 public:
