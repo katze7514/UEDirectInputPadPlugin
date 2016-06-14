@@ -44,6 +44,9 @@ BP公開APIをさっと見たい人は、「DirectInputPadJoystick.h」を見て
 VS2015で開発していますが、VS2013でもビルドできるのを確認していますのでUE4.9でも使用できます。
 内部でtuple/functionalを使っていますので、VS2012以前ではその部分を書き換えれば、たぶん
 
+# サンプルプロジェクト
+https://github.com/katze7514/UEDirectInputPadPluginSample
+
 # ライセンス
 The MIT License (MIT)
 
