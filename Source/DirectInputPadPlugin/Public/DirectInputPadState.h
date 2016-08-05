@@ -13,8 +13,6 @@ enum EDirectInputPadKeyNames
 	DIGamePad_ROT_Y UMETA(DisplayName = "DIGamePad Rot Y"),
 	DIGamePad_ROT_Z UMETA(DisplayName = "DIGamePad Rot Z"),
 
-	DIGamePad_POV UMETA(DisplayName = "DIGamePad POV"),
-
 	DIGamePad_Button1 UMETA(DisplayName = "DIGamePad Button 1"),
 	DIGamePad_Button2 UMETA(DisplayName = "DIGamePad Button 2"),
 	DIGamePad_Button3 UMETA(DisplayName = "DIGamePad Button 3"),
@@ -49,6 +47,11 @@ enum EDirectInputPadKeyNames
 	DIGamePad_Button31 UMETA(DisplayName = "DIGamePad Button 31"),
 	DIGamePad_Button32 UMETA(DisplayName = "DIGamePad Button 32"),
 
+	DIGamePad_POV_Up	UMETA(DisplayName = "DIGamePad POV Up"),
+	DIGamePad_POV_Right	UMETA(DisplayName = "DIGamePad POV Down"),
+	DIGamePad_POV_Down	UMETA(DisplayName = "DIGamePad POV Right"),
+	DIGamePad_POV_Left	UMETA(DisplayName = "DIGamePad POV Left"),
+
 	DIGamePad_END UMETA(DisplayName = "DIGamePad END"),
 };
 
@@ -61,6 +64,8 @@ enum EXInputPadKeyNames
 	XIGamePad_LeftAnalogY		UMETA(DisplayName = "XIGamePad Left Analog Y"),
 	XIGamePad_RightAnalogX		UMETA(DisplayName = "XIGamePad Right Analog X"),
 	XIGamePad_RightAnalogY		UMETA(DisplayName = "XIGamePad Right Analog Y"),
+	XIGamePad_LeftTrigger		UMETA(DisplayName = "XIGamePad L Trigger"),
+	XIGamePad_RightTrigger		UMETA(DisplayName = "XIGamePad R Trigger"),
 
 	XIGamePad_Button_A			UMETA(DisplayName = "XIGamePad Button A"),
 	XIGamePad_Button_B			UMETA(DisplayName = "XIGamePad Button B"),
@@ -68,12 +73,15 @@ enum EXInputPadKeyNames
 	XIGamePad_Button_Y			UMETA(DisplayName = "XIGamePad Button Y"),
 	XIGamePad_Button_LB			UMETA(DisplayName = "XIGamePad Button LB"),
 	XIGamePad_Button_RB			UMETA(DisplayName = "XIGamePad Button RB"),
-	XIGamePad_Button_LTrigger	UMETA(DisplayName = "XIGamePad Button L Trigger"),
-	XIGamePad_Button_RTrigger	UMETA(DisplayName = "XIGamePad Button R Trigger"),
 	XIGamePad_Button_BACK		UMETA(DisplayName = "XIGamePad Button BACK"),
 	XIGamePad_Button_START		UMETA(DisplayName = "XIGamePad Button START"),
 	XIGamePad_Button_LStick		UMETA(DisplayName = "XIGamePad Button L Stick"),
 	XIGamePad_Button_RStick		UMETA(DisplayName = "XIGamePad Button R Stick"),
+
+	XIGamePad_DPad_Up			UMETA(DisplayName = "XIGamePad DPad Up"),
+	XIGamePad_DPad_Down			UMETA(DisplayName = "XIGamePad DPad Down"),
+	XIGamePad_DPad_Right		UMETA(DisplayName = "XIGamePad DPad Right"),
+	XIGamePad_DPad_Left			UMETA(DisplayName = "XIGamePad DPad Left"),
 
 	XIGamePad_END UMETA(DisplayName = "XIGamePad END")
 };

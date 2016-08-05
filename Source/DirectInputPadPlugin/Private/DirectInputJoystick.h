@@ -66,6 +66,7 @@ public:
 	//! 現在の入力状態に合わせてイベントを飛ばす
 	void Event(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
 
+public:
 	//! AD変換が有効か
 	bool IsAdConvFlag()const{ return bADConv_; }
 	//! AD変換フラグ設定
@@ -127,6 +128,9 @@ public:
 	bool IsPush(uint32 nBtn)const;
 	//! ボタンが離れた瞬間。0～31はボタン。32～はPOVと軸
 	bool IsRelease(uint32 nBtn)const;
+
+	//! ボタンが押されているかの一つ前の状態。0～31はボタン。32～はPOVと軸
+	bool IsPrevPress(uint32 nBtn)const;
 
 public:
 	// 入力ガード

@@ -436,8 +436,8 @@ void UDirectInputPadFunctionLibrary::InitDirectInputPadJoystickLibrary()
 	XINameToEnumMap.Emplace(FGamepadKeyNames::FaceButtonTop,		XIGamePad_Button_Y);
 	XINameToEnumMap.Emplace(FGamepadKeyNames::LeftShoulder,			XIGamePad_Button_LB);
 	XINameToEnumMap.Emplace(FGamepadKeyNames::RightShoulder,		XIGamePad_Button_RB);
-	XINameToEnumMap.Emplace(FGamepadKeyNames::LeftTriggerThreshold,	XIGamePad_Button_LTrigger);
-	XINameToEnumMap.Emplace(FGamepadKeyNames::RightTriggerThreshold,XIGamePad_Button_RTrigger);
+	XINameToEnumMap.Emplace(FGamepadKeyNames::LeftTriggerThreshold,	XIGamePad_LeftTrigger);
+	XINameToEnumMap.Emplace(FGamepadKeyNames::RightTriggerThreshold,XIGamePad_RightTrigger);
 	XINameToEnumMap.Emplace(FGamepadKeyNames::SpecialLeft,			XIGamePad_Button_BACK);
 	XINameToEnumMap.Emplace(FGamepadKeyNames::SpecialRight,			XIGamePad_Button_START);
 	XINameToEnumMap.Emplace(FGamepadKeyNames::LeftThumb,			XIGamePad_Button_LStick);

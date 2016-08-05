@@ -100,7 +100,7 @@ void FDirectInputJoystick::InitDefaultMap()
 	JoystickMap_[DIGamePad_ROT_Y]		= FName();
 	JoystickMap_[DIGamePad_ROT_Z]		= FGamepadKeyNames::RightAnalogY;
 
-	JoystickMap_[DIGamePad_POV]			= FName(); // POVは入力を取る段階で分解する
+	JoystickMap_[DIGamePad_POV_Up]		= FName(); // POVは入力を取る段階で分解する
 
 	JoystickMap_[DIGamePad_Button1]		= FGamepadKeyNames::FaceButtonBottom;		// A
 	JoystickMap_[DIGamePad_Button2]		= FGamepadKeyNames::FaceButtonRight;		// B
@@ -940,6 +940,32 @@ bool FDirectInputJoystick::IsPress(uint32_t nBtn)const
 	}
 
 	return (joyBuf_[nCurIndex_].rgbButtons[nBtn] & 0x80)>0;
+}
+
+bool FDirectInputJoystick::IsPrevPress(uint32_t nBtn)const
+{
+	if(nBtn>=ARROW_END)	return false;
+
+	switch(nBtn)
+	{
+	case POV_UP:
+	case POV_RIGHT:
+	case POV_DOWN:
+	case POV_LEFT:
+	case POV_NONE:
+		return IsPovPress(static_cast<enum EDirectInputArrow>(nBtn));
+	break;
+
+	case AXIS_UP:
+	case AXIS_RIGHT:
+	case AXIS_DOWN:
+	case AXIS_LEFT:
+	case AXIS_NONE:
+		return IsAxisPress(static_cast<enum EDirectInputArrow>(nBtn));
+	break;
+	}
+
+	return (joyBuf_[nCurIndex_^1].rgbButtons[nBtn] & 0x80)>0;
 }
 
 bool FDirectInputJoystick::IsPush(uint32_t nBtn)const
