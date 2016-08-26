@@ -64,17 +64,22 @@ enum EXInputPadKeyNames
 	XIGamePad_LeftAnalogY		UMETA(DisplayName = "XIGamePad Left Analog Y"),
 	XIGamePad_RightAnalogX		UMETA(DisplayName = "XIGamePad Right Analog X"),
 	XIGamePad_RightAnalogY		UMETA(DisplayName = "XIGamePad Right Analog Y"),
-	XIGamePad_LeftTrigger		UMETA(DisplayName = "XIGamePad L Trigger"),
-	XIGamePad_RightTrigger		UMETA(DisplayName = "XIGamePad R Trigger"),
+	XIGamePad_LTAnalog			UMETA(DisplayName = "XIGamePad LT Analog"),
+	XIGamePad_RTAnalog			UMETA(DisplayName = "XIGamePad RT Analog"),
 
 	XIGamePad_Button_A			UMETA(DisplayName = "XIGamePad Button A"),
 	XIGamePad_Button_B			UMETA(DisplayName = "XIGamePad Button B"),
 	XIGamePad_Button_X			UMETA(DisplayName = "XIGamePad Button X"),
 	XIGamePad_Button_Y			UMETA(DisplayName = "XIGamePad Button Y"),
+
 	XIGamePad_Button_LB			UMETA(DisplayName = "XIGamePad Button LB"),
 	XIGamePad_Button_RB			UMETA(DisplayName = "XIGamePad Button RB"),
+	XIGamePad_Button_LT			UMETA(DisplayName = "XIGamePad Button LT"),
+	XIGamePad_Button_RT			UMETA(DisplayName = "XIGamePad Button RT"),
+
 	XIGamePad_Button_BACK		UMETA(DisplayName = "XIGamePad Button BACK"),
 	XIGamePad_Button_START		UMETA(DisplayName = "XIGamePad Button START"),
+
 	XIGamePad_Button_LStick		UMETA(DisplayName = "XIGamePad Button L Stick"),
 	XIGamePad_Button_RStick		UMETA(DisplayName = "XIGamePad Button R Stick"),
 
@@ -135,4 +140,20 @@ struct EKeysDirectInputPad
 	static const FKey DIGamePad_Button30;
 	static const FKey DIGamePad_Button31;
 	static const FKey DIGamePad_Button32;
+};
+
+USTRUCT(BlueprintType)
+struct DIRECTINPUTPADPLUGIN_API FDIKeyMapInfo
+{
+	GENERATED_BODY()
+
+	FDIKeyMapInfo(EDirectInputPadKeyNames eDIKey=DIGamePad_END, bool bNegative=false)
+		: eDIKey_(eDIKey), bNegative_(bNegative){}
+
+
+	UPROPERTY(BlueprintReadOnly)
+	TEnumAsByte<EDirectInputPadKeyNames> eDIKey_ = DIGamePad_END;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bNegative_ = false;
 };

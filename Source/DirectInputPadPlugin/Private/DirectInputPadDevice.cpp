@@ -8,6 +8,7 @@
 
 #include "DirectInputDriver.h"
 #include "DirectInputJoystick.h"
+#include "XInputJoystickEmu.h"
 
 #include "DirectInputPadDevice.h"
 
@@ -58,7 +59,7 @@ bool FDirectInputPadDevice::Init(bool bBackGround)
 
 	XInputDeviceNum_ = DFactory_->GetXInputDeviceNum();
 	DInputDeviceNum_ = 0;
-	DJoysticks_.SetNum(MAX_JOYSTICKS);
+	XJoysticks_.SetNum(MAX_JOYSTICKS);
 	
 	uint32 DJoyNum = MAX_JOYSTICKS - XInputDeviceNum_;
 	DJoyNum =( DFactory_->EnabledJoystickNum() < DJoyNum) ? DFactory_->EnabledJoystickNum() : DJoyNum;
@@ -73,7 +74,8 @@ bool FDirectInputPadDevice::Init(bool bBackGround)
 		if(joy.IsValid())
 		{
 			joy->SetPlayerIndex(XInputDeviceNum_+i);
-			DJoysticks_[XInputDeviceNum_+i] = joy;
+			XJoysticks_[XInputDeviceNum_+i] = MakeShareable<FXInputJoystickEmu>(new FXInputJoystickEmu());
+			XJoysticks_[XInputDeviceNum_+i]->Init(joy.ToSharedRef());
 
 			++DInputDeviceNum_;
 		}
@@ -94,27 +96,23 @@ void FDirectInputPadDevice::SendControllerEvents()
 {
 	if(DInputDeviceNum_==0) return;
 
-	for(const auto& j : DJoysticks_)
+	for(const auto& j : XJoysticks_)
 	{
 		if(j.IsValid())
 		{
-			// まずは入力チェック
-			const auto& Joystick = j.Pin();
-			if(Joystick->Input())
-			{// 入力に合わせてイベントを飛ばす
-				Joystick->Event(MessageHandler_);
-			}
+			// 入力に合わせてイベントを飛ばす
+			j->Event(MessageHandler_);
 		}
 	}
 }
 
-TWeakPtr<FDirectInputJoystick> FDirectInputPadDevice::GetJoystick(uint32 nPlayerID)
+TWeakPtr<FXInputJoystickEmu> FDirectInputPadDevice::GetJoystick(uint32 nPlayerID)
 {
-	if(!DJoysticks_.IsValidIndex(nPlayerID))
+	if(!XJoysticks_.IsValidIndex(nPlayerID))
 		return nullptr;
 
-	if(DJoysticks_[nPlayerID].IsValid()) 
-		return DJoysticks_[nPlayerID];
+	if(XJoysticks_[nPlayerID].IsValid()) 
+		return XJoysticks_[nPlayerID];
 
 	return nullptr;
 }

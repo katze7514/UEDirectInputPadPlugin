@@ -13,8 +13,8 @@ struct AnalogDelegate
 	// 負の方向をチェックするのに使う
 	std::function<float()>	AxisNegative_;
 
-	// 軸の反転
-	bool					bReverse_ = false;
+	FDIKeyMapInfo DIKeyAxis_;
+	FDIKeyMapInfo DIKeyAxisNegative_;
 };
 
 struct BtnDelegate
@@ -22,14 +22,13 @@ struct BtnDelegate
 	std::function<bool()>	IsPress_;
 	std::function<bool()>	IsPush_;
 	std::function<bool()>	IsRelease_;
+
+	FDIKeyMapInfo DIKey_;
 };
 
 //! DirectInputPadをXInputとしてエミュレーションするクラス
-class XInputJoystickEmu
+class FXInputJoystickEmu
 {
-public:
-	friend class UDirectInputPadJoystick;
-
 public:
 	void Init(TSharedRef<FDirectInputJoystick> DIPad);
 
@@ -41,10 +40,27 @@ private:
 	void EventButton(FName XIName, const BtnDelegate& Delegate, const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler);
 
 public:
+	//! キーマップを設定する
+	void SetKeyMap(EXInputPadKeyNames eXIKey, FDIKeyMapInfo DIKeyInfo);
+
+private:
 	//! アナログマップを設定する。eDIKeyがボタンの場合、bNegativeに従った場所に設定される
-	void SetAnalogMap(EXInputPadKeyNames eXIKey, EDirectInputPadKeyNames eDIKey, bool bNegative=false);
+	//! eXIKeyがボタンの場合は、何もおこらない
+	void SetAnalogMap(EXInputPadKeyNames eXIKey, FDIKeyMapInfo DIKeyInfo);
 	//! ボタンマップを設定する。eDIKeyが軸の場合、bNegativeに従った方向の値が使われる
-	void SetButtonMap(EXInputPadKeyNames eXIKey, EDirectInputPadKeyNames eDIKey, bool bNegative=false);
+	//! eXIKeyがアナログの場合、アナログのボタン動作部分に設定される
+	void SetButtonMap(EXInputPadKeyNames eXIKey, FDIKeyMapInfo DIKeyInfo);
+
+public:
+	TArray<FDIKeyMapInfo> GetKeyMap(EXInputPadKeyNames eXIKey);
+
+private:
+	//! eXIKeyとして設定されているキーマップ情報を取り出す
+	TArray<FDIKeyMapInfo>	GetAnalogDIKeyMapInfo(EXInputPadKeyNames eXIKey)const;
+	FDIKeyMapInfo			GetButtonDIKeyMapInfo(EXInputPadKeyNames eXIKey)const;
+
+public:
+	TSharedPtr<FDirectInputJoystick> GetDIPad()const{ return DIPad_; }
 
 private:
 	void SetAnalogMapAnalog(EDirectInputPadKeyNames eDIKey, AnalogDelegate& Analog, BtnDelegate& Pos, BtnDelegate& Neg);

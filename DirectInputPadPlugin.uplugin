@@ -2,8 +2,8 @@
 	"FileVersion" : 3,
 	
 	"FriendlyName" : "DirectInputPad Plugin",
-	"Version" : 0.8,
-	"VersionName" : "0.8",
+	"Version" : 0.9,
+	"VersionName" : "0.9",
 	"CreatedBy" : "katze7514",
 	"CreatedByURL" : "https://github.com/katze7514/UEDirectInputPadPlugin",
 	"EngineVersion" : "4.12.0",

@@ -6,6 +6,7 @@
 #include "AllowWindowsPlatformTypes.h"
 
 class FDirectInputDriver;
+class FXInputJoystickEmu;
 class UDirectInputPadJoystick;
 
 //! PVOと軸の入力方向を示す列挙子
@@ -39,6 +40,7 @@ class FDirectInputJoystick
 public:
 	static const int32 MAX_AXIS_VALUE;
 
+	friend class FXInputJoystickEmu;
 	friend class UDirectInputPadJoystick;
 
 public:
@@ -81,12 +83,11 @@ public:
 	int32	GetPlayerIndex()const{ return nPlayerIndex_; }
 	void	SetPlayerIndex(int32 nPlayerIndex){ nPlayerIndex_ = nPlayerIndex; }
 
-	// Joystickの実キーと、XInputのGameKeyを一致させるマップ
-	FName	GetXIKey(EDirectInputPadKeyNames ePadKey);
-	void	SetXIKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName);
-
 	bool	IsAxisReverse(EDirectInputPadKeyNames ePadAxis)const;
 	void	SetAxisReverse(EDirectInputPadKeyNames ePadAxis, bool bReverse);
+
+	//! 入力に変化があったらtrue、なかったらfalse
+	bool	IsChangedKeyState()const;
 
 public:
 	//! x軸の値
@@ -117,6 +118,14 @@ public:
 	//! z回転の1つ前の値
 	float	RotPrevZ()const;
 
+	// 初期値の取得
+	float InitX()const;
+	float InitY()const;
+	float InitZ()const;
+	float InitRotX()const;
+	float InitRotY()const;
+	float InitRotZ()const;
+
 	//! pov値
 	int32 Pov()const;
 	//! povの1つ前の値
@@ -144,14 +153,6 @@ public:
 	void ClearCurBuf(){ ::ZeroMemory(&joyBuf_[nCurIndex_], sizeof(DIJOYSTATE)); }
 
 private:
-	// デフォルトキーマップ
-	void InitDefaultMap();
-
-	void SetDelegateLeftAnalogX(EDirectInputPadKeyNames ePadKey);
-	void SetDelegateLeftAnalogY(EDirectInputPadKeyNames ePadKey);
-	void SetDelegateRightAnalogX(EDirectInputPadKeyNames ePadKey);
-	void SetDelegateRightAnalogY(EDirectInputPadKeyNames ePadKey);
-
 	// アナログイベントを発生させる
 	void EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyNames ePadName, FKey DIKey);
 	// ボタンイベントを発生させる
@@ -216,6 +217,9 @@ private:
 	// 対応するPlayerIndex
 	int32		nPlayerIndex_;
 
+	//! ジョイスティックの初期値
+	DIJOYSTATE	InitialJoyBuf_;
+
 	//! ジョイスティック入力バッファ
 	DIJOYSTATE	joyBuf_[2];
 	//! ジョイスティックバッファ位置
@@ -244,24 +248,8 @@ private:
 	bool		bGuard_;
 
 private:
-	//UE4のゲームパッドIDとのマップ
-	// Joystickの名前になんのゲームパッド軸が割り当てられているのか
-	TArray<FName>	JoystickMap_;
-
 	// 軸の反転フラグ
 	TArray<bool>	AxisReverseFlagMap_;
-
-	// 左スティック扱いとなる軸の値を取るメンバ関数
-	std::function<float()> LeftAnalogX;
-	std::function<float()> LeftAnalogPrevX;
-	std::function<float()> LeftAnalogY;
-	std::function<float()> LeftAnalogPrevY;
-
-	// 右スティック扱いとなる軸の値を取るメンバ関数
-	std::function<float()> RightAnalogX;
-	std::function<float()> RightAnalogPrevX;
-	std::function<float()> RightAnalogY;
-	std::function<float()> RightAnalogPrevY;
 };
 
 #include "HideWindowsPlatformTypes.h"

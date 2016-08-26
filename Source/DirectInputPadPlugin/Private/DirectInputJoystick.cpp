@@ -76,53 +76,40 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 		return false;
 	}
 
-	// デフォルトのマップを設定
-	InitDefaultMap();
+	// 軸の反転フラグ設定
+	//AxisReverseFlagMap_.SetNumUninitialized(DIGamePad_ROT_Z+1);
+	//for(uint32 i=DIGamePad_AXIS_X; i<=DIGamePad_ROT_Z; ++i)
+	//	AxisReverseFlagMap_[i] = false;
 
-	AxisReverseFlagMap_.SetNumUninitialized(DIGamePad_ROT_Z+1);
-	for(uint32 i=DIGamePad_AXIS_X; i<=DIGamePad_ROT_Z; ++i)
-		AxisReverseFlagMap_[i] = false;
+	AxisReverseFlagMap_.Init(false,DIGamePad_ROT_Z+1);
+	AxisReverseFlagMap_[DIGamePad_AXIS_Y] = true; // Y軸はXInputと合わせるためにデフォルトで反転
 
-//	const string sFlag = (flags&DISCL_BACKGROUND)>0 ? "BACKGROUND" : "FOREGROUND";
+	// 初期化
+	memset(&InitialJoyBuf_,0,sizeof(DIJOYSTATE));
+	memset(&joyBuf_[0],0,sizeof(DIJOYSTATE));
+	memset(&joyBuf_[1],0,sizeof(DIJOYSTATE));
+
+	// 初期値を得る
+	int loopcount=0;
+	do{
+		FPlatformProcess::Sleep(0.2);
+		if(Input())
+		{
+			InitialJoyBuf_ = joyBuf_[nCurIndex_];
+			if(++loopcount>10) break;
+		}
+		if(++loopcount>100)
+		{
+			UE_LOG(LogDirectInputPadPlugin, Log, TEXT("DirectInput Joystick Create Fail. : %s"), joyins.tszProductName);
+			return false;
+		}
+	}while(true);
+
+	//	const string sFlag = (flags&DISCL_BACKGROUND)>0 ? "BACKGROUND" : "FOREGROUND";
 	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("DirectInput Joystick Create Success. : %s"), joyins.tszProductName);
+	//UE_LOG(LogDirectInputPadPlugin, Log, TEXT("Init: %d"), InitialJoyBuf_.lRx);
 
 	return true;
-}
-
-void FDirectInputJoystick::InitDefaultMap()
-{
-	JoystickMap_.SetNumUninitialized(DIGamePad_END);
-	
-	JoystickMap_[DIGamePad_AXIS_X]		= FGamepadKeyNames::LeftAnalogX;
-	JoystickMap_[DIGamePad_AXIS_Y]		= FGamepadKeyNames::LeftAnalogY;
-	JoystickMap_[DIGamePad_AXIS_Z]		= FGamepadKeyNames::RightAnalogX;
-	JoystickMap_[DIGamePad_ROT_X]		= FName();
-	JoystickMap_[DIGamePad_ROT_Y]		= FName();
-	JoystickMap_[DIGamePad_ROT_Z]		= FGamepadKeyNames::RightAnalogY;
-
-	JoystickMap_[DIGamePad_POV_Up]		= FName(); // POVは入力を取る段階で分解する
-
-	JoystickMap_[DIGamePad_Button1]		= FGamepadKeyNames::FaceButtonBottom;		// A
-	JoystickMap_[DIGamePad_Button2]		= FGamepadKeyNames::FaceButtonRight;		// B
-	JoystickMap_[DIGamePad_Button3]		= FGamepadKeyNames::FaceButtonLeft;			// X
-	JoystickMap_[DIGamePad_Button4]		= FGamepadKeyNames::FaceButtonTop;			// Y
-	JoystickMap_[DIGamePad_Button5]		= FGamepadKeyNames::LeftShoulder;			// L1
-	JoystickMap_[DIGamePad_Button6]		= FGamepadKeyNames::RightShoulder;			// R1
-	JoystickMap_[DIGamePad_Button7]		= FGamepadKeyNames::LeftTriggerThreshold;	// L2
-	JoystickMap_[DIGamePad_Button8]		= FGamepadKeyNames::RightTriggerThreshold;	// R2
-	JoystickMap_[DIGamePad_Button9]		= FGamepadKeyNames::SpecialLeft;			// SELECT
-	JoystickMap_[DIGamePad_Button10]	= FGamepadKeyNames::SpecialRight;			// START
-	JoystickMap_[DIGamePad_Button11]	= FGamepadKeyNames::LeftThumb;				// Lスティック押し
-	JoystickMap_[DIGamePad_Button12]	= FGamepadKeyNames::RightThumb;				// Rスティック押し
-
-	// 残りのボタンは、とりあえず、空
-	for(uint8 i=DIGamePad_Button13; i<=DIGamePad_Button32; ++i)
-	{	JoystickMap_[i] = FName();	}
-
-	SetDelegateLeftAnalogX(DIGamePad_AXIS_X);
-	SetDelegateLeftAnalogY(DIGamePad_AXIS_Y);
-	SetDelegateRightAnalogX(DIGamePad_AXIS_Z);
-	SetDelegateRightAnalogY(DIGamePad_ROT_Z);
 }
 
 void FDirectInputJoystick::Fin()
@@ -149,9 +136,6 @@ BOOL CALLBACK FDirectInputJoystick::OnEnumAxis(LPCDIDEVICEOBJECTINSTANCE lpddoi,
 
 	std::get<0>(*pAxisResult) = std::get<1>(*pAxisResult)->SetProperty(DIPROP_RANGE, &diprg.diph);
 	if(std::get<0>(*pAxisResult)!=DI_OK) return DIENUM_STOP;
-
-	//if(!check_hresult(pAxisResult->get<0>(), "[FDirectInputJoystick]" + string(lpddoi->tszName) + "の範囲を設定できませんでした："))
-	//	return DIENUM_STOP;
 
 	return DIENUM_CONTINUE;
 }
@@ -289,58 +273,6 @@ void FDirectInputJoystick::Event(const TSharedPtr<FGenericApplicationMessageHand
 void FDirectInputJoystick::EventAnalog(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, float Analog, EDirectInputPadKeyNames ePadName, FKey DIKey)
 {
 	MessageHandler->OnControllerAnalog(DIKey.GetFName(), GetPlayerIndex(), Analog);
-
-	if(!JoystickMap_[ePadName].IsNone())
-	{
-		MessageHandler->OnControllerAnalog(JoystickMap_[ePadName], GetPlayerIndex(), Analog);
-
-		// スティックのデジタル入力チェック
-		if(JoystickMap_[ePadName]==FGamepadKeyNames::LeftAnalogX)
-		{
-			if(IsAxisPush(AXIS_RIGHT))
-			{	MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::LeftStickRight, GetPlayerIndex(), false);	}
-			else if(IsAxisRelease(AXIS_RIGHT))
-			{	MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::LeftStickRight, GetPlayerIndex(), false);	}
-			else if(IsAxisPush(AXIS_LEFT))
-			{	MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::LeftStickLeft, GetPlayerIndex(), false);	}
-			else if(IsAxisRelease(AXIS_LEFT))
-			{	MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::LeftStickLeft, GetPlayerIndex(), false);	}
-		}
-		else if(JoystickMap_[ePadName]==FGamepadKeyNames::LeftAnalogY)
-		{
-			if(IsAxisPush(AXIS_UP))
-			{	MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::LeftStickUp, GetPlayerIndex(), false);		}
-			else if(IsAxisRelease(AXIS_UP))
-			{	MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::LeftStickUp, GetPlayerIndex(), false);	}
-			else if(IsAxisPush(AXIS_DOWN))
-			{	MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::LeftStickDown, GetPlayerIndex(), false);	}
-			else if(IsAxisRelease(AXIS_DOWN))
-			{	MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::LeftStickDown, GetPlayerIndex(), false);	}
-		}
-
-		if(JoystickMap_[ePadName]==FGamepadKeyNames::RightAnalogX)
-		{
-			if(IsAxisRightPush(AXIS_RIGHT))
-			{	MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::RightStickRight, GetPlayerIndex(), false);	}
-			else if(IsAxisRightRelease(AXIS_RIGHT))
-			{	MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::RightStickRight, GetPlayerIndex(), false);}
-			else if(IsAxisRightPush(AXIS_LEFT))
-			{	MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::RightStickLeft, GetPlayerIndex(), false);	}
-			else if(IsAxisRightRelease(AXIS_LEFT))
-			{	MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::RightStickLeft, GetPlayerIndex(), false);	}
-		}
-		else if(JoystickMap_[ePadName]==FGamepadKeyNames::RightAnalogY)
-		{
-			if(IsAxisPush(AXIS_UP))
-			{	MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::RightStickUp, GetPlayerIndex(), false);	}
-			else if(IsAxisRightRelease(AXIS_UP))
-			{	MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::RightStickUp, GetPlayerIndex(), false);	}
-			else if(IsAxisRightPush(AXIS_DOWN))
-			{	MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::RightStickDown, GetPlayerIndex(), false);	}
-			else if(IsAxisRightRelease(AXIS_DOWN))
-			{	MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::RightStickDown, GetPlayerIndex(), false);	}
-		}
-	}
 }
 
 void FDirectInputJoystick::EventButton(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey)
@@ -354,8 +286,6 @@ void FDirectInputJoystick::EventButtonPressed(const TSharedPtr<FGenericApplicati
 	if(!IsPush(ePadName-DIGamePad_Button1)) return;
 
 	MessageHandler->OnControllerButtonPressed(DIKey.GetFName(), GetPlayerIndex(), false);
-	if(!JoystickMap_[ePadName].IsNone())
-		MessageHandler->OnControllerButtonPressed(JoystickMap_[ePadName], GetPlayerIndex(), false);
 }
 
 void FDirectInputJoystick::EventButtonReleased(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler, EDirectInputPadKeyNames ePadName, FKey DIKey)
@@ -363,8 +293,6 @@ void FDirectInputJoystick::EventButtonReleased(const TSharedPtr<FGenericApplicat
 	if(!IsRelease(ePadName-DIGamePad_Button1)) return;
 
 	MessageHandler->OnControllerButtonReleased(DIKey.GetFName(), GetPlayerIndex(), false);
-	if(!JoystickMap_[ePadName].IsNone())
-		MessageHandler->OnControllerButtonReleased(JoystickMap_[ePadName], GetPlayerIndex(), false);
 }
 
 void FDirectInputJoystick::EventPov(const TSharedPtr<FGenericApplicationMessageHandler>& MessageHandler)
@@ -372,43 +300,35 @@ void FDirectInputJoystick::EventPov(const TSharedPtr<FGenericApplicationMessageH
 	if(IsPush(POV_UP))
 	{
 		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Up.GetFName(), GetPlayerIndex(), false);
-		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadUp, GetPlayerIndex(), false);
 	}
 	else if(IsRelease(POV_UP))
 	{
 		MessageHandler->OnControllerButtonReleased(EKeysDirectInputPad::DIGamePad_POV_Up.GetFName(), GetPlayerIndex(), false);
-		MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::DPadUp, GetPlayerIndex(), false);
 	}
 	else if(IsPush(POV_DOWN))
 	{
 		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Down.GetFName(), GetPlayerIndex(), false);
-		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadDown, GetPlayerIndex(), false);
 	}
 	else if(IsRelease(POV_DOWN))
 	{
 		MessageHandler->OnControllerButtonReleased(EKeysDirectInputPad::DIGamePad_POV_Down.GetFName(), GetPlayerIndex(), false);
-		MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::DPadDown, GetPlayerIndex(), false);
 	}
 
 	if(IsPush(POV_RIGHT))
 	{
 		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Right.GetFName(), GetPlayerIndex(), false);
-		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadRight, GetPlayerIndex(), false);
 	}
 	else if(IsRelease(POV_RIGHT))
 	{
 		MessageHandler->OnControllerButtonReleased(EKeysDirectInputPad::DIGamePad_POV_Right.GetFName(), GetPlayerIndex(), false);
-		MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::DPadRight, GetPlayerIndex(), false);
 	}
 	else if(IsPush(POV_LEFT))
 	{
 		MessageHandler->OnControllerButtonPressed(EKeysDirectInputPad::DIGamePad_POV_Left.GetFName(), GetPlayerIndex(), false);
-		MessageHandler->OnControllerButtonPressed(FGamepadKeyNames::DPadLeft, GetPlayerIndex(), false);
 	}
 	else if(IsRelease(POV_LEFT))
 	{
 		MessageHandler->OnControllerButtonReleased(EKeysDirectInputPad::DIGamePad_POV_Left.GetFName(), GetPlayerIndex(), false);
-		MessageHandler->OnControllerButtonReleased(FGamepadKeyNames::DPadLeft, GetPlayerIndex(), false);
 	}
 }
 
@@ -419,65 +339,6 @@ void FDirectInputJoystick::SetGuard(bool bGuard)
 {
 	bGuard_ = bGuard;
 	if(bGuard_) ClearBuf();
-}
-
-FName FDirectInputJoystick::GetXIKey(EDirectInputPadKeyNames ePadKey)
-{
-	if(ePadKey>= EDirectInputPadKeyNames::DIGamePad_END) return FName("");
-	return JoystickMap_[ePadKey];
-}
-
-void FDirectInputJoystick::SetXIKey(EDirectInputPadKeyNames ePadKey, FName UEKeyName)
-{
-	//UE_LOG(LogDirectInputPadPlugin, Log, TEXT("SetXIKey: %d, %s"), (int32)ePadKey, *(UEKeyName.ToString()));
-
-	if(ePadKey >= DIGamePad_END) return;
-
-	if(UEKeyName.IsNone())
-	{
-		JoystickMap_[ePadKey] = UEKeyName;
-		return;
-	}
-
-	// 軸は軸にしか設定できない
-	if(ePadKey>=DIGamePad_AXIS_X && ePadKey<=DIGamePad_ROT_Z)
-	{
-		if(!(  UEKeyName == FGamepadKeyNames::LeftAnalogX
-			|| UEKeyName == FGamepadKeyNames::LeftAnalogY
-			|| UEKeyName == FGamepadKeyNames::RightAnalogX
-			|| UEKeyName == FGamepadKeyNames::RightAnalogY
-			)) return;
-
-		if(UEKeyName == FGamepadKeyNames::LeftAnalogX)
-		{	SetDelegateLeftAnalogX(ePadKey);	}
-		else if(UEKeyName == FGamepadKeyNames::LeftAnalogY)
-		{	SetDelegateLeftAnalogY(ePadKey);	}
-		else if(UEKeyName == FGamepadKeyNames::RightAnalogX)
-		{	SetDelegateRightAnalogX(ePadKey);	}
-		else if(UEKeyName == FGamepadKeyNames::RightAnalogY)
-		{	SetDelegateRightAnalogY(ePadKey);	}
-	}
-
-	// ボタンにはボタンしか設定できない
-	if(ePadKey>=DIGamePad_Button1 && ePadKey<=DIGamePad_Button32)
-	{
-		if(!(  UEKeyName == FGamepadKeyNames::FaceButtonBottom
-			|| UEKeyName == FGamepadKeyNames::FaceButtonRight
-			|| UEKeyName == FGamepadKeyNames::FaceButtonLeft
-			|| UEKeyName == FGamepadKeyNames::FaceButtonTop
-			|| UEKeyName == FGamepadKeyNames::LeftShoulder
-			|| UEKeyName == FGamepadKeyNames::RightShoulder
-			|| UEKeyName == FGamepadKeyNames::LeftTriggerThreshold
-			|| UEKeyName == FGamepadKeyNames::RightTriggerThreshold
-			|| UEKeyName == FGamepadKeyNames::SpecialLeft
-			|| UEKeyName == FGamepadKeyNames::SpecialRight
-			|| UEKeyName == FGamepadKeyNames::LeftThumb
-			|| UEKeyName == FGamepadKeyNames::RightThumb
-			))
-			return;
-	}
-
-	JoystickMap_[ePadKey] = UEKeyName;
 }
 
 bool FDirectInputJoystick::IsAxisReverse(EDirectInputPadKeyNames ePadAxis)const
@@ -493,148 +354,37 @@ void FDirectInputJoystick::SetAxisReverse(EDirectInputPadKeyNames ePadAxis, bool
 
 }
 
-void FDirectInputJoystick::SetDelegateLeftAnalogX(EDirectInputPadKeyNames ePadKey)
+bool FDirectInputJoystick::IsChangedKeyState()const
 {
-	switch(ePadKey)
+//	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("x %d %d"), InitialJoyBuf_.lX, joyBuf_[nCurIndex_].lX);
+//	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("y %d %d"), joyBuf_[nCurIndex_].lY, InitialJoyBuf_.lY);
+//	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("z %d %d"), joyBuf_[nCurIndex_].lZ, InitialJoyBuf_.lZ);
+
+//	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("Rx %d %d"), joyBuf_[nCurIndex_].lRx, InitialJoyBuf_.lRx);
+//	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("Ry %d %d"), joyBuf_[nCurIndex_].lRy, InitialJoyBuf_.lRy);
+//	UE_LOG(LogDirectInputPadPlugin, Log, TEXT("Rz %d %d"), joyBuf_[nCurIndex_].lRz, InitialJoyBuf_.lRz);
+
+	// 軸からチェック。初期値と比較
+	if(InitX()!=X()
+	|| InitY()!=Y()
+	|| InitZ()!=Z()
+	|| InitRotX()!=RotX()
+	|| InitRotY()!=RotY()
+	|| InitRotZ()!=RotZ())
+		return true;
+
+	// ボタンは、PushもReleaseもされてない
+	for(uint32 i = 0; i<32; ++i)
 	{
-	case DIGamePad_AXIS_X:
-		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::X),this);
-		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevX),this);
-	break;
-
-	case DIGamePad_AXIS_Y:
-		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::Y),this);
-		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevY),this);
-	break;
-
-	case DIGamePad_AXIS_Z:
-		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::Z),this);
-		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevZ),this);
-	break;
-
-	case DIGamePad_ROT_X:
-		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::RotX),this);
-		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevX),this);
-	break;
-
-	case DIGamePad_ROT_Y:
-		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::RotY),this);
-		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevY),this);
-	break;
-
-	case DIGamePad_ROT_Z:
-		LeftAnalogX		= std::bind(std::mem_fn(&FDirectInputJoystick::RotZ),this);
-		LeftAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevZ),this);
-	break;
+		if(((joyBuf_[nCurIndex_].rgbButtons[i]&0x80)>0)||((joyBuf_[1^nCurIndex_].rgbButtons[i]&0x80)>0))
+			return true;
 	}
-}
 
-void FDirectInputJoystick::SetDelegateLeftAnalogY(EDirectInputPadKeyNames ePadKey)
-{
-	switch(ePadKey)
-	{
-	case DIGamePad_AXIS_X:
-		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::X),this);
-		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevX),this);
-	break;
+	// POVも押されていない
+	if(LOWORD(joyBuf_[nCurIndex_].rgdwPOV[0])!=0xFFFF) return true;
 
-	case DIGamePad_AXIS_Y:
-		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::Y),this);
-		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevY),this);
-	break;
-
-	case DIGamePad_AXIS_Z:
-		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::Z),this);
-		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevZ),this);
-	break;
-
-	case DIGamePad_ROT_X:
-		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::RotX),this);
-		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevX),this);
-	break;
-
-	case DIGamePad_ROT_Y:
-		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::RotY),this);
-		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevY),this);
-	break;
-
-	case DIGamePad_ROT_Z:
-		LeftAnalogY		= std::bind(std::mem_fn(&FDirectInputJoystick::RotZ),this);
-		LeftAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevZ),this);
-	break;
-	}
-}
-
-void FDirectInputJoystick::SetDelegateRightAnalogX(EDirectInputPadKeyNames ePadKey)
-{
-	switch(ePadKey)
-	{
-	case DIGamePad_AXIS_X:
-		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::X),this);
-		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevX),this);
-	break;
-
-	case DIGamePad_AXIS_Y:
-		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::Y),this);
-		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevY),this);
-	break;
-
-	case DIGamePad_AXIS_Z:
-		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::Z),this);
-		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::PrevZ),this);
-	break;
-
-	case DIGamePad_ROT_X:
-		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotX),this);
-		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevX),this);
-	break;
-
-	case DIGamePad_ROT_Y:
-		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotY),this);
-		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevY),this);
-	break;
-
-	case DIGamePad_ROT_Z:
-		RightAnalogX	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotZ),this);
-		RightAnalogPrevX = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevZ),this);
-	break;
-	}
-}
-
-void FDirectInputJoystick::SetDelegateRightAnalogY(EDirectInputPadKeyNames ePadKey)
-{
-	switch(ePadKey)
-	{
-	case DIGamePad_AXIS_X:
-		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::X),this);
-		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevX),this);
-	break;
-
-	case DIGamePad_AXIS_Y:
-		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::Y),this);
-		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevY),this);
-	break;
-
-	case DIGamePad_AXIS_Z:
-		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::Z),this);
-		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::PrevZ),this);
-	break;
-
-	case DIGamePad_ROT_X:
-		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotX),this);
-		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevX),this);
-	break;
-
-	case DIGamePad_ROT_Y:
-		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotY),this);
-		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevY),this);
-	break;
-
-	case DIGamePad_ROT_Z:
-		RightAnalogY	 = std::bind(std::mem_fn(&FDirectInputJoystick::RotZ),this);
-		RightAnalogPrevY = std::bind(std::mem_fn(&FDirectInputJoystick::RotPrevZ),this);
-	break;
-	}
+	//UE_LOG(LogDirectInputPadPlugin, Log, TEXT("IsChangedState: false"));
+	return false;
 }
 
 /////////////////////////////
@@ -709,7 +459,7 @@ float FDirectInputJoystick::PrevZ()const
 
 //////////////////////////////
 // 回転
-/////////////////////////////
+//////////////////////////////
 float FDirectInputJoystick::RotX()const
 {
 	int32_t nXrot = joyBuf_[nCurIndex_].lRx;
@@ -756,6 +506,57 @@ float FDirectInputJoystick::RotPrevZ()const
 
 	if(is_thr_inner(nZrot, nZrot_Threshold_)) return 0.f;
 	return calc_axis_ratio(nZrot, nZrot_Threshold_, AxisReverseFlagMap_[DIGamePad_ROT_Z]);
+}
+
+//////////////////////////////
+// 初期軸
+//////////////////////////////
+float FDirectInputJoystick::InitX()const
+{
+	int32_t nX = InitialJoyBuf_.lX;
+
+	if(is_thr_inner(nX, nX_Threshold_)) return 0.f;
+	return calc_axis_ratio(nX, nX_Threshold_, AxisReverseFlagMap_[DIGamePad_AXIS_X]);
+}
+
+float FDirectInputJoystick::InitY()const
+{
+	int32_t nY = InitialJoyBuf_.lY;
+
+	if(is_thr_inner(nY, nY_Threshold_)) return 0.f;
+	return calc_axis_ratio(nY, nY_Threshold_, AxisReverseFlagMap_[DIGamePad_AXIS_Y]);
+}
+
+float FDirectInputJoystick::InitZ()const
+{
+	int32_t nZ = InitialJoyBuf_.lZ;
+
+	if(is_thr_inner(nZ, nZ_Threshold_)) return 0.f;
+	return calc_axis_ratio(nZ, nZ_Threshold_, AxisReverseFlagMap_[DIGamePad_AXIS_Z]);
+}
+
+float FDirectInputJoystick::InitRotX()const
+{
+	int32_t nRotX = InitialJoyBuf_.lRx;
+
+	if(is_thr_inner(nRotX, nXrot_Threshold_)) return 0.f;
+	return calc_axis_ratio(nRotX, nXrot_Threshold_, AxisReverseFlagMap_[DIGamePad_ROT_X]);
+}
+
+float FDirectInputJoystick::InitRotY()const
+{
+	int32_t nRotY = InitialJoyBuf_.lRy;
+
+	if(is_thr_inner(nRotY, nYrot_Threshold_)) return 0.f;
+	return calc_axis_ratio(nRotY, nYrot_Threshold_, AxisReverseFlagMap_[DIGamePad_ROT_Y]);
+}
+
+float FDirectInputJoystick::InitRotZ()const
+{
+	int32_t nRotZ = InitialJoyBuf_.lRz;
+
+	if(is_thr_inner(nRotZ, nZrot_Threshold_)) return 0.f;
+	return calc_axis_ratio(nRotZ, nZrot_Threshold_, AxisReverseFlagMap_[DIGamePad_ROT_Z]);
 }
 
 //////////////////////////////
@@ -854,11 +655,11 @@ bool FDirectInputJoystick::IsAxisPressInner(enum EDirectInputArrow eArrow, uint3
 	bool bCur = (nIndex==nCurIndex_);
 	switch (eArrow)
 	{
-	case AXIS_UP:	return (bCur ? LeftAnalogY() : LeftAnalogPrevY()) >  0.6f;
-	case AXIS_RIGHT:return (bCur ? LeftAnalogX() : LeftAnalogPrevX()) >  0.6f;
-	case AXIS_DOWN:	return (bCur ? LeftAnalogY() : LeftAnalogPrevY()) < -0.6f;
-	case AXIS_LEFT:	return (bCur ? LeftAnalogX() : LeftAnalogPrevX()) < -0.6f;
-	case AXIS_NONE:	return (bCur ? LeftAnalogX() : LeftAnalogPrevX())==0.f && (bCur ? LeftAnalogY() : LeftAnalogPrevY())==0.f;
+	case AXIS_UP:	return (bCur ? Y() : PrevY()) >  0.6f;
+	case AXIS_RIGHT:return (bCur ? X() : PrevX()) >  0.6f;
+	case AXIS_DOWN:	return (bCur ? Y() : PrevY()) < -0.6f;
+	case AXIS_LEFT:	return (bCur ? X() : PrevX()) < -0.6f;
+	case AXIS_NONE:	return (bCur ? X() : PrevX())==0.f && (bCur ? Y() : PrevY())==0.f;
 	default:		return false;
 	}
 }
@@ -886,11 +687,11 @@ bool FDirectInputJoystick::IsAxisRightPressInner(enum EDirectInputArrow eArrow, 
 	bool bCur = (nIndex==nCurIndex_);
 	switch (eArrow)
 	{
-	case AXIS_UP:	return (bCur ? RightAnalogY() : RightAnalogPrevY()) >  0.6f;
-	case AXIS_RIGHT:return (bCur ? RightAnalogX() : RightAnalogPrevX()) >  0.6f;
-	case AXIS_DOWN:	return (bCur ? RightAnalogY() : RightAnalogPrevY()) < -0.6f;
-	case AXIS_LEFT:	return (bCur ? RightAnalogX() : RightAnalogPrevX()) < -0.6f;
-	case AXIS_NONE:	return (bCur ? RightAnalogX() : RightAnalogPrevX())==0.f && (bCur ? RightAnalogY() : RightAnalogPrevY())==0.f;
+	case AXIS_UP:	return (bCur ? RotZ()	: RotPrevZ())	>  0.6f;
+	case AXIS_RIGHT:return (bCur ? Z()		: PrevZ())		>  0.6f;
+	case AXIS_DOWN:	return (bCur ? RotZ()	: RotPrevZ())	< -0.6f;
+	case AXIS_LEFT:	return (bCur ? Z()		: PrevZ())		< -0.6f;
+	case AXIS_NONE:	return (bCur ? Z() : PrevZ())==0.f && (bCur ? RotZ() : RotPrevZ())==0.f;
 	default:		return false;
 	}
 }
