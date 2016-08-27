@@ -243,7 +243,7 @@ TArray<FDIKeyMapInfo> FXInputJoystickEmu::GetKeyMap(EXInputPadKeyNames eXIKey)
 	map.SetNum(2);
 
 	map[0] = GetButtonDIKeyMapInfo(eXIKey);
-	if(map[0].eDIKey_==XIGamePad_END)
+	if(map[0].eDIKey_==DIGamePad_END)
 	{
 		map = GetAnalogDIKeyMapInfo(eXIKey);
 	}

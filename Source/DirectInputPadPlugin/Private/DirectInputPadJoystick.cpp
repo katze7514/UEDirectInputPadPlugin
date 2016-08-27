@@ -481,14 +481,14 @@ bool UDirectInputPadFunctionLibrary::SaveDirectInputPadKeyMap(const FString& Slo
 
 	for(int32 i=0; i<GetDirectInputPadNum(); ++i)
 	{
-		FDIPadKeyMaps KeyMaps;
 		auto Joy = GetDirectInputPadJoystick(i);
-		KeyMaps.GUID = Joy->GetGUID();
+		if(Joy==nullptr) continue;
 
+		FDIPadKeyMaps KeyMaps;
+		KeyMaps.GUID = Joy->GetGUID();
 		// 軸
 		for(uint8 j=XIGamePad_LeftAnalogX; j<=XIGamePad_RTAnalog; ++j)
 		{
-			FDIKeyMapInfo MapInfo;
 			TArray<FDIKeyMapInfo> map;
 			map = Joy->GetKeyMap(TEnumAsByte<EXInputPadKeyNames>(j));
 			KeyMaps.aMapInfo_.Add(map[0]);
@@ -498,13 +498,14 @@ bool UDirectInputPadFunctionLibrary::SaveDirectInputPadKeyMap(const FString& Slo
 		// ボタン
 		for(uint8 j=XIGamePad_Button_A; j<=XIGamePad_DPad_Left; ++j)
 		{
-			FDIKeyMapInfo MapInfo;
 			TArray<FDIKeyMapInfo> map;
 			map = Joy->GetKeyMap(TEnumAsByte<EXInputPadKeyNames>(j));
 			KeyMaps.aMapInfo_.Add(map[0]);
 		}
 		SaveGame->DIPadKeyMaps.Add(KeyMaps);
 	}
+
+	if(SaveGame->DIPadKeyMaps.Num()<=0) return false;
 
 	return UGameplayStatics::SaveGameToSlot(SaveGame, SlotName, UserIndex);
 }

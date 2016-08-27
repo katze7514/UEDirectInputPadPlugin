@@ -98,7 +98,7 @@ bool FDirectInputJoystick::Init(const DIDEVICEINSTANCE& joyins, FDirectInputDriv
 			InitialJoyBuf_ = joyBuf_[nCurIndex_];
 			if(++loopcount>10) break;
 		}
-		if(++loopcount>100)
+		if(loopcount>100)
 		{
 			UE_LOG(LogDirectInputPadPlugin, Log, TEXT("DirectInput Joystick Create Fail. : %s"), joyins.tszProductName);
 			return false;
