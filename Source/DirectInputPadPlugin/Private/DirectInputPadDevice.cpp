@@ -112,7 +112,7 @@ TWeakPtr<FXInputJoystickEmu> FDirectInputPadDevice::GetJoystick(uint32 nPlayerID
 		return nullptr;
 
 	if(XJoysticks_[nPlayerID].IsValid()) 
-		return XJoysticks_[nPlayerID];
+	return TWeakPtr<FXInputJoystickEmu>(XJoysticks_[nPlayerID]);
 
 	return nullptr;
 }

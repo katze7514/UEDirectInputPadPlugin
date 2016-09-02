@@ -523,6 +523,7 @@ bool UDirectInputPadFunctionLibrary::LoadDirectInputPadKeyMap(const FString& Slo
 		for(int32 i=0; i<GetDirectInputPadNum(); ++i)
 		{
 			auto Joy = GetDirectInputPadJoystick(i);
+			if(Joy==nullptr) continue;
 			if(KeyMaps.GUID==Joy->GetGUID())
 			{
 				for(uint8 eXIKey = XIGamePad_LeftAnalogX; eXIKey<=XIGamePad_RTAnalog; ++eXIKey)
