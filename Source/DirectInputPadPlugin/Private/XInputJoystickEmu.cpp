@@ -528,7 +528,7 @@ void FXInputJoystickEmu::EventAnalog(FName XIName, const AnalogDelegate& Delegat
 		if(FMath::IsNearlyEqual(Analog, 0.0f) && Delegate.AxisNegative_)
 		{	Analog = Delegate.AxisNegative_();	}
 
-		if(XIName==FGamepadKeyNames::LeftTriggerAnalog || XIName==FGamepadKeyNames::LeftTriggerAnalog)
+		if(XIName==FGamepadKeyNames::LeftTriggerAnalog || XIName==FGamepadKeyNames::RightTriggerAnalog)
 		{
 			Analog = FMath::GetMappedRangeValueUnclamped(FVector2D(-1.f,1.f), FVector2D(0.f,1.f), Analog);
 		}
