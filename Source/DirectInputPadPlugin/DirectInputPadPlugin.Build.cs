@@ -4,7 +4,7 @@ namespace UnrealBuildTool.Rules
 {
 	public class DirectInputPadPlugin : ModuleRules
 	{
-		public DirectInputPadPlugin(TargetInfo Target)
+		public DirectInputPadPlugin(ReadOnlyTargetRules Target):base(Target)
 		{
 			PublicIncludePaths.AddRange(
 				new string[] {
