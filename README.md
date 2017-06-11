@@ -23,7 +23,7 @@ UE4が元からもっている「ゲームパッドAボタン」「ゲームパ�
 # 使用方法
 UE4のプラグインとして入れて有効にするだけで使うことができます。
 プラグインのフォルダ名は、「DirectInputPadPlugin」としてください。  
-VS2015は入れて、ソースからビルドしてください。バイナリ(DLL)はつけていません。
+VisualStudioは入れて、ソースからビルドしてください。バイナリ(DLL)はつけていません。
 
 DIPadとしてのイベントは、BPエディタでDIGamePadで検索！
 
@@ -41,8 +41,7 @@ BP公開APIをさっと見たい人は、「DirectInputPadJoystick.h」を見て
 - 動的な抜き差し
 
 # Misc
-VS2015で開発していますが、VS2013でもビルドできるのを確認していますのでUE4.9でも使用できます。
-内部でtuple/functionalを使っていますので、VS2012以前ではその部分を書き換えれば、たぶん
+VS2017/2015でビルドできるのを確認しています。
 
 # サンプルプロジェクト
 https://github.com/katze7514/UEDirectInputPadPluginSample
