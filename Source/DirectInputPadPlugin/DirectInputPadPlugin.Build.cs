@@ -25,6 +25,7 @@ namespace UnrealBuildTool.Rules
 				{
                     "Core",
                     "CoreUObject",
+		    "ApplicationCore",
                     "Engine",
                     "InputDevice",
 					// ... add other public dependencies that you statically link with here ...
