@@ -8,14 +8,14 @@ namespace UnrealBuildTool.Rules
 		{
 			PublicIncludePaths.AddRange(
 				new string[] {
-					"DirectInputPadPlugin/Public",
+					// "DirectInputPadPlugin/Public",
 					// ... add public include paths required here ...
 				}
 				);
 
 			PrivateIncludePaths.AddRange(
 				new string[] {
-					"DirectInputPadPlugin/Private",
+					// "DirectInputPadPlugin/Private",
 					// ... add other private include paths required here ...
 				}
 				);
