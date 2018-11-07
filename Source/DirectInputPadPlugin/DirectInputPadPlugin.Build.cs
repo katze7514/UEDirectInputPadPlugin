@@ -6,6 +6,8 @@ namespace UnrealBuildTool.Rules
 	{
 		public DirectInputPadPlugin(ReadOnlyTargetRules Target):base(Target)
 		{
+			PrivatePCHHeaderFile = "Private/DirectInputPadPluginPrivatePCH.h";
+			
 			PublicIncludePaths.AddRange(
 				new string[] {
 					// "DirectInputPadPlugin/Public",
