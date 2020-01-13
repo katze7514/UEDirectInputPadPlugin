@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "AllowWindowsPlatformTypes.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
 
 class FDirectInputJoystick;
 
@@ -91,4 +91,4 @@ private:
 	joy_map						mapJoy_;
 };
 
-#include "HideWindowsPlatformTypes.h"
+#include "Windows/HideWindowsPlatformTypes.h"

@@ -4,7 +4,7 @@
 #include "DirectInputDriver.h"
 #include "DirectInputJoystick.h"
 
-#include "AllowWindowsPlatformTypes.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
 
 //////////////////////////////////////
 // FDirectInputJoystick
@@ -823,4 +823,4 @@ bool FDirectInputJoystick::IsRelease(uint32_t nBtn)const
 		&& (joyBuf_[nCurIndex_^1].rgbButtons[nBtn] & 0x80)>0;
 }
 
-#include "HideWindowsPlatformTypes.h"
+#include "Windows/HideWindowsPlatformTypes.h"

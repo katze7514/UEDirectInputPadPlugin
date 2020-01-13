@@ -12,7 +12,7 @@
 
 #include "DirectInputPadDevice.h"
 
-#include "AllowWindowsPlatformTypes.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
 
 namespace{
 const uint32 MAX_JOYSTICKS = 8;
@@ -117,4 +117,4 @@ TWeakPtr<FXInputJoystickEmu> FDirectInputPadDevice::GetJoystick(uint32 nPlayerID
 	return nullptr;
 }
 
-#include "HideWindowsPlatformTypes.h"
+#include "Windows/HideWindowsPlatformTypes.h"

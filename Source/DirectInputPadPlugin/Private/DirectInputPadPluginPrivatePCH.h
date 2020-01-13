@@ -12,7 +12,7 @@
 
 #include "DirectInputPadPlugin.h"
 
-#include "AllowWindowsPlatformTypes.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
 
 #define DIRECTINPUT_VERSION 0x0800 
 #define _CRT_SECURE_NO_DEPRECATE
@@ -29,4 +29,4 @@
 
 #include <dinputd.h>
 
-#include "HideWindowsPlatformTypes.h"
+#include "Windows/HideWindowsPlatformTypes.h"
