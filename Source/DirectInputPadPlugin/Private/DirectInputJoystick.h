@@ -3,7 +3,7 @@
 #include "DirectInputPadState.h"
 #include <functional>
 
-#include "AllowWindowsPlatformTypes.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
 
 class FDirectInputDriver;
 class FXInputJoystickEmu;
@@ -252,4 +252,4 @@ private:
 	TArray<bool>	AxisReverseFlagMap_;
 };
 
-#include "HideWindowsPlatformTypes.h"
+#include "Windows/HideWindowsPlatformTypes.h"

@@ -7,7 +7,7 @@
 
 #include "DirectInputDriver.h"
 
-#include "AllowWindowsPlatformTypes.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
 
 #include <wbemidl.h>
 #include <oleauto.h>
@@ -255,4 +255,4 @@ TSharedPtr<FDirectInputJoystick> FDirectInputJoystickFactory::GetJoystick(uint32
 	return mapJoy_.Emplace(nNo, pJoy);
 }
 
-#include "HideWindowsPlatformTypes.h"
+#include "Windows/HideWindowsPlatformTypes.h"
