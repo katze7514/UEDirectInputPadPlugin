@@ -1,7 +1,7 @@
+#include "XInputJoystickEmu.h"
 #include "DirectInputPadPluginPrivatePCH.h"
 
 #include "DirectInputJoystick.h"
-#include "XInputJoystickEmu.h"
 
 namespace{
 const float AXIS_THRESHOLD = 0.6f;
@@ -55,7 +55,7 @@ void FXInputJoystickEmu::SetAnalogMap(EXInputPadKeyNames eXIKey, FDIKeyMapInfo D
 	const bool bNegative				 = DIKeyInfo.bNegative_;
 
 	if(eDIKey<=DIGamePad_ROT_Z)
-	{// Ž²‚ðŽ²‚É
+	{// Å½Ë›â€šÄ‘Å½Ë›â€šÃ‰
 		switch(eXIKey)
 		{
 		case XIGamePad_LeftAnalogX:
@@ -90,7 +90,7 @@ void FXInputJoystickEmu::SetAnalogMap(EXInputPadKeyNames eXIKey, FDIKeyMapInfo D
 		}
 	}
 	else
-	{// ƒ{ƒ^ƒ“‚ðŽ²‚É
+	{// Âƒ{Âƒ^Âƒâ€œâ€šÄ‘Å½Ë›â€šÃ‰
 		switch(eXIKey)
 		{
 		case XIGamePad_LeftAnalogX:

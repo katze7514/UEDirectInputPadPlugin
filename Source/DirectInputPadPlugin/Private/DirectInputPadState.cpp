@@ -1,6 +1,5 @@
-﻿#include "DirectInputPadPluginPrivatePCH.h"
-
 #include "DirectInputPadState.h"
+#include "DirectInputPadPluginPrivatePCH.h"
 
 const FKey EKeysDirectInputPad::DIGamePad_AxisX("DIGamePad_AxisX");
 const FKey EKeysDirectInputPad::DIGamePad_AxisY("DIGamePad_AxisY");
