@@ -1,7 +1,7 @@
 ﻿// Copyright 1998-2015 Epic Games, Inc. All Rights Reserved.
 
-#include "DirectInputPadPluginPrivatePCH.h"
 #include "DirectInputPadPlugin.h"
+#include "DirectInputPadPluginPrivatePCH.h"
 
 #include "DirectInputPadState.h"
 #include "DirectInputPadDevice.h"

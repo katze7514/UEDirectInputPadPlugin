@@ -1,11 +1,10 @@
-﻿#include "DirectInputPadPluginPrivatePCH.h"
+#include "DirectInputDriver.h"
+#include "DirectInputPadPluginPrivatePCH.h"
 
 #include "DirectInputPadState.h"
 #include "DirectInputJoystick.h"
 
 #include <tuple>
-
-#include "DirectInputDriver.h"
 
 #include "Windows/AllowWindowsPlatformTypes.h"
 

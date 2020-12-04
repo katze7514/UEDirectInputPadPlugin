@@ -1,8 +1,8 @@
-﻿#include "DirectInputPadPluginPrivatePCH.h"
+#include "DirectInputJoystick.h"
+#include "DirectInputPadPluginPrivatePCH.h"
 
 #include "DirectInputPadState.h"
 #include "DirectInputDriver.h"
-#include "DirectInputJoystick.h"
 
 #include "Windows/AllowWindowsPlatformTypes.h"
 
